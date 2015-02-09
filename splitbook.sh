@@ -288,8 +288,8 @@ for name in $articlelist ; do
     # output the dvips command line
     PSFILE3=${PSZDIR}/${OUTPREFIX}_$name.ps
     PDFFILE=${PDFDIR}/${OUTPREFIX}_$name.pdf
-    echo >> $OUTFILE3 "dvips -o  $PSFILE3 $DVIPSRANGE $FILEROOT -P$COPYRIGHT && gzip -fv $PSFILE3"
-    echo >> $OUTFILE4 "dvips $DVIPSRANGE $FILEROOT -Pcmz -Pamz -Ppdf -G0 -P$COPYRIGHT -f | $PS2PDF $PS2PDF_OPTIONS - $PDFFILE"
+    echo >> $OUTFILE3 "dvips -o  $PSFILE3 $DVIPSRANGE $FILEROOT -h ${COPYRIGHT}header.ps && gzip -fv $PSFILE3"
+    echo >> $OUTFILE4 "dvips $DVIPSRANGE $FILEROOT -Ppdf -G0 -h ${COPYRIGHT}header.ps -f | $PS2PDF $PS2PDF_OPTIONS - $PDFFILE"
     
     #### now do the commands for PS files of individual pages
     pp=$Pfirstpage
