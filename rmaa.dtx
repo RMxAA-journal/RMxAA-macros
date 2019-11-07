@@ -1,9 +1,9 @@
-% \def\fileversion{3.26} \def\filedate{2011/08/15}
+% \def\fileversion{3.27} \def\filedate{2019/11/05}
 % \MakeShortVerb{\|}
 % \title{A \LaTeX{} document class for the Revista Mexicana de
 % Astronom\'\i a y Astrof\'\i sica\thanks{This file has version
 % \fileversion{} last revised \filedate{}.}}
-% \author{William J. Henney\thanks{w.henney@astrosmo.unam.mx}}
+% \author{William J. Henney\thanks{w.henney@irya.unam.mx}}
 % \date{\filedate}
 % \maketitle
 % \paragraph{Abstract}
@@ -49,6 +49,9 @@
 \newcommand\rmDate{\rmaa@date}
 \NeedsTeXFormat{LaTeX2e}[1995/06/01]
 %    \end{macrocode}
+% \changes{3.27}{2019/11/02}{Change abstract to appear before
+% resumen. Change RevMexAA to RMxAA for consistency with ADS.}
+%
 % \changes{3.22}{2007/03/22}{Allow proceedings articles to have
 %   received/accepted dates} \changes{3.21}{2006/05/15}{Changes for
 %   Silvia - abstracts are now shipped out to ADS.}
@@ -108,7 +111,7 @@
 %   missing Fig/Tab/Refs} \changes{0.0}{1999/05/21}{ So bored today,
 %   decided to rewrite RMAA LaTeX macros from scratch}
 %    \begin{macrocode}
-\ProvidesClass{rmaa}[\rmaa@date\space v\rmaa@version\space RevMexAA article
+\ProvidesClass{rmaa}[\rmaa@date\space v\rmaa@version\space RMxAA article
 class]
 %    \end{macrocode}
 % \subsection{Option Handling}
@@ -303,6 +306,7 @@ class]
 %%\RequirePackage[latin1]{inputenc}
 \IfFileExists{url.sty}{%
   \RequirePackage{url}
+  \urlstyle{same}
   \newcommand\email{\begingroup \urlstyle{rm}\Url}
   }{%
   \typeout{Package url.sty not found - line breaks in email addresses
@@ -844,30 +848,36 @@ class]
 %    \begin{macrocode}
   \renewcommand\@evenfoot{\thepage\hfil}%
 %    \end{macrocode}
-% header has journal name, volume, and page numbers for a regular
+% Header has journal name, volume, and page numbers for a regular
 % article, or similar for special cases. 
+% \changes{3.27}{2019/11/03}{Change to three-line header with copyright info and DOI.}
 %    \begin{macrocode}
-  \renewcommand\@oddhead{%
-    \if@preprint
-      \if@proceedings 
-        \textsc{To appear in ``\@conftitle{}
-       (\rmaa@YearStyle{\@year})''}\hfil \textit{RevMexAA(SC)}
-      \else
-        \textsc{To appear in} \@journalname\hfil
-      \fi
-    \else
-      \if@guide
-        \textsc{Documentation} 
-      \else
-        \if@manuscript
-          Manuscript for \@journalname{} 
-        \else
-          \@journalname, \rmaa@VolumeStyle{\@volume},
-          \rmaa@PagesStyle{\@artpages}\
-        \fi
-      \fi
-      (\rmaa@YearStyle{\@year})\hfil
-    \fi}%
+\if@preprint
+\renewcommand\@oddhead{%
+  \if@proceedings 
+  \textsc{To appear in ``\@conftitle{} (\rmaa@YearStyle{\@year})''}\hfil
+  \textit{RMxAC}
+  \else
+  \textsc{To appear in} \@journalname\hfil
+  \fi}\fi%
+\if@guide
+\renewcommand\@oddhead{\textsc{Documentation} (\rmaa@YearStyle{\@year})\hfil}
+\fi%
+\if@manuscript
+\renewcommand\@oddhead{Manuscript for \@journalname{} (\rmaa@YearStyle{\@year})\hfil}
+\fi%
+\if@journal
+\renewcommand\@oddhead{%
+  \parbox{\textwidth}{
+    \@journalname, \rmaa@VolumeStyle{\@volume},
+    \rmaa@PagesStyle{\@artpages}\
+    (\rmaa@YearStyle{\@year})\hfil\\[1pt]
+    {\small\textcopyright{} \@year:
+      Instituto de Astronom\'\i{}a,
+      Universidad Nacional Aut\'onoma de M\'exico}\hfil\\[1pt]
+    {\small\@DOI@url}\hfil
+  }%
+}\fi%
   \renewcommand\@evenhead{\@oddhead}}
 %    \end{macrocode}
 % By default, use the |\ps@rmaa| page style.
@@ -964,7 +974,6 @@ class]
 % \end{macro}
 % \end{macro}
 % \end{macro}
-%
 % 
 % All the weird and whacky ways of indicating the author
 % affiliations. 
@@ -1389,6 +1398,15 @@ class]
 \newcommand{\ReceivedDate}[1]{\renewcommand{\@received}{#1}}
 \newcommand{\AcceptedDate}[1]{\renewcommand{\@accepted}{#1}}
 %    \end{macrocode}
+%
+% \begin{macro}{\DOI}
+% User command to enter the DOI, which will be typeset as a link.
+% \changes{3.27}{2019/11/02}{New user command |\DOI{2019.55.02.21}| to typeset
+% DOI in the header of first page.}
+%    \begin{macrocode}
+\newcommand\DOI[1]{\def\@DOI@url{\url{https://doi.org/10.22201/ia.01851101p.#1}}}
+%    \end{macrocode}
+% \end{macro}
 % \begin{macro}{\@volume}
 % \begin{macro}{\@volumen}
 % \begin{macro}{\@artpages}
@@ -1403,14 +1421,16 @@ class]
 \newcommand{\@volume}{00}
 \newcommand{\@volumen}{\rmaa@VolumenStyle{00}}
 \newcommand{\@artpages}{%
-  \pageref{RMAAFirstPage}--\pageref{RMAALastPage}}
-\newcommand{\@year}{2007}
+  \oldpageref{\articlename:RMAAFirstPage}--\oldpageref{\articlename:RMAALastPage}}
+\newcommand{\@year}{\the\year}
 \newcommand{\@anyo}{\rmaa@VolumenStyle{2007}}
 \newcommand{\@journalname}{\rmaa@JournalNameStyle{%
     \if@proceedings\RMAASClong\else\RMAAlong\fi}}
 \newcommand{\@received}{}
 \newcommand{\@accepted}{}
 \newcommand{\@MSnum}{0000}
+\newcommand{\@DOI@prefix}{https://doi.org/10.22201/ia.01851101p}
+\def\@DOI@url{\url{https://doi.org/10.22201/ia.01851101p.2099.00.00.00}}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1958,12 +1978,13 @@ class]
 % \changes{3.26}{2011/08/15}{Add extra label to review articles}
 %    \begin{macrocode}
 \newlength{\@kwhwidth}\newlength{\@kwtwidth}
+\newcommand\reviewname{Review}
 \renewcommand{\@maketitle}{%
   \newpage
   \null
   \if@reviewarticle
   \smallskip
-  {\large\bfseries\itshape Review}%
+  {\large\bfseries\itshape\reviewname}%
   \bigskip
   \else
   \vskip\@before@title@skip%
@@ -1979,13 +2000,13 @@ class]
     \if@printdates
     \vskip\@before@dates@skip%
     \if@preprint
-    \rmaa@ReceivedStyle{Submitted to RevMexAA \@received}
+    \rmaa@ReceivedStyle{Submitted to RMxAA \@received}
     \else
     \rmaa@ReceivedStyle{Received \@received; accepted \@accepted}
     \fi
     \fi
     \if@manuscript
-    \rmaa@ReceivedStyle{Submitted to RevMexAA \@received}
+    \rmaa@ReceivedStyle{Submitted to RMxAA \@received}
     \fi
     \if@guide
     \rmaa@ReceivedStyle{Version \rmaa@version, \rmaa@date}
@@ -2028,10 +2049,42 @@ class]
 %
 %
 % \begin{macro}{\reviewarticle}
-% User command to specify a review article. Must be used in preamble. Only effect is to place the text ``Review'' 
-% before the article title
+% \begin{macro}{\reviewtoc}
+% \begin{macro}{\reviewlof}
+%   User command to specify a review article. Must be used in
+%   preamble. Main effect is to place the text ``Review'' before the
+%   article title.  Also add command for setting a table of contents
+%   and a list of figures at the beginning of the article.
 %    \begin{macrocode}
 \newcommand{\reviewarticle}{\@reviewarticletrue}
+\newcommand\reviewtoc{%
+  \section*{CONTENTS}%
+  \@starttoc{rtc}%
+}
+\newcommand\reviewlof{%
+  \section*{LIST OF FIGURES}%
+  \@starttoc{lof}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\l@section}
+%    \begin{macrocode}
+\renewcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{0.8em \@plus\p@}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode %\bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2162,8 +2215,10 @@ class]
 %    \begin{macrocode}
   \ifnum #2=1                   
      \def\sec@upcase##1{\uppercase{##1}}
+     \def\sec@shape{\upshape}
   \else                         
      \def\sec@upcase##1{\relax{##1}}
+     \def\sec@shape{\itshape}
   \fi
   \@tempskipa #5\relax
   \ifdim \@tempskipa>\z@
@@ -2181,6 +2236,16 @@ class]
              \protect\numberline{\csname the#1\endcsname}
           \fi
           #7}%
+     \fi
+%    \end{macrocode}
+% Also allow per-article TOC for review papers
+%    \begin{macrocode}
+     \if@reviewarticle
+        \ifnum #2>2 \else
+           \addcontentsline{rtc}{#1}{%
+             \protect\numberline{\csname the#1\endcsname}
+             \sec@upcase{\sec@shape #7}}%
+        \fi
      \fi
   \else
      \def\@svsechd{#6\hskip #3\relax  %% \relax added 2 May 90
@@ -3410,9 +3475,9 @@ class]
 % Definitions of the journal name in different incarnations.  
 %    \begin{macrocode}
 %<*package|adshtml-style>
-\newcommand{\RMAA}{RevMexAA}
+\newcommand{\RMAA}{RMxAA}
 \newcommand{\RMAAlong}{Revista Mexicana de Astronom\'{\i}a y Astrof\'{\i}sica}
-\newcommand{\RMAASC}{RevMexAA(SC)}
+\newcommand{\RMAASC}{RMxAC}
 \newcommand{\RMAASClong}{\RMAA\ (Serie de Conferencias)}
 %    \end{macrocode}
 % \begin{macro}{\ibidrule}
@@ -3749,7 +3814,7 @@ PLEASE DO NOT EDIT THIS FILE! It is generated automatically from
 the file rmaa.dtx using the accompanying Makefile and rmaa.ins 
 Any hand-edited changes will be lost
 
-A LaTeX document class for the RevMexAA
+A LaTeX document class for the RMxAA
 
 Author: William Henney (w.henney@crya.unam.mx)
 
@@ -3914,7 +3979,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 \renewcommand{\bibitem}[2][]{\par}
 \setlength{\parindent}{0pt}
 \renewcommand{\ThisVolume}[1]{%  
-  2001, \RMAASC, 12, \pageref{#1:RMAAFirstPage}}  
+  2001, \RMAASC, 12, \oldpageref{#1:RMAAFirstPage}}  
  
 
 \begin{document}
@@ -3961,12 +4026,12 @@ $dum = &do_cmd_makeatletter();
 
 sub do_cmd_RMAA {
     local($_) = @_;
-    "RevMexAA" . $_;
+    "RMxAA" . $_;
 }
 
 sub do_cmd_RMAASC {
     local($_) = @_;
-    "RevMexAASC" . $_;
+    "RMxAASC" . $_;
 }
 
 sub do_cmd_etal {
@@ -4147,8 +4212,8 @@ echo "Generating $ADSBASENAME.sed"
 
 # Find type of journal
 grep '\\documentclass\[.*proceedings.*\]' $BASENAME.tex >/dev/null \
-     && JOURNAL='RevMexAA(SC)' \
-     || JOURNAL='RevMexAA'
+     && JOURNAL='RMxAC' \
+     || JOURNAL='RMxAA'
 
 # Find the year and volume number
 YEAR=`grep '\\SetYear' $BASENAME.tex | sed 's/.*\\SetYear{\(.*\)}.*/\1/'`
@@ -4156,7 +4221,7 @@ VOLUME=`grep '\\SetVolume' $BASENAME.tex | sed 's/.*\\SetVolume{\(.*\)}.*/\1/'`
 
 # Generate an auxilliary sed script 
 cat > $TMPFILE <<EOF
-s|\\\\newlabel{\(.*\):RMAAFirstPage}{{.*}{\(.*\)}}|s/\\\\\\\\ThisVolume{\1}/$YEAR, RevMexAA(SC), $VOLUME, \2/g|g
+s|\\\\newlabel{\(.*\):RMAAFirstPage}{{.*}{\(.*\)}}|s/\\\\\\\\ThisVolume{\1}/$YEAR, RMxAC, $VOLUME, \2/g|g
 EOF
 
 # Now go through the .aux file, looking for \newlabels and use the sed 
@@ -4192,3 +4257,9 @@ lynx --justify=off --width=100 --dump --nolist \
 
 \endinput
 
+
+% \endinput
+% Local Variables:
+% mode: doctex
+% TeX-master: t
+% End:
