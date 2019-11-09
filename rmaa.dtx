@@ -304,12 +304,14 @@ class]
   }
 %% commented out for moment since requires more modern version of LaTeX
 %%\RequirePackage[latin1]{inputenc}
-\IfFileExists{url.sty}{%
+\IfFileExists{hyperref.sty}{%
+  %\RequirePackage[draft,implicit=false]{hyperref}
+  %\hypersetup{hidelinks=true}
   \RequirePackage{url}
   \urlstyle{same}
   \newcommand\email{\begingroup \urlstyle{rm}\Url}
   }{%
-  \typeout{Package url.sty not found - line breaks in email addresses
+  \typeout{Package hyperref.sty not found - line breaks in email addresses
     will not work properly.}
   \newcommand\email[1]{#1}
   }
