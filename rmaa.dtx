@@ -304,17 +304,27 @@ class]
   }
 %% commented out for moment since requires more modern version of LaTeX
 %%\RequirePackage[latin1]{inputenc}
+\newif\if@hyperref@loaded
 \IfFileExists{hyperref.sty}{%
-  %\RequirePackage[draft,implicit=false]{hyperref}
-  %\hypersetup{hidelinks=true}
-  \RequirePackage{url}
-  \urlstyle{same}
-  \newcommand\email{\begingroup \urlstyle{rm}\Url}
+  \RequirePackage{hyperref}
+  \hypersetup{hidelinks}
+  \@hyperref@loadedtrue
   }{%
   \typeout{Package hyperref.sty not found - line breaks in email addresses
     will not work properly.}
-  \newcommand\email[1]{#1}
-  }
+  \@hyperref@loadedfalse
+}
+%    \end{macrocode}
+% Configuration of hyperref is moved out of the \cs{IfFileExists}
+% structure since it was giving me errors.
+%    \begin{macrocode}
+\if@hyperref@loaded
+ %\renewcommand*{\HyperDestNameFilter}[1]{\articlename:#1}
+\urlstyle{same}
+\newcommand\email{\begingroup \urlstyle{rm}\Url}
+\else
+\newcommand\email[1]{#1}
+\fi  
 %    \end{macrocode}
 % \subsection{Other setup stuff}\label{sec:setup}
 % Some declarations: 
@@ -1830,16 +1840,17 @@ class]
 % Another issue that has cost me a lot of grief. Still, it finally
 % seems to be sorted now. All hail Jeff Goldberg. 
 %
-% Cunning trick to get the page numbers from |\pageref|. 
-% Put a label on the first and last page of the document using
-% |\AtBeginDocument| and |\AtEndDocument|. . 
-% This way won't work for the book option. 
+% Cunning trick to get the page numbers from |\pageref|.  Put a label
+% on the first and last page of the document using |\AtBeginDocument|
+% and |\AtEndDocument|. .  This way won't work for the book option.
 % In that case, we do it by defining |\@endofarticlehook| and
-% |\@begofarticlehook| as parallels
-% to |\AtEndDocument| and |\AtBeginDocument|. 
+% |\@begofarticlehook| as parallels to |\AtEndDocument| and
+% |\AtBeginDocument|.  Note that we have to defer adding
+% |\@begofarticlehook| to |\AtBeginDocument| to make sure it comes
+% after the redefinitions of |\ref| and |\label|.
 %    \begin{macrocode}
 \if@book\AtEndDocument{\ADS@closefile}\else
-\AtBeginDocument{\@begofarticlehook}
+ %\AtBeginDocument{\@begofarticlehook}
 \AtEndDocument{\@endofarticlehook}
 \fi
 %    \end{macrocode}
@@ -1899,14 +1910,16 @@ class]
 % output routine for the last page has already been called. Instead,
 % we first explicitly clear the page, step back the page counter,
 % explicitly write to the .aux file, then restep the page counter
-% again. 
+% again.
+%
+% But this will conflict with the hyperref package, which does labels differently.  Compensate for that by using the five-argument form.
 % 
 % Also set the |\ADS@LastPage| macro to the appropriate number. 
 %    \begin{macrocode}
 \newcommand{\rmaa@lastpagelabel}{%
   \addtocounter{page}{-1}%
   \immediate\write\@auxout{\string
-    \newlabel{\articlename:RMAALastPage}{{}{\thepage}}}%
+    \newlabel{\articlename:RMAALastPage}{{}{\thepage}{}{}{}}}%
   \edef\ADS@lastpage{\thepage}%
   \addtocounter{page}{1}}
 %    \end{macrocode}
@@ -2561,11 +2574,13 @@ class]
 % we don't get multiply-defined labels in the single article case
 %    \begin{macrocode}
 \newcommand{\articlename}{anon}
-\let\oldcite=\cite 
-\let\oldnocite=\nocite 
-\let\oldref=\ref 
-\let\oldpageref=\pageref
-\let\oldlabel=\label
+\AtBeginDocument{
+  \let\oldcite=\cite 
+  \let\oldnocite=\nocite 
+  \let\oldref=\ref 
+  \let\oldpageref=\pageref
+  \let\oldlabel=\label
+}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -2573,14 +2588,18 @@ class]
 % \end{macro}
 % \end{macro}
 % \end{macro}
-% Uniquify all cross-references by prepending the article name
+%
+% Uniquify all cross-references by prepending the article name.  This now has to go into |\AtBeginDocument| so it is working on the new versions that hyperref.sty has set up.  Then we need to put the |\@begofarticlehook| afterwards, so that the first page label is using the new definitions.
 %    \begin{macrocode}
-\renewcommand{\ref}[1]{\oldref{\articlename:#1}%
-  \if@debug{\ClassInfo{rmaa}{Reference to \articlename:#1}}\fi}
-\renewcommand{\pageref}[1]{\oldpageref{\articlename:#1}%
-  \if@debug{\ClassInfo{rmaa}{Page reference to \articlename:#1}}\fi}
-\renewcommand{\label}[1]{\oldlabel{\articlename:#1}%
-  \if@debug{\ClassInfo{rmaa}{Label for \articlename:#1}}\fi}
+\AtBeginDocument{
+  \renewcommand{\ref}[1]{\oldref{\articlename:#1}%
+    \if@debug{\ClassInfo{rmaa}{Reference to \articlename:#1}}\fi}
+  \renewcommand{\pageref}[1]{\oldpageref{\articlename:#1}%
+    \if@debug{\ClassInfo{rmaa}{Page reference to \articlename:#1}}\fi}
+  \renewcommand{\label}[1]{\oldlabel{\articlename:#1}%
+    \if@debug{\ClassInfo{rmaa}{Label for \articlename:#1}}\fi}%
+  \@begofarticlehook
+}%
 %    \end{macrocode}
 % Citations are more complicated since they can contain a list of
 % keys. These are really only here for use with the rmaacite package,
