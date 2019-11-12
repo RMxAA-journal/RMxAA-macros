@@ -316,12 +316,21 @@ class]
 }
 %    \end{macrocode}
 % Configuration of hyperref is moved out of the \cs{IfFileExists}
-% structure since it was giving me errors.
+% structure since it was giving me errors.  We patch the
+% \cs{@combinedblfloats} following a suggestion by Heiko Oberdiek at
+% \url{https://tex.stackexchange.com/a/249743/3843}, which avoids
+% problems when hyperlinks are split across
+% pages. \changes{3.27}{2019/11/12}{Fix for issue where breaking
+% hyperlink across pages gave an error.}
 %    \begin{macrocode}
 \if@hyperref@loaded
  %\renewcommand*{\HyperDestNameFilter}[1]{\articlename:#1}
 \urlstyle{same}
 \newcommand\email{\begingroup \urlstyle{rm}\Url}
+\RequirePackage{etoolbox}
+\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
+  \errmessage{\noexpand\@combinedblfloats could not be patched}%
+}%
 \else
 \newcommand\email[1]{#1}
 \fi  
