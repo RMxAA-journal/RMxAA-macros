@@ -1,4 +1,4 @@
-% \def\fileversion{3.27} \def\filedate{2019/11/05}
+% \def\fileversion{3.27} \def\filedate{2019/11/12}
 % \MakeShortVerb{\|}
 % \title{A \LaTeX{} document class for the Revista Mexicana de
 % Astronom\'\i a y Astrof\'\i sica\thanks{This file has version
@@ -517,6 +517,7 @@ class]
 % \end{macro}
 % 
 % \begin{macro}{\abovesectionskip}
+% \changes{3.27}{2019/11/12}{Use negative values for skip so that first paragraph after section headings is not indented.  This is something that I have been trying to fix for years!  It turns out that the anser was in the documentation for the standard command \cs{@startsection.}}
 % \begin{macro}{\belowsectionskip}
 % \begin{macro}{\aboveparaskip}
 % \begin{macro}{\belowparaskip}
@@ -531,7 +532,7 @@ class]
 % The default values for these lengths are those traditionally used
 % for the onecolumn style. 
 %    \begin{macrocode}
-\@set@scalable@length{abovesectionskip}{3.5ex}{4ex}{2ex}
+\@set@scalable@length{abovesectionskip}{-3.5ex}{-4ex}{-2ex}
 \@set@scalable@length{belowsectionskip}{2.3ex}{0ex}{2ex}
 \@set@scalable@length{aboveparaskip}{3.25ex}{2ex}{0.5ex}
 \@set@scalable@length{belowparaskip}{-1em}{\z@}{\z@}
@@ -1412,13 +1413,42 @@ class]
 %    \end{macrocode}
 %
 % \begin{macro}{\DOI}
-% User command to enter the DOI, which will be typeset as a link.
-% \changes{3.27}{2019/11/02}{New user command |\DOI{2019.55.02.21}| to typeset
-% DOI in the header of first page.}
+% User/editor command to enter the DOI, which will be typeset as a link.
+% \changes{3.27}{2019/11/02}{New user command \cs{DOI} to typeset
+% DOI in the header of first page and add it to ADS info.}
 %    \begin{macrocode}
-\newcommand\DOI[1]{\def\@DOI@url{\url{https://doi.org/10.22201/ia.01851101p.#1}}}
+\newcommand\DOI[1]{%
+  \def\@DOI@url{\url{https://doi.org/10.22201/ia.01851101p.#1}}%
+  \def\ADS@doi{https://doi.org/10.22201/ia.01851101p.#1}%
+}%
 %    \end{macrocode}
 % \end{macro}
+%
+% \begin{macro}{\ORCIDiD}
+% \changes{3.27}{2019/11/12}{Add mechanism for giving ORCID iD links}
+% \begin{macro}{\ORCIDiDfull}
+% \begin{macro}{\@orcid@icon}
+% \begin{macro}{\@orcid@iconbig}
+% Commands to add icon links to ORCID iDs of authors. For example
+% \begin{quote}
+% |\ORCIDiD|\marg{0000-0000-0000-0000}
+% \end{quote}
+% to be used after each author name in the |\author|
+% command and in the |\fulladdresses|.  Alternatively,
+% |\OORCIDiDfull| will typeset the icon plus the full text of the
+% link, but we don't use that at present.  The icon image is stored in |ORCIDiD_iconvector.pdf|, which needs to be on the input path.  In principle, we could make EPS versions if necessary.
+%    \begin{macrocode}
+\newcommand\@orcid@icon{\includegraphics[height=1.8ex]{ORCIDiD_iconvector}}
+\newcommand\@orcid@iconbig{\includegraphics[height=2ex]{ORCIDiD_iconvector}}
+\newcommand\ORCIDiD[1]{\href{https://orcid.org/#1}{\,\@orcid@icon}}
+\newcommand\ORCIDiDfull[1]{%
+  \href{https://orcid.org/#1}{\@orcid@iconbig}\,\url{https://orcid.org/#1}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
 % \begin{macro}{\@volume}
 % \begin{macro}{\@volumen}
 % \begin{macro}{\@artpages}
@@ -1596,16 +1626,25 @@ class]
 % |%D| & Publication Date & |\ADS@fulldate| &  \\
 % |%L| & Last Page & |\ADS@lastpage| & generate from label \\
 % |%T| & Title & |\ADS@title| & required, generate from |\title| \\
-% |%C| & Abstract Copyright & |\ADS@copyright| & ask UNAM lawyers! \\
-% |%U| & URL for electronic document & |\ADS@url| & hmmmm \\
+% |%C| & Abstract Copyright & |\ADS@copyright| & set to IA-UNAM \\
+% |%U| & URL for electronic document & |\ADS@url| & set to PDF file \\
+% |%d| & DOI for article & |\ADS@doi| & set by |\DOI| \\
 % |%K| & Keywords & |\ADS@keywords| & set equal to |\@keywords| \\
 % |%A| & Abstract Text & |\ADS@abstract| & set equal to |\@abstract| \\
-% |%R| & References & |\ADS@references| & somehow generate from the
+% |%R| & References & |\ADS@references| & generate from the
 % bibliography  \\ \hline
 % \end{tabular}
 % \end{table}
 % A lot of these macros are set by other commands, as mentioned in the
 % Table, but some need to be set  explicitly here. 
+% 
+% \begin{macro}{\ADS@doi}
+% \changes{3.37}{2019/11/08}{Save DOI for ADS}
+% The user/editor command \cs{DOI} is used to set this. 
+%    \begin{macrocode}
+\newcommand{\ADS@doi}{https://doi.org/10.22201/ia.01851101p.0000.00.00.00}
+%    \end{macrocode}
+% \end{macro}
 % 
 % \begin{macro}{\ADS@journalname}
 % This
@@ -1804,6 +1843,7 @@ class]
   \ADS@write{\string\ADSfield{L}{\ADS@lastpage}}
   {\ADS@sanitize\ADS@write{\string\ADSfield{T}{\ADS@title}}}
   \ADS@write{\string\ADSfield{C}{\ADS@copyright}}
+  \ADS@write{\string\ADSfield{d}{\ADS@doi}}
   \ADS@write{\string\ADSfield{U}{\ADS@url}}
   \ADS@write{\string\ADSfield{K}{\ADS@keywords}}
   {\ADS@sanitize\ADS@write{\string\ADSfield{B}{\ADS@abstract}}}
@@ -2030,15 +2070,15 @@ class]
     \if@abstractpresent
     \parbox{\rmaa@AbstractWidthFrac\textwidth}{%
       \setlength{\parindent}{0.9cm}%
+      \centerline{\rmaa@AbstractHeaderStyle{Abstract}}\par%
+      \vskip\@after@abstracthead@skip%
+      \if@newstyle\noindent\fi\@abstract
+      \vskip\@between@abstract@skip%
       \centerline{\rmaa@AbstractHeaderStyle{Resumen}}\par%
       \vskip\@after@abstracthead@skip%
       \if@newstyle\noindent\fi\@resumen
       \if@setresumen\else\@abstract\fi % append english abstract if
                                        % spanish one not set
-      \vskip\@between@abstract@skip%
-      \centerline{\rmaa@AbstractHeaderStyle{Abstract}}\par%
-      \vskip\@after@abstracthead@skip%
-      \if@newstyle\noindent\fi\@abstract
       \if@guide\else            %do not use keywords for guide
       \vskip\@before@kwd@skip%
       % Format the Key Words with hanging indentation:
@@ -2229,11 +2269,11 @@ class]
 % |\section|, use mixed case for the rest. 
 %    \begin{macrocode}
   \ifnum #2=1                   
-     \def\sec@upcase##1{\uppercase{##1}}
-     \def\sec@shape{\upshape}
+     \def\sec@upcase##1{\uppercase{##1}}%
+     \def\sec@shape{\upshape}%
   \else                         
-     \def\sec@upcase##1{\relax{##1}}
-     \def\sec@shape{\itshape}
+     \def\sec@upcase##1{\relax{##1}}%
+     \def\sec@shape{\itshape}%
   \fi
   \@tempskipa #5\relax
   \ifdim \@tempskipa>\z@
@@ -2241,14 +2281,14 @@ class]
           \@hangfrom{\hskip #3\relax\@svsec}%
                     {\interlinepenalty \@M \sec@upcase{#8}\par}%
      \endgroup
-     \csname #1mark\endcsname{#7}
+     \csname #1mark\endcsname{#7}%
 %    \end{macrocode}
 % Only write TOC entries if doing the Guide style. 
 %    \begin{macrocode}
      \if@guide 
         \addcontentsline{toc}{#1}{%
           \ifnum #2>\c@secnumdepth \else
-             \protect\numberline{\csname the#1\endcsname}
+             \protect\numberline{\csname the#1\endcsname}%
           \fi
           #7}%
      \fi
@@ -2258,13 +2298,13 @@ class]
      \if@reviewarticle
         \ifnum #2>2 \else
            \addcontentsline{rtc}{#1}{%
-             \protect\numberline{\csname the#1\endcsname}
+             \protect\numberline{\csname the#1\endcsname}%
              \sec@upcase{\sec@shape #7}}%
         \fi
      \fi
   \else
      \def\@svsechd{#6\hskip #3\relax  %% \relax added 2 May 90
-       \@svsec #8\csname #1mark\endcsname{#7}
+       \@svsec #8\csname #1mark\endcsname{#7}%
        \if@guide
           \addcontentsline{toc}{#1}{%
             \ifnum #2>\c@secnumdepth \else
@@ -2283,13 +2323,16 @@ class]
 % \label{sec:appendices}
 % Make sure that appendices in individual articles work properly. We
 % copy the definition from the article class (the book one doesn't do
-% what we want), then we make the equation numbering be subordinate to
-% the appendix (equations A12, B6, etc). Finally, we have a medskip 
-% followed by APPENDICES to introduce them (but what if there is only
-% one!). 
-% \changes{3.17}{2002/04/08}{ 
-%  Added appendices environment that does the right thing.}
-% 
+% what we want).  
+% \begin{environment}{appendices}
+%   This uses an environment |appendices| inside of which each
+%   |\section| will become a separate appendix.  Note that the
+%   appendices must come before the references (otherwise the full
+%   addresses mechanism will not work properly). We make the equation
+%   numbering be subordinate to the appendix (equations A12, B6,
+%   etc). Finally, we have a medskip followed by APPENDICES to
+%   introduce them. \changes{3.17}{2002/04/08}{ Added appendices environment
+%   that does the right thing.}
 %    \begin{macrocode}
 \newenvironment{appendices}{\par
   \begingroup
@@ -2301,6 +2344,23 @@ class]
   \section*{APPENDICES}}
 {\endgroup}
 %    \end{macrocode}
+% \end{environment}
+% \begin{environment}{appendix}
+%   If there is only one appendix, then use |appendix| environment
+%   instead.  \changes{3.27}{2019/11/12}{ Added
+%   appendix environment for case where there is only one section.}
+%    \begin{macrocode}
+\renewenvironment{appendix}{\par
+  \begingroup
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \renewcommand\thesection{\@Alph\c@section}
+  \renewcommand\theequation{\thesection\arabic{equation}}
+  \medskip
+  \section*{APPENDIX}}
+{\endgroup}
+%    \end{macrocode}
+% \end{environment}
 
 % \subsection{Floating thingies}
 % \label{sec:floats}   
