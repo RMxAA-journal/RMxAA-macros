@@ -1,0 +1,18 @@
+
+
+
+
+$PDFTOCAIRO = "pdftocairo";
+$PDFLATEX = "pdflatex";
+$LATEX = "latex";
+$MAX_SPLIT_DEPTH = 0;
+$HTML_VERSION = "4.0,math";
+$NO_SIMPLE_MATH = 1;
+$ADDRESS = "<p><address><a href=\"mailto:rmaa\@astroscu.unam.mx\">rmaa\@astroscu.unam.mx</address></p>";
+$INFO = "<p>This document was created using latex2html and the rmaa latex macros</p>";
+$NO_NAVIGATION = 1;
+1;
+
+
+
+

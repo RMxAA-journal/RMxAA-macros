@@ -1,0 +1,349 @@
+%% Demonstration file for formatting an entire volume
+\documentclass[book,journal,twocolumn]{rmaa}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%            PREAMBLE            %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{paralist}
+\usepackage{psfrag,color}
+% Needed for landscape tables
+\usepackage{pdflscape}
+
+% Used in rm-minimal-test
+\usepackage{kantlipsum}
+
+% publication details of volume
+\SetVolume{9}
+\SetYear{2000}
+\SetMonthNumeric{06}
+\SetMes{junio}
+% details of meeting
+\SetConfTitle{Astrophysical Plasmas: Codes, Models, \& Observations}
+\SetReunion{M\'exico, D. F.}{octubre 25--29, 1999}
+\SetEditors{S. Jane Arthur, Nancy S. Brickhouse, \& Jos\'e Franco}
+
+% this writes the .idx file that is used to generate the index 
+\makeindex
+
+%% This command makes the session headings come out bold in the
+%% Table-of-Contents. Comment it out if you don't like it.
+\BoldSessionTitles
+
+%% This command makes a title page for each session
+%% Comment it out if you don't like it.
+\SessionTitlePages
+
+%% Use this command if you want the abstract-only papers to be
+%% indexed by ADS
+\abstractsADS
+
+%% At the special request of Alberto Carramin~ana, the following is a
+%% way to suppress the author adresses at the end of each article
+%\suppressfulladdresses
+
+%% Use this command to add Received/accepted dates for each paper
+% \printdates
+
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%b
+%%%%%%%%%%%%%%%%          FRONT MATTER          %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frontmatter % start roman numbering
+
+% format the TOC
+\renewcommand{\RMAAbannerimage}{rmsc_blank}
+\tableofcontents
+
+%% preface, group photo, list of participants go here
+%% use the `frontsection' environment (see editors' guide)
+\begin{frontsection}{Preface}{%
+    \listofauthors{S.~J.~Arthur, N.~S.~Brickhouse, J.~Franco}
+    \indexauthor{Arthur, S. J.}
+    \indexauthor{Brickhouse, N.}
+    \indexauthor{Franco, J.}
+    }
+  These are the proceedings of a very nice conference that Jane and
+  Pepe organised. This is the preface, which explains what a wonderful
+  time was had by all and how grateful they are for all the people who
+  gave them money or helped out.
+  
+  This is another paragraph of the preface, in case they have anything
+  else to say.  For example, the Scientific Organizing Committee
+  consisted of
+  \begin{quote}
+    J. Franco (Mexico, Chair), D. Cox (USA) and various other notables
+  \end{quote}
+  while the Local Organizing Committee comprised
+  \begin{quote}
+    S. J. Arthur (Chair), S. Kurtz, etc.
+  \end{quote}
+
+  \EditorSignature
+
+\end{frontsection}
+
+\begin{frontsection}[Photo]{Group Photograph}{\notitle}
+\null\vfill
+\centerline{Here goes the photograph.}
+\vfill
+\end{frontsection}
+
+\begin{frontsection}[Participants]{List of Participants}{}
+%% Here you put a formatted list of participants
+\vfil
+\dotfill First page of list of participants \dotfill
+\vfil\clearpage
+
+\null\vfil
+\dotfill Second page of list of participants \dotfill
+\vfil
+
+\end{frontsection}
+
+\begin{frontsection}[XXX]{Another front section}{}
+
+\end{frontsection}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%          MAIN MATTER           %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mainmatter % start arabic numbering
+
+\begin{articles}
+  %% Main articles go here
+  %% Use \article{ARTICLENAME} for each individual article
+  %% If you want any text to appear in brackets after the article
+  %% title in the TOC and index, then put it as an optional first
+  %% argument, e.g.,  \article[Invited Talk]{ARTICLENAME} 
+
+  \session{The Contributed Papers}
+  \article{rm-journal-example} % An illustrative article
+  \article{rm-onepage} % another article, which has a plate
+  \article{rm-minimal-test}
+  \session{Conference Summary}
+  \article[Invited Review]{rmsummsamp} % An illustrative conference summary
+
+\end{articles}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%          BACK MATTER           %%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\backmatter
+
+%% Abstracts of presentations for which the
+%% authors have not submitted a paper
+\begin{abstracts}
+
+  \title{An abstract of a poster}
+  \author{W. J. Henney\altaffilmark{1}}
+  \listofauthors{W.~J.~Henney}
+  \indexauthor{Henney, W. J}
+  \altaffiltext{1}{Where I am from done with altaffilmark/text}
+  \abstract{This is a test abstract.   This is a test abstract.   This
+    is a test abstract.   This is a test abstract.}
+  
+
+  \title{An abstract of another  poster}
+  \author{W.~J.~Henney\altaffil{This is done with altaffil} and
+    A.~N.~Other\altaffil{So is this} }
+  \listofauthors{W.~J.~Henney \& A.~N.~Other}
+  \indexauthor{Henney, W. J}
+  \indexauthor{Other, A. N.}
+  \abstract{This is a test abstract.   This is a test abstract.   This
+    is a test abstract.   This is a test abstract.}
+
+  \title{An abstract of yet another  poster}
+  \author{W.~J.~Henney\altaffil{This is done with altaffil} and
+    A.~N.~Other\altaffil{So is this} }
+  \listofauthors{W.~J.~Henney \& A.~N.~Other}
+  \indexauthor{Henney, W. J}
+  \indexauthor{Other, A. N.}
+  \abstract{This is a test abstract.   This is a test abstract.   This
+    is a test abstract.   This is a test abstract.}
+
+  \title{The abstract of a poster with a very long title to see how
+    well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+    
+  \title[Comment to go in TOC]{The abstract of a second poster with a
+    very long title to see how well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+    
+  \title{The abstract of a third poster with a very long title to see how
+    well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+    
+  \title{The abstract of a fourth poster with a very long title to see how
+    well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+    
+  \title{The abstract of a fifth poster with a very long title to see how
+    well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+    
+  \title{The abstract of a sixth poster with a very long title to see how
+    well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+    
+  \title{The abstract of a seventh poster with a very long title to see how
+    well it gets split up into lines}
+  \author{A.~N.~Other\altaffil{The affiliation of A.~N.~Other is also
+      very long so that it will go over several lines. His email
+      address is anon@nowhere.org}}
+  \listofauthors{A.~N.~Other}
+  \indexauthor{Other, A. N.}
+  \abstract{We will try and make this abstract longer so there is more
+    stuff to put on the page and it doesn't look too empty. However, I
+    have nothing whatsoever to say so will have to stop here. Let's
+    repeat that a few times. We will try and make this abstract longer
+    so there is more stuff to put on the page and it doesn't look too
+    empty. However, I have nothing whatsoever to say so will have to
+    stop here. Let's repeat that a few times. We will try and make
+    this abstract longer so there is more stuff to put on the page and
+    it doesn't look too empty. However, I have nothing whatsoever to
+    say so will have to stop here. Let's repeat that a few times. We
+    will try and make this abstract longer so there is more stuff to
+    put on the page and it doesn't look too empty. However, I have
+    nothing whatsoever to say so will have to stop here. Let's repeat
+    that a few times.}
+  
+  \title{An abstract to go in the list of abstracts, but not in the
+    index of authors}
+  \author{I.~A.~M. Hidden\altaffil{Puerto Escondido}}
+  \listofauthors{I.~A.~M. Hidden}
+  \abstract{The idea is that by omitting the
+    \textbackslash{}indexauthor command, we can avoid an entry in the
+    author index.}
+
+\end{abstracts}
+
+
+%% The Index: after latexing twice, run `makeindex -s rmaa' on this
+%% file, then latex twice more
+\printindex
+
+%% if you rename this file to something other than `rmbooksamp', then
+%% you must change the above line accordingly
+
+%%
+%% Plates: If you have any, then the following line will print
+%% them out:
+
+\outputplates
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

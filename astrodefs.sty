@@ -1,0 +1,167 @@
+%%%
+%%% Reimplementation of some AASTEX astronomical commands (originally for RevMex macros) 
+%%%\usepackage{astrodefs.sty}
+
+%%% Will Henney (w.henney@astrosmo.unam.mx)
+
+\newcommand{\etal}{et al.\@}
+
+\let\jnl@style=\rm
+\def\ref@jnl#1{{\jnl@style#1}}
+\DeclareRobustCommand\aj{\ref@jnl{AJ}}
+\DeclareRobustCommand\araa{\ref@jnl{ARA\&A}}
+\DeclareRobustCommand\apj{\ref@jnl{ApJ}}
+\DeclareRobustCommand\apjl{\ref@jnl{ApJ}}
+\DeclareRobustCommand\apjs{\ref@jnl{ApJS}}
+\DeclareRobustCommand\ao{\ref@jnl{Appl.~Opt.}}
+\DeclareRobustCommand\apss{\ref@jnl{Ap\&SS}}
+\DeclareRobustCommand\aap{\ref@jnl{A\&A}}
+\DeclareRobustCommand\aapr{\ref@jnl{A\&A~Rev.}}
+\DeclareRobustCommand\aaps{\ref@jnl{A\&AS}}
+\DeclareRobustCommand\azh{\ref@jnl{AZh}}
+\DeclareRobustCommand\baas{\ref@jnl{BAAS}}
+\DeclareRobustCommand\jrasc{\ref@jnl{JRASC}}
+\DeclareRobustCommand\memras{\ref@jnl{MmRAS}}
+\DeclareRobustCommand\mnras{\ref@jnl{MNRAS}}
+\DeclareRobustCommand\pra{\ref@jnl{Phys.~Rev.~A}}
+\DeclareRobustCommand\prb{\ref@jnl{Phys.~Rev.~B}}
+\DeclareRobustCommand\prc{\ref@jnl{Phys.~Rev.~C}}
+\DeclareRobustCommand\prd{\ref@jnl{Phys.~Rev.~D}}
+\DeclareRobustCommand\pre{\ref@jnl{Phys.~Rev.~E}}
+\DeclareRobustCommand\prl{\ref@jnl{Phys.~Rev.~Lett.}}
+\DeclareRobustCommand\pasp{\ref@jnl{PASP}}
+\DeclareRobustCommand\pasj{\ref@jnl{PASJ}}
+\DeclareRobustCommand\qjras{\ref@jnl{QJRAS}}
+\DeclareRobustCommand\skytel{\ref@jnl{S\&T}}
+\DeclareRobustCommand\solphys{\ref@jnl{Sol.~Phys.}}
+\DeclareRobustCommand\sovast{\ref@jnl{Soviet~Ast.}}
+\DeclareRobustCommand\ssr{\ref@jnl{Space~Sci.~Rev.}}
+\DeclareRobustCommand\zap{\ref@jnl{ZAp}}
+\DeclareRobustCommand\nat{\ref@jnl{Nature}}
+\DeclareRobustCommand\iaucirc{\ref@jnl{IAU~Circ.}}
+\DeclareRobustCommand\aplett{\ref@jnl{Astrophys.~Lett.}}
+\DeclareRobustCommand\apspr{\ref@jnl{Astrophys.~Space~Phys.~Res.}}
+\DeclareRobustCommand\bain{\ref@jnl{Bull.~Astron.~Inst.~Netherlands}}
+\DeclareRobustCommand\fcp{\ref@jnl{Fund.~Cosmic~Phys.}}
+\DeclareRobustCommand\gca{\ref@jnl{Geochim.~Cosmochim.~Acta}}
+\DeclareRobustCommand\grl{\ref@jnl{Geophys.~Res.~Lett.}}
+\DeclareRobustCommand\jcp{\ref@jnl{J.~Chem.~Phys.}}
+\DeclareRobustCommand\jgr{\ref@jnl{J.~Geophys.~Res.}}
+\DeclareRobustCommand\jqsrt{\ref@jnl{J.~Quant.~Spec.~Radiat.~Transf.}}
+\DeclareRobustCommand\memsai{\ref@jnl{Mem.~Soc.~Astron.~Italiana}}
+\DeclareRobustCommand\nphysa{\ref@jnl{Nucl.~Phys.~A}}
+\DeclareRobustCommand\physrep{\ref@jnl{Phys.~Rep.}}
+\DeclareRobustCommand\physscr{\ref@jnl{Phys.~Scr}}
+\DeclareRobustCommand\planss{\ref@jnl{Planet.~Space~Sci.}}
+\DeclareRobustCommand\procspie{\ref@jnl{Proc.~SPIE}}
+\let\astap=\aap
+\let\apjlett=\apjl
+\let\apjsupp=\apjs
+\let\applopt=\ao
+\def\phn{\phantom{0}}
+\def\phd{\phantom{.}}
+\def\phs{\phantom{\ensuremath{-}}}
+\def\phm#1{\phantom{#1}}
+%%\def\sun{\hbox{$\odot$}}
+\DeclareRobustCommand\sun{\ensuremath{\odot}}
+%%\def\earth{\hbox{$\oplus$}}
+\DeclareRobustCommand\earth{\ensuremath{\oplus}}
+%%\def\lesssim{\mathrel{\hbox{\rlap{\hbox{\lower4pt\hbox{$\sim$}}}\hbox{$<$}}}}
+%%\def\gtrsim{\mathrel{\hbox{\rlap{\hbox{\lower4pt\hbox{$\sim$}}}\hbox{$>$}}}}
+\DeclareRobustCommand\lesssim{\mathrel{\hbox{\smaller\smaller\rlap{\hbox{\lower3pt\hbox{$\sim$}}}\raise1.5pt\hbox{$<$}}}}
+\DeclareRobustCommand\gtrsim{\mathrel{\hbox{\smaller\smaller\rlap{\hbox{\lower3pt\hbox{$\sim$}}}\raise1.5pt\hbox{$>$}}}}
+%%\def\lta{\mathrel{\spose{\lower 3pt\hbox{$\mathchar"218$}}
+%%     \raise 2.0pt\hbox{$\mathchar"13C$}}}
+%%\def\gta{\mathrel{\spose{\lower 3pt\hbox{$\mathchar"218$}}
+%%     \raise 2.0pt\hbox{$\mathchar"13E$}}}
+\DeclareRobustCommand\sq{\hbox{\rlap{$\sqcap$}$\sqcup$}}
+%%\def\arcdeg{\hbox{$^\circ$}}
+%%\def\arcmin{\hbox{$^\prime$}}
+%%\def\arcsec{\hbox{$^{\prime\prime}$}}
+\DeclareRobustCommand\arcdeg{\ensuremath{^\circ}}
+\DeclareRobustCommand\arcmin{\ensuremath{^\prime}}
+\DeclareRobustCommand\arcsec{\ensuremath{^{\prime\prime}}}
+%%\def\fd{\hbox{$.\!\!^{\rm d}$}}
+%%\def\fh{\hbox{$.\!\!^{\rm h}$}}
+%%\def\fm{\hbox{$.\!\!^{\rm m}$}}
+%%\def\fs{\hbox{$.\!\!^{\rm s}$}}
+%%\def\fdg{\hbox{$.\!\!^\circ$}}
+%%\def\farcm{\hbox{$.\mkern-4mu^\prime$}}
+%%\def\farcs{\hbox{$.\!\!^{\prime\prime}$}}
+%%\def\fp{\hbox{$.\!\!^{\scriptscriptstyle\rm p}$}}
+\DeclareRobustCommand\fd{\ensuremath{.\!\!^\mathrm{d}}}
+\DeclareRobustCommand\fh{\ensuremath{.\!\!^\mathrm{h}}}
+\DeclareRobustCommand\fm{\ensuremath{.\!\!^\mathrm{m}}}
+\DeclareRobustCommand\fs{\ensuremath{\mkern0.5mu.\mkern-5mu^\mathrm{s}\mkern-1mu}}
+\DeclareRobustCommand\fdg{\ensuremath{.\!\!^\circ}}
+\DeclareRobustCommand\farcm{\ensuremath{.\mkern-4mu^\prime}}
+\DeclareRobustCommand\farcs{\ensuremath{\mkern1mu.\mkern-6mu^{\prime\prime}\mkern-1.5mu}}
+%%\DeclareRobustCommand\farcs{\ensuremath{.\!\!^{\prime\prime}}}
+\DeclareRobustCommand\fp{\ensuremath{.\!\!^{\scriptscriptstyle\rm p}}}
+%%\def\micron{\hbox{$\mu$m}}
+\DeclareRobustCommand\micron{\ensuremath{\mu\mathrm{m}}}
+\let\la=\lesssim
+\let\ga=\gtrsim
+%%\def\case#1#2{\hbox{$\frac{#1}{#2}$}}
+%%\def\slantfrac#1#2{\hbox{$\,^#1\!/_#2$}}
+%%\def\onehalf{\slantfrac{1}{2}}
+%%\def\onethird{\slantfrac{1}{3}}
+%%\def\twothirds{\slantfrac{2}{3}}
+%%\def\onequarter{\slantfrac{1}{4}}
+%%\def\threequarters{\slantfrac{3}{4}}
+\DeclareRobustCommand\case[2]{\ensuremath{\frac{#1}{#2}}}
+\DeclareRobustCommand\slantfrac[2]{\ensuremath{\,^#1\!/_#2}}
+\DeclareRobustCommand\onehalf{\slantfrac{1}{2}}
+\DeclareRobustCommand\onethird{\slantfrac{1}{3}}
+\DeclareRobustCommand\twothirds{\slantfrac{2}{3}}
+\DeclareRobustCommand\onequarter{\slantfrac{1}{4}}
+\DeclareRobustCommand\threequarters{\slantfrac{3}{4}}
+%%\def\ubvr{\hbox{$U\!BV\!R$}}
+%%\def\ub{\hbox{$U\!-\!B$}}
+%%\def\bv{\hbox{$B\!-\!V$}}
+%%\def\vr{\hbox{$V\!-\!R$}}
+%%\def\ur{\hbox{$U\!-\!R$}}
+\DeclareRobustCommand\ubvr{\ensuremath{U\!BV\!R}}
+\DeclareRobustCommand\Color[2]{%
+  \ensuremath{%
+    #1\!\ifx#1V\!\fi-\!#2
+  }}
+\DeclareRobustCommand\ub{\Color{U}{B}}
+\DeclareRobustCommand\bv{\Color{B}{V}}
+\DeclareRobustCommand\vr{\Color{V}{R}}
+\DeclareRobustCommand\ur{\Color{U}{R}}
+%% New version of the \ion command, that actually works!
+\DeclareRobustCommand\ion[2]{%
+  \mbox{#1\kern0.2em%
+    \smaller\rmfamily%
+    \edef\@tempa{\@car#2\@nil}%
+    \ifcat1\@tempa%
+    \@Roman{#2}%
+    \else%
+    \uppercase{#2}%
+    \fi}}
+\newcounter{IonStage}
+\DeclareRobustCommand\plainion[2]{\setcounter{IonStage}{#2}#1 \Roman{IonStage}}
+\DeclareRobustCommand\nodata{$\cdots$}
+
+\let\@small=\small
+\let\@normalsize=\normalsize
+\let\@footnotesize=\footnotesize
+\let\@scriptsize=\scriptsize
+\let\@tiny=\tiny
+\let\@large=\large
+\let\@Large=\Large
+\let\@LARGE=\LARGE
+\let\@huge=\huge
+\let\@Huge=\Huge
+\newcommand{\smaller}{\small}
+\renewcommand{\normalsize}{\renewcommand{\smaller}{\small}\@normalsize}
+\renewcommand{\small}{\renewcommand{\smaller}{\footnotesize}\@small}
+\renewcommand{\footnotesize}{\renewcommand{\smaller}{\scriptsize}\@footnotesize}
+\renewcommand{\scriptsize}{\renewcommand{\smaller}{\tiny}\@scriptsize}
+\renewcommand{\tiny}{\renewcommand{\smaller}{\tiny}\@tiny}
+\renewcommand{\large}{\renewcommand{\smaller}{\normalsize}\@large}
+\renewcommand{\Large}{\renewcommand{\smaller}{\large}\@Large}
+\renewcommand{\LARGE}{\renewcommand{\smaller}{\Large}\@LARGE}
+\renewcommand{\huge}{\renewcommand{\smaller}{\LARGE}\@huge}
+\renewcommand{\Huge}{\renewcommand{\smaller}{\huge}\@Huge}

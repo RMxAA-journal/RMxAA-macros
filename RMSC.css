@@ -1,0 +1,28 @@
+body { 
+  color                 : black ;
+  background-color      : #ffffff ;
+  font-family: times, serif ; 
+}
+h1, h2, h3, h4 {
+  color                 : #990066 ;
+  font-variant: small-caps ;
+}
+img { 
+  border-width          : 0 ; 
+  background-color      : #ffffff ;
+}
+
+tt {
+   font-family: courier, monospace ;
+   }
+
+pre {
+    font-family: courier, monospace ; 
+    }		 
+
+address tt { 
+   font-family: courier, monospace ; 
+   font-size: 110% ; 
+   font-style: normal ;
+   }
+

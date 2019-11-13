@@ -1,0 +1,101 @@
+-----------------------------
+THE REVMEXAA(SC) LATEX MACROS
+-----------------------------
+
+Version: 3.24 (14 Sep 2007)
+
+Author: William Henney (w.henney@astrosmo.unam.mx)
+
+Latest version available from:	http://www.astrosmo.unam.mx/rmaa
+
+USAGE
+-----
+
+There are three different types of conference contribution that can be
+typeset with this package.  Each has an associated example LaTeX
+document, which should serve both as documentation and as a template
+for your own contribution.  If you are unsure which sort of
+contribution you should be writing or how many pages you are allowed,
+please check with the organizers of your particular conference.
+
+1. rm-extenso.tex - Full "in extenso" paper. Usually used for oral
+   presentations. 
+
+2. rm-onepage.tex - Single-page, compact paper. Usually used for
+   poster presentations. 
+
+3. rm-shortabstract.tex - Abstract only. Usually used when there are
+   too many presentations for them all to be published "in extenso",
+   or when the authors do not wish to write up a longer paper. 
+
+Further details on the use of the macros are given in the "Guide for
+Authors", rmsc_authorguide.pdf
+
+VERSION 3.24 RELEASE NOTES 
+--------------------------
+
+The main change in this release is a reorganization to give separate
+packages for the Conference Series (rmsc3.24.tar.gz or rmsc3.24.zip)
+and the main journal (rmaa3.24.tar.gz or rmaa3.24.zip).
+
+A maximum of six keywords is now enforced. Exceeding this limit gives
+a LaTeX compilation error.
+
+There is also experimental support for BibTeX (see
+rmsc_authorguide.pdf).
+
+DOWNLOAD AND INSTALLATION
+-------------------------
+
+The latest version of the macros can always be obtained from
+|http://www.astrosmo.unam.mx/rmaa|. There are three different
+packages, each designed for a different audience: authors of main
+journal papers (e.g., |rmaa3.24.tar.gz|), authors of contributions to
+conference proceedings (e.g., |rmsc3.24.tar.gz|), and editors of the
+main journal or conference proceedings (e.g.,
+|rmaa_editor3.24.tar.gz|). Please make sure you have the right
+package. All packages are also provided in |.zip| format, chiefly for
+the convenience of MS Windows users.
+
+Once you have downloaded the relevant package archive file, move it to
+the directory (folder) where you wish to work and unpack the
+archive. The procedure to do this may vary between systems. From the
+command line on Unix, Linux, or Mac OS X, you can use something like
+|tar -zxf rmsc3.24.tar.gz|.
+
+To test that everything is working, you should compile the relevant
+example document: |rm-extenso.tex|, |rm-onepage.tex|, or
+|rm-shortabstract.tex|. You will need to invoke |latex| twice to get
+the cross references right. The procedure to view and print the
+document will vary between systems. On Unix, Linux, or Mac OS X, you
+can use |latex} and |dvips| to generate a postscript file (which can
+be converted to PDF via |ps2pdf|), or alternatively you can use
+|pdflatex| to generate a PDF file directly. Note that in the first
+case, any included graphics must be in EPS format, while in the second
+case, they must be in PDF, PNG, or JPG format. It is recommended that
+you omit the file extension from the filenames in the
+|\includegraphics| command, so that both |latex| and |pdflatex| can
+automatically find the correct figure file.
+
+Assuming that the example document compiled and printed correctly, you
+can now start writing your own paper, using the example document as a
+template. 
+
+FILE MANIFEST for rmscN.MM.tar:
+-------------------------------
+
+README.rmsc		this file
+rmaa.cls		LaTeX class file for typesetting RMAA articles 
+rm-extenso.tex		Example proceedings paper and tutorial
+rm-onepage.tex		Example poster paper
+rm-shortabstract.tex	Example short abstract
+rmsc_authorguide.pdf	Guide for Conference Authors 
+example-fig.eps		Example figure
+example-badfig.eps	Example of how not to do a figure
+example-fig.pdf		Example figure
+example-badfig.pdf	Example of how not to do a figure
+rmaa.bst		Bibtex style file (experimental)
+GPL			License for free re-distribution of macros
+
+	
+

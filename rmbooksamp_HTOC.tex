@@ -1,0 +1,45 @@
+%%% Example LaTeX file for generating HTML Table of Contents
+%%% WJH 05 Feb 2001
+\documentclass{article}
+\usepackage{html} % this is distributed with latex2html
+
+%%% Change the following 4 definitions if necessary 
+\newcommand{\HyperTOCinput}{\input{rmbooksamp.htc}}
+\newcommand{\HyperTOCpsprefix}{RMxAC..9}
+\newcommand{\HyperTOCpsdir}{../PS}
+\newcommand{\HyperTOCpdfdir}{../PDF}
+\newcommand{\HyperTOCmeetingname}{Astrophysical Plasmas 1999: Codes,
+  Models, and Observations}
+
+%%% Nothing should need changing below this line
+\renewcommand{\\}{\relax} % temporarily turn off explicit line breaks just in case
+\renewcommand{\textsuperscript}[1]{\relax} % ditto with this 
+\newcommand{\Empty}{}
+\newcommand{\HyperTOCEntry}[3]{%
+%  #1\newline\ifx#2\Empty\else\textit{#2}\newline\fi 
+  \textbf{#1}\newline\textit{#2}\newline 
+  $|$ \htmladdnormallinkfoot{PDF}{\HyperTOCpdfdir/\HyperTOCpsprefix\_{}#3.pdf} 
+  $|$ \htmladdnormallinkfoot{gzipped PS}{\HyperTOCpsdir/\HyperTOCpsprefix\_{}#3.ps.gz} $|$ 
+  \par 
+  }
+
+\newcommand{\HyperTOCmeeting}[3]{{\LARGE\textbf{\HyperTOCmeetingname}\par}{\Large\textbf{#2,
+      #3}\par}}
+\newcommand{\HyperTOCpart}[1]{\subsubsection*{#1}}
+\newcommand{\HyperTOCeditors}[1]{{\Large\textbf{Editors: #1}\par}}
+
+\newcommand{\HyperTOCpreamble}{
+  \tableofchildlinks
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2ex}
+
+\begin{document}
+
+\input{rmbooksamp.htc}
+
+\htmlrule
+\htmlinfo*
+
+\end{document}

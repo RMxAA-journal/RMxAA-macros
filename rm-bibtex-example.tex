@@ -1,0 +1,38 @@
+\documentclass[guide]{rmaa}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage[colorlinks, citecolor=red!50!black, urlcolor=blue!50!black]{hyperref}
+\reviewarticle
+\title{Minimal example of the use of Bib\TeX{} with the rmaa document class} 
+
+\author{W. J. Henney\altaffil{Centro de Radioastronomía y Astrofísica, UNAM, Mé\-xi\-co.}}
+\suppressfulladdresses
+\SetYear{2010}
+\resumen{
+  Este documento muestra un ejemplo de cómo generar citas y lista de referencias de manera automática usando Bib\TeX. 
+}
+
+\abstract{
+  This document shows an example of how to generate automatic citations and reference list using Bib\TeX.
+}
+
+
+\begin{document}
+
+\maketitle
+
+\enlargethispage{-18\baselineskip}
+\RescaleLengths{3}
+
+\section{Citations in the text}
+The principal citation commands are \verb|\citep| for parenthetical citations and \verb|\citet| for a citation used as a noun in the text. See the \href{http://mirror.ctan.org/macros/latex/contrib/natbib/natnotes.pdf}{ \texttt{natbib} documentation} for more details. 
+
+The following sentence is meaningless nonsense, written purely to illustrate the citation mechanism. It is now widely accepted \citep{1991ApJ...374..580B, 2005MNRAS.358..291D} that something or other is the case. On the other hand, following \citet{1996ApJ...469..171G}, we believe that other assertions are not true at all (despite what \citealp{1939ApJ....89..526S} maintains).
+
+\section{The reference list}
+The reference list is generated automatically by the command \verb|\|\texttt{bib\-lio\-gra\-phy\-\{BIBFILE\}}, where \texttt{BIBFILE.bib} contains all your references in Bib\TeX{} format (these can be downloaded from ADS or exported from your favorite bibliographic software package). After running \texttt{latex} on your file for the first time, you have to run \texttt{bibtex}, then \texttt{latex} twice more. After that, \texttt{bibtex} only needs to be run again if you add new citations.
+
+\bigskip
+\bibliography{rm-example-bibliography}
+
+\end{document}

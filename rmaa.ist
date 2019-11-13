@@ -1,0 +1,18 @@
+%%%
+%%% makeindex style file for rmaa.cls
+%%%
+%%% W. J. Henney (04 Feb 2000)
+%%%
+
+%% We can make do with the defaults for nearly everything
+%%
+
+%% The only thing need to change is the stuff between entry and
+%% pagenumber. The entry should end with a period and then the number
+%% should be flush against the right margin. 
+delim_0 ".\\hskip 1ex\\penalty0\\null\\nobreak\\hfill"
+
+%% I don't think we will ever have sub-entries in the index, but do
+%% them the same anyway for completeness.
+delim_1 ".\\hskip 1ex\\penalty0\\null\\nobreak\\hfill"
+delim_2 ".\\hskip 1ex\\penalty0\\null\\nobreak\\hfill"
