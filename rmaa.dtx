@@ -1,4 +1,4 @@
-% \def\fileversion{3.27} \def\filedate{2019/11/12}
+% \def\fileversion{4.0} \def\filedate{2019/11/12}
 % \MakeShortVerb{\|}
 % \title{A \LaTeX{} document class for the Revista Mexicana de
 % Astronom\'\i a y Astrof\'\i sica\thanks{This file has version
@@ -49,7 +49,7 @@
 \newcommand\rmDate{\rmaa@date}
 \NeedsTeXFormat{LaTeX2e}[1995/06/01]
 %    \end{macrocode}
-% \changes{3.27}{2019/11/02}{Change abstract to appear before
+% \changes{4.0}{2019/11/02}{Change abstract to appear before
 % resumen. Change RevMexAA to RMxAA for consistency with ADS.}
 %
 % \changes{3.22}{2007/03/22}{Allow proceedings articles to have
@@ -303,37 +303,31 @@ class]
   \typeout{Package makeidx.sty not found - Author Index may not work.}
   }
 %% commented out for moment since requires more modern version of LaTeX
-%%\RequirePackage[latin1]{inputenc}
-\newif\if@hyperref@loaded
-\IfFileExists{hyperref.sty}{%
-  \RequirePackage{hyperref}
-  \hypersetup{hidelinks}
-  \@hyperref@loadedtrue
-  }{%
-  \typeout{Package hyperref.sty not found - line breaks in email addresses
-    will not work properly.}
-  \@hyperref@loadedfalse
-}
+%% \RequirePackage[latin1]{inputenc}
 %    \end{macrocode}
-% Configuration of hyperref is moved out of the \cs{IfFileExists}
-% structure since it was giving me errors.  We patch the
-% \cs{@combinedblfloats} following a suggestion by Heiko Oberdiek at
-% \url{https://tex.stackexchange.com/a/249743/3843}, which avoids
-% problems when hyperlinks are split across
-% pages. \changes{3.27}{2019/11/12}{Fix for issue where breaking
+% \changes{4.0}{2019/11/13}{Make \texttt{hyperref} and
+% \texttt{etoolbox} into hard requirements, since we now use them
+% extensively.}  We use hyperref to get internal and external links.
+% But I don't like the colored boxes so I turn those off.  We use
+% etoolbox for patching and robustifying at the moment.  In the
+% future, I want to port a lot of other stuff over to it.  For
+% instance, replace the ifthen package and the TeX ifs too.
+%    \begin{macrocode}
+\RequirePackage{etoolbox}
+\RequirePackage{hyperref}
+\hypersetup{hidelinks}
+%    \end{macrocode}
+% We patch the \cs{@combinedblfloats} following a suggestion by Heiko
+% Oberdiek at \url{https://tex.stackexchange.com/a/249743/3843}, which
+% avoids problems when hyperlinks are split across
+% pages. \changes{4.0}{2019/11/12}{Fix for issue where breaking
 % hyperlink across pages gave an error.}
 %    \begin{macrocode}
-\if@hyperref@loaded
- %\renewcommand*{\HyperDestNameFilter}[1]{\articlename:#1}
 \urlstyle{same}
 \newcommand\email{\begingroup \urlstyle{rm}\Url}
-\RequirePackage{etoolbox}
 \patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
   \errmessage{\noexpand\@combinedblfloats could not be patched}%
 }%
-\else
-\newcommand\email[1]{#1}
-\fi  
 %    \end{macrocode}
 % \subsection{Other setup stuff}\label{sec:setup}
 % Some declarations: 
@@ -526,7 +520,7 @@ class]
 % \end{macro}
 % 
 % \begin{macro}{\abovesectionskip}
-% \changes{3.27}{2019/11/12}{Use negative values for skip so that first paragraph after section headings is not indented.  This is something that I have been trying to fix for years!  It turns out that the anser was in the documentation for the standard command \cs{@startsection.}}
+% \changes{4.0}{2019/11/12}{Use negative values for skip so that first paragraph after section headings is not indented.  This is something that I have been trying to fix for years!  It turns out that the anser was in the documentation for the standard command \cs{@startsection.}}
 % \begin{macro}{\belowsectionskip}
 % \begin{macro}{\aboveparaskip}
 % \begin{macro}{\belowparaskip}
@@ -872,7 +866,7 @@ class]
 %    \end{macrocode}
 % Header has journal name, volume, and page numbers for a regular
 % article, or similar for special cases. 
-% \changes{3.27}{2019/11/03}{Change to three-line header with copyright info and DOI.}
+% \changes{4.0}{2019/11/03}{Change to three-line header with copyright info and DOI.}
 %    \begin{macrocode}
 \if@preprint
 \renewcommand\@oddhead{%
@@ -1423,7 +1417,7 @@ class]
 %
 % \begin{macro}{\DOI}
 % User/editor command to enter the DOI, which will be typeset as a link.
-% \changes{3.27}{2019/11/02}{New user command \cs{DOI} to typeset
+% \changes{4.0}{2019/11/02}{New user command \cs{DOI} to typeset
 % DOI in the header of first page and add it to ADS info.}
 %    \begin{macrocode}
 \newcommand\DOI[1]{%
@@ -1434,7 +1428,7 @@ class]
 % \end{macro}
 %
 % \begin{macro}{\ORCIDiD}
-% \changes{3.27}{2019/11/12}{Add mechanism for giving ORCID iD links}
+% \changes{4.0}{2019/11/12}{Add mechanism for giving ORCID iD links}
 % \begin{macro}{\ORCIDiDfull}
 % \begin{macro}{\@orcid@icon}
 % \begin{macro}{\@orcid@iconbig}
@@ -1648,7 +1642,7 @@ class]
 % Table, but some need to be set  explicitly here. 
 % 
 % \begin{macro}{\ADS@doi}
-% \changes{3.37}{2019/11/08}{Save DOI for ADS}
+% \changes{4.0}{2019/11/08}{Save DOI for ADS}
 % The user/editor command \cs{DOI} is used to set this. 
 %    \begin{macrocode}
 \newcommand{\ADS@doi}{https://doi.org/10.22201/ia.01851101p.0000.00.00.00}
@@ -1829,14 +1823,42 @@ class]
 %%  \fi\fi\fi}
 %    \end{macrocode}
 % \end{macro}
-% 
+%
+% \begin{macro}{\AuthorADS}
+% \begin{macro}{\ADS@affiliations}
+% New mechanism for setting the affiliations for ADS. The author labels (AA, AB, \dots) are generated using two nested counters.  We use the |\robustify| command from \texttt{etoolbox} so that accented characters in the affiliation addresses do not blow up.  The list of accents may need to be expanded. 
+%    \begin{macrocode}
+\newcounter{AUTHOR}
+\newcounter{author}[AUTHOR]
+\stepcounter{AUTHOR}
+\newcommand\ADS@affiliations{}
+\robustify{\'}\robustify{\i}\robustify{\~}\robustify{\`}
+\def\AuthorADS#1#2{%
+  \begingroup
+  \def\ORCIDiD##1{<ID system="ORCID">##1</ID>}
+  \def\Email##1{<EMAIL>##1</EMAIL>}
+  \def\Affil##1{##1}
+  \stepcounter{author}
+  \ifthenelse{\value{author} > 26}{\stepcounter{AUTHOR}\stepcounter{author}}{}
+  \ifthenelse{\equal{\ADS@affiliations}{\@rmaaEmpty}}{%
+    \xdef\ADS@affiliations{\Alph{AUTHOR}\Alph{author}(#2)}
+  }{%
+    \xdef\ADS@affiliations{\ADS@affiliations, \Alph{AUTHOR}\Alph{author}(#2)}
+  }%
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% %
 % \begin{macro}{\ADS@dumpdata}
+% \changes{4.0}{2019/11/13}{Write all author affiliations for ADS}
 % \begin{macro}{\ADS@write}
 % \begin{macro}{\ADS@openfile}
 % |\ADS@dumpdata| is the macro that actually does the job of writing out all the
 % data to an auxiliary file, using |\ADS@write| to write each
 % field. The file is set up with |\ADS@openfile|, which currently is
-% done in the TOC of a book. 
+% done in the TOC of a book.  The new multi-author affiliations are used if |\ADS@affiliations| has been set, otherwise it falls back to the single-author version |\ADS@affil|. 
 %    \begin{macrocode}
 \newcommand{\ADSfield}[2]{\relax}
 \newcommand{\ADSvfield}[2]{\relax}
@@ -1846,7 +1868,11 @@ class]
   \ADS@write{\string\begin{ADSarticle}}
   \ADS@WRITE{\string\ADSfield{R}{\ADS@BibCode}}
   \ADS@write{\string\ADSfield{A}{\ADS@authors}}
-  {\ADS@sanitize\ADS@write{\string\ADSfield{F}{AA(\ADS@affil)}}}
+  \ifthenelse{\equal{\ADS@affiliations}{\@rmaaEmpty}}{%
+    {\ADS@sanitize\ADS@write{\string\ADSfield{F}{AA(\ADS@affil)}}}
+  }{%
+    {\ADS@sanitize\ADS@write{\string\ADSfield{F}{\ADS@affiliations}}}
+  }
   \ADS@write{\string\ADSfield{J}{\ADS@journalname}}
   \ADS@write{\string\ADSfield{D}{\ADS@fulldate}}
   \ADS@write{\string\ADSfield{L}{\ADS@lastpage}}
@@ -2356,7 +2382,7 @@ class]
 % \end{environment}
 % \begin{environment}{appendix}
 %   If there is only one appendix, then use |appendix| environment
-%   instead.  \changes{3.27}{2019/11/12}{ Added
+%   instead.  \changes{4.0}{2019/11/12}{ Added
 %   appendix environment for case where there is only one section.}
 %    \begin{macrocode}
 \renewenvironment{appendix}{\par
@@ -2993,8 +3019,11 @@ class]
   \setcounter{section}{0}
   \setcounter{equation}{0}
   \setcounter{rmaabib}{0}
+  \setcounter{author}{0}
+  \setcounter{AUTHOR}{1}
   \gdef\ADS@authors{}%
   \gdef\ADS@affil{}%
+  \gdef\ADS@affiliations{}%
   \gdef\ADS@references{}%
   \@firstauthortrue
   \@firstaffiltrue
@@ -3801,7 +3830,7 @@ class]
 DOCFILES=rmaa.pdf rmaa.ps.gz
 MACRO_LTX_FILES=rmaa.cls rmaa.ins rmaacite.sty adshtml.sty ADS.tex
 SHELLSCRIPTS=makeads.sh
-MACRO_OTHER_FILES=adshtml.perl .latex2html-init
+MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
 MAKEFILE=Makefile
 MACROFILES=$(MACRO_LTX_FILES) $(SHELLSCRIPTS) $(MACRO_OTHER_FILES)         
 SKELETONFILES=ADS.tex 
@@ -3868,10 +3897,6 @@ macros: rmaa.dtx rmaa.ins
 %    \end{macrocode}
 % We now use PDF\LaTeX{} for this.
 %    \begin{macrocode}
-rmaa.pdf: rmaa.aux rmaa.ind rmaa.gls
-        @echo "REGENERATING .pdf FILE"
-        pdflatex "\nonstopmode\input{rmaa.dtx}"
-
 rmaa.aux: rmaa.dtx rmaa.ind rmaa.gls
         @echo "REGENERATING .aux FILE"
         pdflatex "\nonstopmode\input{rmaa.dtx}"
@@ -3883,6 +3908,10 @@ rmaa.ind: rmaa.idx
 rmaa.gls: rmaa.glo
         @echo "REGENERATING CHANGELOG"
         makeindex -s gglo.ist -o rmaa.gls rmaa.glo
+
+rmaa.pdf: rmaa.aux rmaa.ind rmaa.gls
+        @echo "REGENERATING .pdf FILE"
+        pdflatex "\nonstopmode\input{rmaa.dtx}"
 
 clean: 
         rm -f rmaa.aux rmaa.dvi rmaa.ind rmaa.gls
@@ -4092,10 +4121,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 % The init file for latex2html.
 %    \begin{macrocode}
 %<*latex2html-init>
+$PDFTOCAIRO = "pdftocairo";
+$PDFLATEX = "pdflatex";
+$LATEX = "latex";
 $MAX_SPLIT_DEPTH = 0;
 $HTML_VERSION = "4.0,math";
 $NO_SIMPLE_MATH = 1;
-$ADDRESS = "<p><address><a href=\"mailto:rmaa\@astroscu.unam.mx\">rmaa\@astroscu.unam.mx</address></p>"; 
+$ADDRESS = "<p><address><a href=\"mailto:rmaa\@astro.unam.mx\">rmaa\@astro.unam.mx</address></p>"; 
 $INFO = "<p>This document was created using latex2html and the rmaa latex macros</p>"; 
 $NO_NAVIGATION = 1;
 1; 
@@ -4260,6 +4292,7 @@ _RAW_ARG_CMDS_
 % |_ads.tex| by using \LaTeX{}2HTML and |lynx|. 
 % \changes{2.2beta13}{2002/03/12}{Complete rewrite of |makeads.sh|. Now much 
 % improved I think}
+% \changes{4.0}{2019/11/13}{Fix the at-sign substitution so that it only eliminates \cs{@} and does not mess with email addresses.}
 
 %    \begin{macrocode}
 %<*ads-shell-script>
@@ -4322,7 +4355,7 @@ grep '^\\newlabel{.*:RMAAFirstPage}' $AUXFILE \
 
 # Apend a further sed command to get rid of \@, since redefining 
 # it in _ads.tex didn't work
-echo >> $ADSBASENAME.sed 's/\\@//g'
+echo >> $ADSBASENAME.sed 's/\\\\@//g'
 
 echo "Generating $BASENAME.ads2 from $ADSBASENAME.sed and $BASENAME.ads" 
 
