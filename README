@@ -2,11 +2,11 @@
 THE REVMEXAA LATEX MACROS
 -------------------------
 
-Version: 3.26b (09 Feb 2015)
+Version: 4.0pre (pre-release testing 2019-11)
 
-Author: William Henney (w.henney@crya.unam.mx)
+Author: William Henney (w.henney@irya.unam.mx)
 
-Latest version available from:	http://www.crya.unam.mx/rmaa
+Latest version available from:	http://www.astroscu.unam.mx/~rmaa
 
 
 USAGE
@@ -20,6 +20,14 @@ template for your own contribution.
 
 Further details on the use of the macros are given in the "Guide for
 Authors", authorguide.pdf
+
+VERSION 4.0x RELEASE NOTES 
+--------------------------
+
+The main change in this release is the inclusion of DOI links for each
+article and ORCID iD links for each author (if available).  In
+addition, hyperlinks in the PDF file should now work (both internal
+links and external ones).  
 
 
 VERSION 3.2x RELEASE NOTES 
@@ -46,10 +54,10 @@ DOWNLOAD AND INSTALLATION
 The latest version of the macros can always be obtained from
 |http://www.astrosmo.unam.mx/rmaa|. There are three different
 packages, each designed for a different audience: authors of main
-journal papers (e.g., |rmaa3.24.tar.gz|), authors of contributions to
-conference proceedings (e.g., |rmsc3.24.tar.gz|), and editors of the
+journal papers (e.g., |rmaa4.0.tar.gz|), authors of contributions to
+conference proceedings (e.g., |rmsc4.0.tar.gz|), and editors of the
 main journal or conference proceedings (e.g.,
-|rmaa_editor3.24.tar.gz|). Please make sure you have the right
+|rmaa_editor4.0.tar.gz|). Please make sure you have the right
 package. All packages are also provided in |.zip| format, chiefly for
 the convenience of MS Windows users.
 
@@ -57,7 +65,7 @@ Once you have downloaded the relevant package archive file, move it to
 the directory (folder) where you wish to work and unpack the
 archive. The procedure to do this may vary between systems. From the
 command line on Unix, Linux, or Mac OS X, you can use something like
-|tar -zxf rmaa3.24.tar.gz|.
+|tar -zxf rmaa4.0.tar.gz|.
 
 To test that everything is working, you should compile the example
 document: |rm-journal-example.tex|. You will need to invoke |latex|
