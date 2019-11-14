@@ -1,0 +1,4388 @@
+% \def\fileversion{4.0} \def\filedate{2019/11/12}
+% \MakeShortVerb{\|}
+% \title{A \LaTeX{} document class for the Revista Mexicana de
+% Astronom\'\i a y Astrof\'\i sica\thanks{This file has version
+% \fileversion{} last revised \filedate{}.}}
+% \author{William J. Henney\thanks{w.henney@irya.unam.mx}}
+% \date{\filedate}
+% \maketitle
+% \paragraph{Abstract}
+% This document describes the \texttt{rmaa} \LaTeX{}
+% document class for the journal ``Revista Mexicana de
+% Astronom\'\i a y Astrof\'\i sica''. The macros can be used for 
+% \begin{enumerate}
+% \item Preparing author manuscripts for the journal (including
+% conference proceedings to be published in the ``Serie de
+% Conferencias'')
+% \item Typesetting an entire volume of the journal by inputting the
+% individual article files from a container file. Facilities are
+% included for automatic generation of TOC and Author Index. 
+% \end{enumerate}
+% 
+% \tableofcontents
+% \section{The documentation driver file}
+% This is the part that generates the documentation that you may or
+% may not be reading, which is done with the help of the Makefile
+% discussed in section~\ref{sec:driver_make}. 
+%    \begin{macrocode}
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{hyperref}
+\usepackage{palatino}
+\EnableCrossrefs \CodelineIndex \RecordChanges
+\setlength{\parindent}{0pt}
+\def\MacroFont{\footnotesize\tt}
+\begin{document} \DocInput{rmaa.dtx} \PrintIndex \PrintChanges \end{document}
+%</driver>
+%    \end{macrocode}
+
+% \section{The implementation}
+% 
+% \changes{3.24}{2007/09/14}{Added user access to the macro version
+% and date via \cs{rmVersion} and \cs{rmDate}}
+% 
+%    \begin{macrocode}
+%<*package>
+\newcommand{\rmaa@version}{3.26}
+\newcommand{\rmaa@date}{2011/08/15}
+\newcommand\rmVersion{\rmaa@version}
+\newcommand\rmDate{\rmaa@date}
+\NeedsTeXFormat{LaTeX2e}[1995/06/01]
+%    \end{macrocode}
+% \changes{4.0}{2019/11/02}{Change abstract to appear before
+% resumen. Change RevMexAA to RMxAA for consistency with ADS.}
+%
+% \changes{3.22}{2007/03/22}{Allow proceedings articles to have
+%   received/accepted dates} \changes{3.21}{2006/05/15}{Changes for
+%   Silvia - abstracts are now shipped out to ADS.}
+% \changes{3.19}{2006/01/19}{Changes for Silvia - remove adresses from
+%   end, new abstract style} \changes{2.2beta}{2001/10/30}{ Fixed bug
+%   whereby twocolumn option was not passed through to book
+%   class. Finally sorted out the ``label on last page'' issue. }
+% \changes{2.1}{2001/01/23}{ Fixed some inconsistencies in
+%   \cs{nocite} and \cs{bibitem} uniqification Fixed the definition of
+%   \cs{ion} so it will work in math mode and in contexts where the
+%   typesize is different from normal (e.g., title, fig captions).
+%   Modified the definition of \cs{@caption}, so we don't write any
+%   list-of-figures data (we never use it anyway, and it just causes
+%   problems with fragile commands in fig captions). }
+% \changes{2.0}{2000/11/30}{ Added `newstyle' option, which should be
+%   used in all new proceedings volumes (wider abstract, smaller
+%   typeface in fig captions, etc.) Added commands for formatting
+%   table captions. New demonstation document rmpostsamp.tex for
+%   1-page posters. This will be the last release under a PRI
+%   government (for a while...)}  \changes{1.9}{2000/06/06}{
+%   Corrected position of page number in footer of articles that open
+%   on even pages. Ensured that first article in each session opens on
+%   an odd page, as do list of abstracts and author index. Added extra
+%   space in TOC before the backmatter. Added command for editors,
+%   \cs{BoldSessionTitles}, that makes produces bold titles for
+%   session in the TOC.}  \changes{1.8}{2000/05/16}{ Fixed bug in
+%   last page label with \cs{suppressfulladdresses} }
+% \changes{1.7}{2000/05/11}{ Fixed more little things. Page labels
+%   now work, even if you have no bibliography. You can output the
+%   full addresses by hand with the \cs{outputfulladdresses}
+%   command. Editors' Guide updated but still not finished. Revamped
+%   splitbook.sh now produces PS file of each article for web page and
+%   also an EPS file of each page for sending to the printers.}
+% \changes{1.6}{2000/04/15}{ More cleaning up: full stops after
+%   titles in index, running headers and footers in frontmatter,
+%   fontsize in title of index, etc} \changes{1.5}{2000/04/15}{
+%   Eliminated superscripts from titles in TOC and index}
+% \changes{1.4}{2000/04/14}{ Added copyright and license info (GPL)}
+% \changes{1.3}{2000/03/01}{ Corrected \cs{figcaption} to do the
+%   caption formatting right Corrected font size of sec headings in
+%   front matter} \changes{1.2}{2000/02/16}{ Added \cs{plate}
+%   command} \changes{1.1}{2000/02/14}{ Added manuscript option,
+%   corrected bugs} \changes{1.0}{2000/02/08}{ Now does a whole book
+%   - lots of stuff tidied up} \changes{0.7}{1999/10/04}{ Increased
+%   spacing between sections in single column styles. Suppressed
+%   floats at bottom of pages (didn't work though) }
+% \changes{0.6}{1999/09/24}{ Tweaked \cs{adjustfinalcols} (still not
+%   perfect) Added proceedings option Added onecolumn/twocolumn
+%   options (orthogonal to journal/proceedings) }
+% \changes{0.5}{1999/09/23}{ Added \cs{fulladdresses} and
+%   \cs{adjustfinalcols} (just about working)}
+% \changes{0.4}{1999/09/22}{ Minor stylistic changes}
+% \changes{0.3}{1999/06/28}{ Better mechanism for alternative
+%   affiliations Added `guide' option for user guide}
+% \changes{0.2}{1999/05/27}{ All basic functionality present, I
+%   think} \changes{0.1}{1999/05/26}{ Just about working - still
+%   missing Fig/Tab/Refs} \changes{0.0}{1999/05/21}{ So bored today,
+%   decided to rewrite RMAA LaTeX macros from scratch}
+%    \begin{macrocode}
+\ProvidesClass{rmaa}[\rmaa@date\space v\rmaa@version\space RMxAA article
+class]
+%    \end{macrocode}
+% \subsection{Option Handling}
+% \label{sec:options}
+% Declarations that are needed in options
+% \changes{3.05}{2003/10/22}{Added natbib option}
+% \changes{3.06}{2003/01/03}{Natbib option turned on permanently}
+% \changes{3.07}{2003/01/11}{Added proof option}
+% \changes{3.14}{2003/01/11}{Option to turn off natbib}
+% \changes{3.18}{2003/10/22}{trying out doctex mode} 
+% \changes{3.23}{2007/09/09}{Manuscript is now on by default.}
+% \changes{3.26}{2011/08/15}{New option for review articles}
+%    \begin{macrocode}
+\newif\if@reviewarticle
+\@reviewarticlefalse
+\newif\if@proof
+\@prooffalse
+\newif\if@journal
+\@journaltrue
+\newif\if@printdates
+\@printdatesfalse
+\newif\if@proceedings
+\@proceedingsfalse
+\newif\if@manuscript
+\@manuscripttrue
+\newif\if@bigfont
+\@bigfonttrue
+\newif\if@guide
+\@guidefalse
+\newif\if@preprint
+\@preprintfalse
+\newif\if@rmtwocol
+\@rmtwocoltrue
+\newif\if@biblist
+\@biblistfalse
+\newif\if@book
+\@bookfalse
+\newif\if@natbib
+\@natbibtrue
+\newif\if@rmcite
+\@rmcitefalse
+\newif\if@titlevisible
+\@titlevisibletrue
+\newif\if@abstractpresent
+\@abstractpresentfalse
+\newif\if@printbanner
+\@printbannerfalse
+\newif\if@suppressfulladdresses
+\@suppressfulladdressesfalse
+\newif\if@newstyle
+\@newstylefalse
+\newif\if@debug
+\@debugfalse
+\newif\if@boldkeywords
+\@boldkeywordsfalse
+%    \end{macrocode}
+% The option handling---mainly setting various booleans.
+% \changes{2.2beta11}{2001/11/26}{Made twocol and
+% newstyle the default for proceedings.}
+% \changes{3.23}{2007/09/09}{Manuscript is now 10 pt instead of 12pt}
+% \changes{3.23}{2007/09/10}{Full addresses are now automatically
+% suppressed for proceedings style.}
+% \changes{3.24}{2007/09/14}{New option \texttt{boldkeywords} that
+% does the keywords in the old ugly way. Now off by default.}
+%    \begin{macrocode}
+\DeclareOption{manuscript}{\typeout{Manuscript for referee} 
+  \@manuscripttrue\@journalfalse\@rmtwocolfalse
+  \PassOptionsToClass{10pt}{article}}
+\DeclareOption{bigfont}{\typeout{Big font manuscript requested by Gary
+  Ferland} 
+  \@manuscripttrue\@journalfalse\@rmtwocolfalse\@bigfonttrue
+  \PassOptionsToClass{11pt}{article}}
+\DeclareOption{journal}{\typeout{Main journal option}%
+  \@journaltrue\@rmtwocoltrue\@printdatestrue\@manuscriptfalse
+  \PassOptionsToClass{10pt}{article}}
+\DeclareOption{guide}{\typeout{User guide option}%
+  \@guidetrue\@journalfalse\@rmtwocoltrue\@manuscriptfalse
+  \PassOptionsToClass{10pt}{article}}
+\DeclareOption{preprint}{\typeout{Preprint option}%
+  \@preprinttrue\@manuscriptfalse\PassOptionsToClass{10pt}{article}}
+\DeclareOption{proof}{\typeout{Author proof option}%
+  \@prooftrue\@manuscriptfalse}
+\DeclareOption{proceedings}{\typeout{Proceedings option}%
+  \@proceedingstrue\@journalfalse\@rmtwocoltrue\@newstyletrue
+  \@suppressfulladdressestrue
+  \@printdatesfalse\@manuscriptfalse\PassOptionsToClass{10pt}{article}} 
+\DeclareOption{printdates}{\typeout{Force printing of received/accepted dates}%
+  \@printdatestrue} 
+\DeclareOption{book}{\typeout{Whole issue option}%
+  \@booktrue} 
+\DeclareOption{nonatbib}{\typeout{Turn off natbib support (required
+    for compatibility with old rmaacite package).}%
+  \@natbibfalse} 
+\DeclareOption{newstyle}{\typeout{Use new layout style}%
+  \@newstyletrue}
+\DeclareOption{oldstyle}{\typeout{Use old layout style}%
+  \@newstylefalse}
+\DeclareOption{debug}{\typeout{Loads of annoying messages}%
+  \@debugtrue}
+%    \end{macrocode}
+% These two need to be declared explicitly so that |\ExecuteOptions|
+% actually does something.
+%    \begin{macrocode}
+\DeclareOption{twocolumn}{\@rmtwocoltrue}
+\DeclareOption{onecolumn}{\@rmtwocolfalse}
+\DeclareOption{twoside}{\PassOptionsToClass{\CurrentOption}{article}}
+\DeclareOption{boldkeywords}{\@boldkeywordstrue}
+%    \end{macrocode}
+% Bold, upper-case keywords used to be the default. Now they must be
+% turned on explicitly with the \texttt{boldkeywords} option. 
+%    \begin{macrocode}
+\DeclareOption{boldkeywords}{\@boldkeywordstrue}
+%    \end{macrocode}
+% Pass any other option along to the \texttt{article} class.
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+% Default options are to be two-sided and based on the standard
+% \LaTeX{} \texttt{article} class,
+% unless we are processing the entire book, in which case we base
+% ourselves on the standard \texttt{book} class. Default is to use
+% manuscript option unless otherwise specified. 
+%    \begin{macrocode}
+\ExecuteOptions{twoside,manuscript} \ProcessOptions\relax
+\if@book
+\if@rmtwocol\LoadClass[twocolumn]{book}\else\LoadClass{book}\fi
+\newcommand{\abstract}{\relax}
+\newcommand{\@maketitle}{\relax}
+\else
+\if@rmtwocol\LoadClass[twocolumn]{article}\else\LoadClass{article}\fi
+\fi
+%    \end{macrocode}
+% Attempt to use natbib for citations 02 Jan 2003. 
+% \changes{3.05}{2003/01/02}{If the natbib option is used, then set
+% things up so that natbib's version of the bibliography is identical
+% to the standard one.}
+% \changes{3.09}{2003/01/23}{Explicitly require a recent version of
+% natbib, so that we get a decent error message if the package is too
+% old.} 
+% \changes{3.23}{2007/09/09}{Now allow Bibtex to work properly} 
+% \changes{3.25}{2009/10/01}{Change \cs{newcommand} tp \cs{def} when setting \cs{bibfont}. This allows it to work with all versions of natbib.} 
+% \changes{3.25}{2010/02/06}{Updated copyright year.} 
+% \changes{3.25}{2010/02/06}{Updated email and web addresses to \texttt{crya.unam.mx}.} 
+%    \begin{macrocode}
+\if@natbib
+\RequirePackage{natbib}[1999/02/25]
+\bibpunct{(}{)}{;}{a}{}{,}
+\def\bibfont{\small}
+\renewcommand\bibsection{\section*{REFERENCES}}
+\setlength\bibsep{0pt}
+\setlength\bibhang{1.5em}
+\bibliographystyle{rmaa}
+\fi
+%    \end{macrocode}
+% We want the \texttt{graphicx} package for the extended syntax of
+% |\includegraphics|. We want the \texttt{ifthen} package for using in
+% these macros (although we don't much yet). We explicitly load
+% \texttt{babel} since some \LaTeX{} distributions messed up the
+% hyphenation if we didn't.  
+%    \begin{macrocode}
+\RequirePackage{graphicx}
+\RequirePackage{ifthen}
+\IfFileExists{babel.sty}{%
+%   \let\@restoreindent=\@afterindentfalse
+  \RequirePackage[english]{babel}
+%   \@restoreindent
+  %% reinstate the definition of \@roman so as not to break .idx files
+  \@ifundefined{org@@roman}{\relax}{\renewcommand{\@roman}[1]{\org@@roman{##1}}}
+  }{%
+  \typeout{Package babel.sty not found - don't worry about this}}
+%    \end{macrocode}
+% Try to load the \texttt{dcolumn} and \texttt{booktabs} packages if
+% they can be found. These can produce nicer-looking tables. 
+%    \begin{macrocode}
+\IfFileExists{dcolumn.sty}{%
+  \RequirePackage{dcolumn}
+  }{%
+  \typeout{Package dcolumn.sty not found - you will not be able to
+    align columns on decimal points in tables}}
+\IfFileExists{booktabs.sty}{%
+  \RequirePackage{booktabs}
+  }{%
+  \typeout{Package booktabs.sty not found - your tables will not look
+    as pretty as they ought too.}
+  }
+\IfFileExists{makeidx.sty}{%
+  \RequirePackage{makeidx}
+}{%
+  \typeout{Package makeidx.sty not found - Author Index may not work.}
+  }
+%% commented out for moment since requires more modern version of LaTeX
+%% \RequirePackage[latin1]{inputenc}
+%    \end{macrocode}
+% \changes{4.0}{2019/11/13}{Make \texttt{hyperref} and
+% \texttt{etoolbox} into hard requirements, since we now use them
+% extensively.}  We use hyperref to get internal and external links.
+% But I don't like the colored boxes so I turn those off.  We use
+% etoolbox for patching and robustifying at the moment.  In the
+% future, I want to port a lot of other stuff over to it.  For
+% instance, replace the ifthen package and the TeX ifs too.
+%    \begin{macrocode}
+\RequirePackage{etoolbox}
+\RequirePackage{hyperref}
+\hypersetup{hidelinks}
+%    \end{macrocode}
+% We patch the \cs{@combinedblfloats} following a suggestion by Heiko
+% Oberdiek at \url{https://tex.stackexchange.com/a/249743/3843}, which
+% avoids problems when hyperlinks are split across
+% pages. \changes{4.0}{2019/11/12}{Fix for issue where breaking
+% hyperlink across pages gave an error.}
+%    \begin{macrocode}
+\urlstyle{same}
+\newcommand\email{\begingroup \urlstyle{rm}\Url}
+\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
+  \errmessage{\noexpand\@combinedblfloats could not be patched}%
+}%
+%    \end{macrocode}
+% \subsection{Other setup stuff}\label{sec:setup}
+% Some declarations: 
+%    \begin{macrocode}
+\newif\if@needaddresses
+\@needaddressestrue
+\newif\if@frontmatter
+\@frontmatterfalse
+\newif\if@inpreamble
+\@inpreambletrue
+\newif\if@firstauthor
+\@firstauthortrue
+\newif\if@firstaffil
+\@firstaffiltrue
+\newif\if@firstaltaffil
+\@firstaltaffiltrue
+\newif\if@firstkwd
+\@firstkwdtrue
+\newif\if@noexpandADS
+\@noexpandADSfalse
+\newif\if@sessiontitlepages
+\@sessiontitlepagesfalse
+%    \end{macrocode}
+% \begin{macro}{\@rmaaEmpty}
+% \begin{macro}{\@rmaaArg}
+% These are used in various commands to check if arg was left blank
+%    \begin{macrocode}
+\newcommand{\@rmaaEmpty}{}
+\newcommand{\@rmaaArg}{}
+%    \end{macrocode}  
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Compatibility with old \LaTeX{} versions}
+% \label{sec:compat}
+% This package is based on the 1998/12/01 release of \LaTeX{}.
+% Older releases may not define all the commands that we need.
+% Luckily, we can use |\providecommand| to define these if necessary. 
+% The following commands are not defined in the 1994/06/01 release. 
+%
+% \begin{macro}{\MakeUpperCase}
+% \begin{macro}{\textsuperscript}
+% \begin{macro}{\textbackslash}
+% User commands:
+%    \begin{macrocode}
+\providecommand{\MakeUpperCase}[1]{\uppercase{#1}}
+\providecommand{\textsuperscript}[1]{\ensuremath{^\textrm{#1}}}
+\providecommand{\textbackslash}{\ensuremath{\backslash}}
+%    \end{macrocode}  
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\protected@xdef}
+% \begin{macro}{\restore@protect}
+% \begin{macro}{\@unexpandable@protect}
+% \begin{macro}{\hb@xt@}
+% \LaTeX{} internal commands:
+%    \begin{macrocode}
+\providecommand{\protected@xdef}{%
+        \let\@@protect\protect
+        \let\protect\@unexpandable@protect
+        \afterassignment\restore@protect
+        \xdef}
+\providecommand{\restore@protect}{\let\protect\@@protect}
+\providecommand{\@unexpandable@protect}{\noexpand\protect\noexpand}
+\providecommand{\hb@xt@}{\hbox to}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Page layout}\label{sec:page-layout}
+%
+% The dimensions of the text were defined by Elizabeth. Text width is
+% 169\,mm with equal margins on the two sides: 
+%    \begin{macrocode}
+\setlength{\textwidth}{169mm}
+\setlength{\@tempdima}{\paperwidth}
+\addtolength{\@tempdima}{-\textwidth}
+\setlength{\oddsidemargin}{0.5\@tempdima}
+\addtolength{\oddsidemargin}{-1in}
+\setlength{\evensidemargin}{\oddsidemargin}
+%    \end{macrocode}
+% Text height is 225\,mm, top margin is 14\,mm. 
+%    \begin{macrocode}
+\setlength{\textheight}{225mm} 
+\setlength{\topmargin}{-1in} 
+\addtolength{\topmargin}{14mm}
+%    \end{macrocode}
+% Space between columns in two-column styles, header, footer,
+% paragraph indentation:
+%    \begin{macrocode}
+\setlength{\columnsep}{9.5mm}
+\setlength{\headsep}{0.7cm}
+\setlength{\footskip}{0.75cm}
+\setlength{\parindent}{1.5em}
+%    \end{macrocode}
+% 
+% \begin{macro}{\@set@scalable@length}
+% Try out a new scheme for dealing with various spacing dimensions and
+% allowing the user to easily modify them. The command
+% \begin{quote}
+% |\set@scalable@length|\marg{name}\marg{defaultlength}\marg{stretch}\marg{shrink}
+% \end{quote}
+% does a 
+% |\setlength|\marg{\cs{name}}\marg{defaultlength plus stretch minus shrink}
+% and also defines the user command
+% \textbackslash\meta{name}|Scale|\marg{factor} that can 
+% be used to rescale length by \meta{factor}. Additionally, now
+% defines the package command
+% \textbackslash\meta{name}|@set@scale|\marg{FACTOR} 
+% that also rescales the length by \meta{FACTOR}, so that the length
+% becomes \meta{factor} $\times$ \meta{FACTOR} $\times$
+% \meta{defaultlength}.   
+%    \begin{macrocode}
+\newcommand\@set@scalable@length[4]{%
+  %% arg #1: NAME of length without leading `\'
+  %%
+  %% arg #2: default VALUE  
+  \expandafter\newlength\csname @#1@default\endcsname
+  \expandafter\setlength\csname @#1@default\endcsname{#2}%
+  \expandafter\newlength\csname @@#1@@default\endcsname
+  \expandafter\setlength\csname @@#1@@default\endcsname{#2}%
+  %% arg #3: default STRETCH  
+  \expandafter\newlength\csname @#1@stretch\endcsname
+  \expandafter\setlength\csname @#1@stretch\endcsname{#3}%
+  \expandafter\newlength\csname @@#1@@stretch\endcsname
+  \expandafter\setlength\csname @@#1@@stretch\endcsname{#3}%
+  %% arg #4: default SHRINK  
+  \expandafter\newlength\csname @#1@shrink\endcsname
+  \expandafter\setlength\csname @#1@shrink\endcsname{#4}%
+  \expandafter\newlength\csname @@#1@@shrink\endcsname
+  \expandafter\setlength\csname @@#1@@shrink\endcsname{#4}%
+  %%
+  %% User-defined scale \@NAME@scale is unity by default
+  \expandafter\gdef\csname @#1@scale\endcsname{1}%
+  %% Package-defined scale \@NAME@SCALE is unity by default
+  \expandafter\gdef\csname @#1@SCALE\endcsname{1}%
+  %%
+  %% internal command \@reset@NAME should expand to 
+  %% \setlength\@@NAME@@default{\@NAME@SCALE\@NAME@default}
+  %% \setlength\NAME{\@NAME@scale\@@NAME@@default}
+  %% in other words: scale x SCALE x default 
+  \expandafter\gdef\csname @reset@#1\endcsname{%
+    \expandafter\setlength\csname @@#1@@default\endcsname{%
+      \csname @#1@SCALE\endcsname \csname @#1@default\endcsname
+      }
+    \expandafter\setlength\csname @@#1@@stretch\endcsname{%
+      \csname @#1@SCALE\endcsname \csname @#1@stretch\endcsname
+      }
+    \expandafter\setlength\csname @@#1@@shrink\endcsname{%
+      \csname @#1@SCALE\endcsname \csname @#1@shrink\endcsname
+      }
+    \expandafter\setlength\csname #1\endcsname{%
+      \csname @#1@scale\endcsname \csname @@#1@@default\endcsname
+      \@plus
+      \csname @#1@scale\endcsname \csname @@#1@@stretch\endcsname
+      \@minus
+      \csname @#1@scale\endcsname \csname @@#1@@shrink\endcsname
+      }}
+  %%
+  %% User command \NAMEScale should expand to 
+  %% {\renewcommand\@NAME@scale{#1}\@reset@NAME}
+  \expandafter\gdef\csname #1Scale\endcsname##1{%
+    \expandafter\gdef\csname @#1@scale\endcsname{##1}%
+    \csname @reset@#1\endcsname}
+  %%
+  %% Package command \NAME@set@SCALE should expand to 
+  %% {\renewcommand\@NAME@SCALE{#1}\@reset@NAME}
+  \expandafter\gdef\csname #1@set@SCALE\endcsname##1{%
+    \expandafter\gdef\csname @#1@SCALE\endcsname{##1}%
+    \csname @reset@#1\endcsname}
+  %%
+  %% initialize at default values with \@reset@NAME
+  \csname @reset@#1\endcsname
+  }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\parskip}
+% First use of this new infrastructure: set interparagraph space to be
+% zero but with a small amount of stretchiness.
+%    \begin{macrocode}
+%   \ifthenelse{\boolean{@manuscript}}{%
+%     \@set@scalable@length{parskip}{0.5\baselineskip}{0.3\p@}{0.1\p@}
+%   }{
+    \@set@scalable@length{parskip}{0\p@}{0.3\p@}{0\p@}
+%   }
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\abovesectionskip}
+% \changes{4.0}{2019/11/12}{Use negative values for skip so that first paragraph after section headings is not indented.  This is something that I have been trying to fix for years!  It turns out that the anser was in the documentation for the standard command \cs{@startsection.}}
+% \begin{macro}{\belowsectionskip}
+% \begin{macro}{\aboveparaskip}
+% \begin{macro}{\belowparaskip}
+% Define some utility rubber lengths for use in
+% section~\ref{sec:section-commands}. 
+%    \begin{macrocode}
+\newlength{\abovesectionskip}
+\newlength{\belowsectionskip}
+\newlength{\aboveparaskip}
+\newlength{\belowparaskip}
+%    \end{macrocode}
+% The default values for these lengths are those traditionally used
+% for the onecolumn style. 
+%    \begin{macrocode}
+\@set@scalable@length{abovesectionskip}{-3.5ex}{-4ex}{-2ex}
+\@set@scalable@length{belowsectionskip}{2.3ex}{0ex}{2ex}
+\@set@scalable@length{aboveparaskip}{3.25ex}{2ex}{0.5ex}
+\@set@scalable@length{belowparaskip}{-1em}{\z@}{\z@}
+%    \end{macrocode}
+% \end{macro}\end{macro}\end{macro}\end{macro}
+% We also make scalable some of the standard float parameters. These
+% are the same defaults as in the standard article classes, but
+% slightly more stretchy. For the twocolumn style, they are currently
+% halved, see below. Note that I have also lumped |\abovecaptionskip|
+% in with these, since it plays a similar role. There is also a
+% |\belowcaptionskip| but it is set to zero in the standard classes. 
+%    \begin{macrocode}
+\@set@scalable@length{floatsep}{12\p@}{4\p@}{4\p@}
+\@set@scalable@length{textfloatsep}{20\p@}{4\p@}{8\p@}
+\@set@scalable@length{intextsep}{12\p@}{4\p@}{4\p@}
+\@set@scalable@length{dblfloatsep}{12\p@}{4\p@}{4\p@}
+\@set@scalable@length{dbltextfloatsep}{20\p@}{4\p@}{8\p@}
+\@set@scalable@length{abovecaptionskip}{10\p@}{\z@}{\z@}
+%    \end{macrocode}
+% \begin{macro}{\@before@title@skip}         
+% \begin{macro}{\@before@author@skip}        
+% \begin{macro}{\@between@author@skip}       
+% \begin{macro}{\@before@abstract@skip}      
+% \begin{macro}{\@after@abstracthead@skip}   
+% \begin{macro}{\@between@abstract@skip}     
+% \begin{macro}{\@before@kwd@skip}           
+% \begin{macro}{\@before@dates@skip}           
+% Spacing parameters used in |\@maketitle|. These are not changed by
+% default except by the user, so they don't need to go into
+% |\@package@default@lengths|.  
+%    \begin{macrocode}
+\newlength{\@before@title@skip}         
+\newlength{\@before@author@skip}        
+\newlength{\@between@author@skip}       
+\newlength{\@before@abstract@skip}      
+\newlength{\@after@abstracthead@skip}   
+\newlength{\@between@abstract@skip}     
+\newlength{\@before@kwd@skip}           
+\newlength{\@before@dates@skip}           
+\@set@scalable@length{@before@title@skip}{2em}{\z@}{\z@}
+\@set@scalable@length{@before@author@skip}{1.5em}{\z@}{\z@}
+\@set@scalable@length{@between@author@skip}{0.5em}{\z@}{\z@}
+\@set@scalable@length{@before@abstract@skip}{3ex}{1ex}{0.5ex}
+\@set@scalable@length{@after@abstracthead@skip}{1ex}{\z@}{\z@}
+\@set@scalable@length{@between@abstract@skip}{2ex}{1ex}{0.5ex}
+\@set@scalable@length{@before@kwd@skip}{1ex}{0.5ex}{0.2ex}
+\@set@scalable@length{@before@dates@skip}{2ex}{0.5ex}{0.2ex}
+%    \end{macrocode}
+% \end{macro}\end{macro}\end{macro}\end{macro}
+% \end{macro}\end{macro}\end{macro}\end{macro}
+% 
+% Spacing above and below displayed equations also wants to be done
+% like this, but it is more complicated since the standard article
+% classes make these change with the fontsize. Something to do later,
+% maybe. 
+% 
+%    \begin{macrocode}
+%    \end{macrocode}
+% \begin{macro}{\@package@default@lengths}
+% The value actually used for these lengths is controlled by the
+% \meta{SCALE} parameter, which depends on the style option that is in
+% effect. This is set using the |\@package@default@lengths| command,
+% which must be called every time the style changes (e.g., changing
+% from onecolumn to twocolumn). 
+%    \begin{macrocode}
+\newcommand{\@package@default@lengths}{%
+  \ifthenelse{\boolean{@rmtwocol}}{%
+    %% twocolumn mode
+    \abovesectionskip@set@SCALE{0.5}
+    \belowsectionskip@set@SCALE{0.5}
+    \aboveparaskip@set@SCALE{0.5}
+    \belowparaskip@set@SCALE{1}
+    \floatsep@set@SCALE{0.5}
+    \textfloatsep@set@SCALE{0.5}
+    \intextsep@set@SCALE{0.5}
+    \dblfloatsep@set@SCALE{0.5}
+    \dbltextfloatsep@set@SCALE{0.5}
+    }{%
+    %% onecolumn mode
+    \abovesectionskip@set@SCALE{1}
+    \belowsectionskip@set@SCALE{1}
+    \aboveparaskip@set@SCALE{1}
+    \belowparaskip@set@SCALE{1}
+    \floatsep@set@SCALE{1}
+    \textfloatsep@set@SCALE{1}
+    \intextsep@set@SCALE{1}
+    \dblfloatsep@set@SCALE{1}
+    \dbltextfloatsep@set@SCALE{1}
+    }%
+  }
+\@package@default@lengths
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\RescaleLengths}
+% \begin{macro}{\RescaleSecLengths}
+% \begin{macro}{\RescaleFloatLengths}
+% \begin{macro}{\RescaleTitleLengths}
+% User commands that will fiddle with all the scalable lengths. 
+%    \begin{macrocode}
+\newcommand{\RescaleLengths}[1]{%
+  \RescaleSecLengths{#1}\RescaleFloatLengths{#1}\RescaleTitleLengths{#1}}
+\newcommand{\RescaleSecLengths}[1]{%
+%% sections
+  \abovesectionskipScale{#1}
+  \belowsectionskipScale{#1}
+  \aboveparaskipScale{#1}
+  }
+\newcommand{\RescaleFloatLengths}[1]{%
+%% floats
+  \floatsepScale{#1}
+  \textfloatsepScale{#1}
+  \intextsepScale{#1}
+  \dblfloatsepScale{#1}
+  \dbltextfloatsepScale{#1}
+  \abovecaptionskipScale{#1}
+  }
+\newcommand{\RescaleTitleLengths}[1]{%
+%% maketitle
+  \@before@title@skipScale{#1}           
+  \@before@author@skipScale{#1}        
+  \@between@author@skipScale{#1}       
+  \@before@abstract@skipScale{#1}      
+  \@after@abstracthead@skipScale{#1}   
+  \@between@abstract@skipScale{#1}     
+  \@before@kwd@skipScale{#1}           
+  \@before@dates@skipScale{#1}           
+  }
+%    \end{macrocode}
+% \end{macro}\end{macro}\end{macro}\end{macro}
+% \changes{2.2beta14}{2002/03/17}{Finished implementation of new
+% infrastructure for scalable lengths. Converted the above/below
+% section skips to use it. Also, all the floatsep parameters. Also,
+% all the vertical lengths that are used by |\@maketitle|. }
+
+% \begin{macro}{\MSextramargin}
+% For the \texttt{manuscript} option we have an extra 0.3\,inch
+% vertical margin and 1\,inch horizontal margin for marginal notes (by
+% hand or with |\marginpar|. 
+%
+% \changes{3.23}{2007/09/09}{Reduce baselinestretch in
+%   \texttt{manuscript} style to 1.2. No longer use raggedright for
+%   manuscript.}
+%
+% \changes{3.24}{2007/09/14}{Further reduction of baselinestretch in
+%   \texttt{manuscript} style to 1.1 since we now have wider margins.}
+%
+% \changes{3.24}{2007/09/14}{Split \texttt{manuscript}'s extra margin
+%   into separate horizontal and vertical parts.}
+% 
+%    \begin{macrocode}
+\newlength{\MSextraHmargin}\newlength{\MSextraVmargin}
+\setlength{\MSextraHmargin}{1in} 
+\setlength{\MSextraVmargin}{0.3in} 
+\if@manuscript
+   \renewcommand{\baselinestretch}{1.1}
+   \addtolength{\textwidth}{-2\MSextraHmargin}
+   \addtolength{\oddsidemargin}{\MSextraHmargin}
+   \setlength{\evensidemargin}{\oddsidemargin}
+   \addtolength{\textheight}{-2\MSextraVmargin}
+   \addtolength{\topmargin}{\MSextraVmargin}
+%    \raggedright
+\fi
+%    \end{macrocode}
+% \end{macro}
+% Float parameters: don't allow bottom floats by default. 
+%    \begin{macrocode}
+\renewcommand{\fps@figure}{tp}
+\renewcommand{\fps@table}{tp}
+%    \end{macrocode}
+%
+% \begin{macro}{\rmaa@AuthorWidthFrac}
+% \begin{macro}{\rmaa@AbstractWidthFrac}
+% These parameters control what fraction of the total text width can
+% be used by the list of authors and the abstract/resumen,
+% respectively.  
+%    \begin{macrocode}
+\newcommand{\rmaa@AuthorWidthFrac}{1.0}
+\newcommand{\rmaa@AbstractWidthFrac}{0.75}
+%    \end{macrocode}
+% Use a wide abstract to save space in the new style.
+%    \begin{macrocode}
+\if@newstyle\renewcommand{\rmaa@AbstractWidthFrac}{1.0}\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% Some things to consider in future versions. Trying to avoid too many
+% widows, etc. Apparently, the following will work best with
+% \cs{flushbottom}. 
+%    \begin{macrocode}
+%%\widowpenalty=10000
+%%\clubpenalty=10000
+%    \end{macrocode}
+% Also, should perhaps try getting rid of underfull/overfull box warnings. 
+% \changes{3.10}{2003/01/24}{Set large values for \cs{hbadness},
+% \cs{vbadness}, \cs{hfuzz}, \cs{vfuzz}. To reduce amount of stuff
+% that gets written to the terminal every time you compile something.}
+%    \begin{macrocode}
+\hbadness=10000
+\vbadness=10000
+\setlength\hfuzz{\maxdimen}
+\setlength\vfuzz{\maxdimen}
+%    \end{macrocode}
+% \subsection{Various text styles for different contexts}
+% \label{sec:text-styles} 
+% \begin{macro}{\rmaa@AffilStyle}
+% \begin{macro}{\rmaa@PagesStyle}
+% \begin{macro}{\rmaa@YearStyle}
+% \begin{macro}{\rmaa@VolumeStyle}
+% \begin{macro}{\rmaa@VolumenStyle}
+% \begin{macro}{\rmaa@JournalNameStyle}
+% \begin{macro}{\rmaa@ReceivedStyle}
+% \begin{macro}{\rmaa@AbstractHeaderStyle}
+% \begin{macro}{\rmaa@JournalNameStyle}
+% Style commands for the different fields used by |\maketitle| in
+% constructing the title page of the article. These have the form
+% |\rmaa@XYZStyle{TEXT}|. I'm not sure these were really a good idea,
+% but never mind \dots 
+%    \begin{macrocode}
+\newcommand{\rmaa@AffilStyle}[1]{{\normalsize\rmfamily#1}}
+\newcommand{\rmaa@PagesStyle}[1]{{\normalsize\rmfamily#1}}
+\newcommand{\rmaa@YearStyle}[1]{{\normalsize\rmfamily#1}}
+\newcommand{\rmaa@VolumeStyle}[1]{{\normalsize\rmfamily\bfseries#1}}
+\newcommand{\rmaa@VolumenStyle}[1]{{\Large\sffamily\bfseries#1}}
+\newcommand{\rmaa@JournalNameStyle}[1]{{\normalsize\itshape#1}}
+\newcommand{\rmaa@ReceivedStyle}[1]{{\normalsize\rmfamily\itshape#1}}
+\newcommand{\rmaa@AbstractHeaderStyle}[1]{%
+  {\normalsize\rmfamily\MakeUpperCase{#1}}}
+\newcommand{\rmaa@TitleStyle}[1]{%
+  {\large\bfseries\rmfamily\boldmath\MakeUpperCase{#1}\par}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\rmaa@FrontSecStyle}
+% Headings of ``front sections'' (see section~\ref{sec:front-sections})
+%    \begin{macrocode}
+\newcommand{\rmaa@FrontSecStyle}[1]{%
+  {\normalsize\bfseries\rmfamily\MakeUpperCase{#1}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\rmaa@TOCTitleStyle}
+% \begin{macro}{\rmaa@TOCPartStyle}
+% \begin{macro}{\rmaa@IndexTitleStyle}
+% \begin{macro}{\rmaaTOCAuthorStyle}
+% \begin{macro}{\rmaaIndexAuthorStyle}
+% Commands to set style of TOC and index entries.
+% Rewritten to avoid unnecessary font commands in the .toc and .ind files
+%    \begin{macrocode}
+\newcommand{\rmaa@TOCTitleStyle}[1]{\MakeUpperCase{#1}}
+\newcommand{\rmaa@TOCPartStyle}[1]{\rmaa@TOCTitleStyle{#1}}
+\newcommand{\rmaa@IndexTitleStyle}[1]{#1}
+\newcommand{\rmaaTOCAuthorStyle}[1]{%
+  {\itshape#1}}
+\newcommand{\rmaaIndexAuthorStyle}[1]{%
+  \protect\mbox{\bfseries#1}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\rmaa@KeywordStyle}
+% \begin{macro}{\rmaa@KeywordHeaderStyle}
+% The style of the keywords depends on whether we are using the
+% \texttt{newstyle} option or not. If we are, then they are small. 
+%    \begin{macrocode}
+\ifthenelse{\boolean{@newstyle}}{
+  \newcommand{\rmaa@KeywordStyle}[1]{%
+    {\small%
+      \if@boldkeywords 
+      \bfseries\MakeUpperCase{\raggedright #1}
+      \else
+      \raggedright #1
+      \fi
+    }}
+  \newcommand{\rmaa@KeywordHeaderStyle}[1]{%
+    {\small\itshape#1}}}
+{
+  \newcommand{\rmaa@KeywordStyle}[1]{%
+    {\normalsize%
+      \if@boldkeywords\bfseries\fi\raggedright #1}}
+  \newcommand{\rmaa@KeywordHeaderStyle}[1]{%
+    {\normalsize\itshape#1}}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Page styles}\label{sec:page-styles}
+% \begin{macro}{\ps@rmaa}
+% The running headers for normal pages:
+%    \begin{macrocode}
+\newcommand{\ps@rmaa}{%
+%    \end{macrocode}
+% nothing in either foot; 
+%    \begin{macrocode}
+  \renewcommand\@oddfoot{\relax}%
+  \renewcommand\@evenfoot{\relax}%
+%    \end{macrocode}
+% page number and short author list in the even heads; 
+%    \begin{macrocode}
+  \renewcommand\@evenhead{\rlap{\thepage}\hfil\@shortauthor\hfil}%
+%    \end{macrocode}
+% short title and page number in the odd heads.
+%    \begin{macrocode}
+  \renewcommand\@oddhead{\hfil\@shorttitle\hfil\llap{\thepage}}
+  }
+%    \end{macrocode}
+% \begin{macro}{\ps@rmaafirstpage}
+% The header of the first page of each
+% article:
+%    \begin{macrocode}
+\newcommand{\ps@rmaafirstpage}{%
+  \renewcommand\@oddfoot{\hfil\thepage}%
+%    \end{macrocode}
+% footer corrected (06 Jun 2000) to have page on outside edge;
+%    \begin{macrocode}
+  \renewcommand\@evenfoot{\thepage\hfil}%
+%    \end{macrocode}
+% Header has journal name, volume, and page numbers for a regular
+% article, or similar for special cases. 
+% \changes{4.0}{2019/11/03}{Change to three-line header with copyright info and DOI.}
+%    \begin{macrocode}
+\if@preprint
+\renewcommand\@oddhead{%
+  \if@proceedings 
+  \textsc{To appear in ``\@conftitle{} (\rmaa@YearStyle{\@year})''}\hfil
+  \textit{RMxAC}
+  \else
+  \textsc{To appear in} \@journalname\hfil
+  \fi}\fi%
+\if@guide
+\renewcommand\@oddhead{\textsc{Documentation} (\rmaa@YearStyle{\@year})\hfil}
+\fi%
+\if@manuscript
+\renewcommand\@oddhead{Manuscript for \@journalname{} (\rmaa@YearStyle{\@year})\hfil}
+\fi%
+\if@journal
+\renewcommand\@oddhead{%
+  \parbox{\textwidth}{
+    \@journalname, \rmaa@VolumeStyle{\@volume},
+    \rmaa@PagesStyle{\@artpages}\
+    (\rmaa@YearStyle{\@year})\hfil\\[1pt]
+    {\small\textcopyright{} \@year:
+      Instituto de Astronom\'\i{}a,
+      Universidad Nacional Aut\'onoma de M\'exico}\hfil\\[1pt]
+    {\small\@DOI@url}\hfil
+  }%
+}\fi%
+  \renewcommand\@evenhead{\@oddhead}}
+%    \end{macrocode}
+% By default, use the |\ps@rmaa| page style.
+%    \begin{macrocode}
+\pagestyle{rmaa}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \subsection{Preamble commands}\label{sec:preamble} 
+% Everything you need for setting the title page, TOC and index
+% entries, etc.
+% \subsubsection{Commands for the title page}
+% \label{sec:title-commands}
+% \begin{macro}{\resumen}
+% \begin{macro}{\@resumen}
+% \begin{macro}{\abstract}
+% \begin{macro}{\@abstract}
+% User commands for setting the resumen and abstract. 
+% These should be used in the document header. The internal commands
+% |\@resumen| and |\@abstract| are used to hold the actual text
+% pending output via the |\maketitle| command. 
+%    \begin{macrocode}
+\newif\if@setresumen
+\newcommand{\resumen}[1]{%
+%%  \renewcommand{\@resumen}{{\selectlanguage{spanish}#1}}%
+  \renewcommand{\@resumen}{{\ignorespaces#1}}%
+  \@setresumentrue}
+\renewcommand{\abstract}[1]{%
+  \renewcommand{\@abstract}{{\ignorespaces#1}}
+  \renewcommand\ADS@abstract{#1}
+%% Not a good idea, since then author macros are not expanded and
+%% cause errors later. However, by not doing it we are vulnerable to
+%% fragile commands.....
+  \if@noexpandADS\@onelevel@sanitize{\ADS@abstract}\fi
+  \@abstractpresenttrue
+  }
+\newcommand{\ADSnoexpand}{\@noexpandADStrue}
+%    \end{macrocode}
+% \begin{macro}{\boldabstract}
+% This is the version for doing 1-page conference proceedings. Still
+% save the text for ADS but then write it out immediately as a bold
+% paragraph. 
+%    \begin{macrocode}
+\newcommand{\boldabstract}[1]{%
+  \gdef\ADS@abstract{#1}%
+  \renewcommand{\@abstract}{#1}%
+  \if@noexpandADS\@onelevel@sanitize{\ADS@abstract}\fi%
+  \noindent\textbf{\boldmath #1}
+  }
+%    \end{macrocode}
+% \end{macro}
+% Default value in each case is to print out a warning if not set
+%    \begin{macrocode}
+  \newcommand{\@resumen}{%
+    \@setresumenfalse \ClassWarningNoLine{rmaa}{No Spanish abstract
+      (resumen) specified - if you do not speak Spanish, this will be
+      translated by the editors}%
+    \textbf{Favor de proporcionar un resumen en espa\~nol. If you are
+      unable to translate your abstract into Spanish, the editors will
+      do it for you.} }
+  \newcommand{\@abstract}{\ClassWarningNoLine{rmaa}{No abstract
+      specified}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\title}
+% \begin{macro}{\@rawtitle}
+% \begin{macro}{\@TOCtitle}
+% \begin{macro}{\rmaaIndexTitle}
+% Similarly, |\title| is the preamble command to set the title of the
+% article. This is used in various places, typeset in different
+% styles, hence the use of the internal |\@rawtitle|, |\@title|,
+% |\rmaaIndexTitle|, and |\@TOCtitle| commands, each of which uses the
+% relevant style from section~\ref{sec:text-styles}
+%    \begin{macrocode}
+\newcommand{\@rawtitle}{Raw Title}
+\newcommand{\@TOCtitle}{\rmaa@TOCTitleStyle{Title for TOC}}
+\newcommand{\rmaaIndexTitle}{\rmaa@IndexTitleStyle{Title for index}.}
+\newcommand{\@TOCaftertitle}{}
+\renewcommand{\title}[1]{%
+%%  {\ADS@sanitize\xdef\@rawtitle{#1}}
+  \renewcommand\@rawtitle{\noexpand#1}
+  \let\ADS@title=\@rawtitle
+  \renewcommand{\@title}{\rmaa@TitleStyle{#1}}%
+  \renewcommand{\@TOCtitle}{\rmaa@TOCTitleStyle{#1}\@TOCaftertitle}%
+  \renewcommand{\rmaaIndexTitle}{\rmaa@IndexTitleStyle{#1\@TOCaftertitle}.}%
+  }
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% 
+% All the weird and whacky ways of indicating the author
+% affiliations. 
+% \begin{macro}{\affil}
+% First, the way that sets it directly underneath the authors name.
+% Note that |\affil| trumps all other affiliations for the purposes of
+% getting into the ADS stuff (we use |\gdef|).   
+% \dots 
+%    \begin{macrocode}
+\newcommand{\affil}[1]{%
+  \\[1.5ex]\rmaa@AffilStyle{#1}\\[1.5ex]%
+  \if@firstaffil\gdef\ADS@affil{#1}\@firstaffilfalse\fi%
+  }
+\renewcommand{\and}{and\\[1.5ex]}
+%    \end{macrocode}
+% \begin{macro}{\altaffil}
+% Alternative affiliations are footnoted. 
+%    \begin{macrocode}
+\newcommand{\altaffil}[1]{%
+  \if@firstaltaffil\gdef\ADS@affil{#1}\@firstaltaffilfalse\fi%
+  \thanks{#1}}
+%    \end{macrocode}
+% \begin{macro}{\altaffilmark}
+% \begin{macro}{\altaffiltext}
+% Alternative-alternative mechanism for affiliations---should not be
+% mixed with |\altaffil| (unless you know what you are doing) or there
+% will be problems with numbering.
+%    \begin{macrocode}
+\newcommand{\altaffilmark}[1]{\textsuperscript{#1}}
+\newcommand{\altaffiltext}[2]{%
+  \if@firstaltaffil\gdef\ADS@affil{#2}\@firstaltaffilfalse\fi
+  \stepcounter{footnote}%
+  \protected@xdef\@thanks{\@thanks
+    \protect\footnotetext[#1]{#2}}} 
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\keywords}
+% \begin{macro}{\@keywords}
+% \begin{macro}{\@keywordheader}
+% \label{keywords}Sundry minor preamble commands. All
+% self-explanatory, I hope. |\keywords| is the old user interface
+% (deprecated). New articles should use |\addkeyword| once for each
+% keyword. That way the ADS record comes out right too (comma rather
+% than em-dash separator).
+% \changes{2.2beta12}{2001/12/07}{\cs{addkeyword} New user interface
+%   for keywords.} 
+% \changes{2.2beta13}{2002/03/11}{\cs{addkeyword} Improved behaviour
+%   with .ads file. Use
+%   \cs{ADS@sanitize} to change definitions of `~' and \cs{ion}.}
+% \changes{3.23}{2007/09/09}{\cs{addkeyword} now signals a compilation
+% error if the author tries to add more than 6 keywords.}
+% \changes{3.24}{2007/09/14}{kwdcounter is now reset in
+% \cs{@begofarticlehook} to prevent error in book style} 
+%    \begin{macrocode}
+\newcommand{\@kwdsep}{ --- }
+\newcommand{\ADS@kwdsep}{, }
+\newcounter{kwdcounter}\setcounter{kwdcounter}{0}
+\newcommand{\addkeyword}[1]{%
+  \addtocounter{kwdcounter}{1}
+  \ifthenelse{\thekwdcounter > 6}{
+    \ClassError{rmaa}{Too many keywords. A maximum of 6 keywords is allowed.}{}
+  }{}
+  \if@firstkwd%
+  \renewcommand\@keywords{\if@boldkeywords\uppercase{#1}\else #1\fi}
+  {\ADS@sanitize\def\ion{\plainion}\gdef\ADS@keywords{#1}}
+  \@firstkwdfalse
+  \else%
+  \edef\@keywords{\@keywords\@kwdsep \if@boldkeywords\uppercase{#1}\else #1\fi}%
+  {\ADS@sanitize\def\ion{\plainion}\xdef\ADS@keywords{\ADS@keywords\ADS@kwdsep #1}}%
+  \fi}
+\newcommand{\ADS@sanitize}{%
+  \def\mathrm{}
+  \def\@{\ }
+  \def~{\ }
+  \def\langle{<}
+  \def\rangle{>}
+  \def\log{log }
+  \def\sin{sin }
+  \def\cos{cos }
+  \def\tan{tan }
+  \def\fd{^d.}
+  \def\fh{^h.}
+  \def\fm{^m.}
+  \def\fs{^s.}
+  \def\fdg{°.}
+  \def\farcm{'.}
+  \def\farcs{''.}
+  \def\arcdeg{°}
+  \def\,{ }
+  }
+\newcommand{\keywords}[1]{%
+  \renewcommand{\ADS@keywords}{#1}
+  \renewcommand{\@keywords}{\uppercase{#1}}
+  }
+\newcommand{\@keywordheader}{\rmaa@KeywordHeaderStyle{Key Words:}}
+\newcommand{\@keywords}{%
+  \ClassWarningNoLine{rmaa}{No keywords specified}%
+  Keywords go here
+  }
+%    \end{macrocode}
+% \begin{macro}{\shorttitle}
+% \begin{macro}{\shortauthor}
+% \begin{macro}{\@shorttitle}
+% \begin{macro}{\@shortauthor}
+% Commands for setting the running headers.
+%    \begin{macrocode}
+\newcommand{\shorttitle}[1]{%
+  \renewcommand\@shorttitle{\MakeUpperCase{#1}}}
+\newcommand{\shortauthor}[1]{%
+  \renewcommand\@shortauthor{\MakeUpperCase{#1}}}
+\newcommand{\@shorttitle}{SHORT TITLE GOES HERE}
+\newcommand{\@shortauthor}{SHORT AUTHOR GOES HERE}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+
+% \subsubsection{The full addresses}
+% \label{sec:full-addresses}
+% \begin{macro}{\fulladdresses}
+% \begin{macro}{\@fulladdresses}
+% \begin{macro}{\@fulladdheight}
+% \begin{macro}{\@fulladddepth}
+% \begin{macro}{\@fulladdbox}
+% Aaghh, the full addresses! A perennial source of problems. 
+%    \begin{macrocode}
+\newlength{\@fulladdheight}
+\newlength{\@fulladddepth}
+\newsavebox{\@fulladdbox}
+%% \fulladdresses command modified (11 May 2000) so that we can put
+%% \fulladdresses{} in the article to suppress the output of the
+%% addresses
+\newcommand{\@FinalFigure}{\relax}
+\newcommand{\FinalFigure}[1]{\renewcommand{\@FinalFigure}{#1}}
+\newcommand{\fulladdresses}[1]{%
+  \renewcommand{\@rmaaArg}{#1}
+  \ifx\@rmaaArg\@rmaaEmpty
+     \renewcommand{\@fulladdresses}{}
+  \else
+     \renewcommand{\@fulladdresses}{
+       \normalsize%
+       \ifx\@FinalFigure\relax\else\vfill\@FinalFigure\vfill\fi
+%%       \vspace*{1ex}
+       %% do addresses as a list (copied from thebibliography environment) 
+       \list{\null}{\leftmargin 1.5em\topsep\z@\labelwidth\z@\labelsep\z@\itemindent -1.5em
+         \itemsep\z@\parsep\z@\usecounter{enumi}}
+       \sloppy\clubpenalty4000\widowpenalty4000
+       \sfcode`\.=1000\relax
+       #1
+       \endlist
+       }
+  \fi
+  }
+\newcommand{\@fulladdresses}{Full addresses go here}
+%    \end{macrocode}
+% \begin{macro}{\suppressfulladdresses}
+% New user-level command for suppressing full addresses should you so
+% desire. Currently used in the single-page-poster style. 
+%    \begin{macrocode}
+\newcommand{\suppressfulladdresses}{\@suppressfulladdressestrue\@needaddressesfalse}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{\printdates}
+% \begin{macro}{\noprintdates}
+% Command to activate the printing out of the received/accepted
+% dates. This can also be done using the \texttt{printdates} option,
+% which is the default for \texttt{journal}, but not for \texttt{proceedings}.
+%    \begin{macrocode}
+\newcommand{\printdates}{\@printdatestrue}
+\newcommand{\noprintdates}{\@printdatesfalse}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\@outputaddressesifnecessary}
+% Command to output the addresses if we haven't already done so
+% This is called by: 
+% \begin{enumerate}
+% \item The end of |thebibliography| environment
+% \item The |\outputfulladdresses| command
+% \end{enumerate}
+%    \begin{macrocode}
+\newcommand{\@outputaddressesifnecessary}{%
+  \ClassInfo{rmaa}{Calling @outputaddressesifnecessary}
+  \ifthenelse{\boolean{@needaddresses}}{%
+    %% If in one column style, or in the first column of a two column
+    %% style then we can try to put it on this page 
+    \ifthenelse{\boolean{@firstcolumn} \or \not\boolean{@rmtwocol}}{%
+      \@outputaddresses}{%
+      %% otherwise give warning it will be on a separate page
+      \ClassWarning{rmaa}{Full addresses will go on a separate
+        page (please see User Guide for how to remedy this)}}%
+    %% If we haven't managed yet, put it on its own page
+    \ifthenelse{\boolean{@needaddresses}}{%
+      \if@debug{\ClassWarning{rmaa}{In this silly bit!}}\fi
+      \clearpage\vfill\@outputaddresses}{}%
+    }{
+    %% If we don't need them, we still might need to do the eoa hook 
+    \ifthenelse{\boolean{@suppressfulladdresses}}{%
+      \if@debug{\ClassWarning{rmaa}{XXX}}\fi
+%%      \if@book\else\@endofarticlehook\null\fi
+      }{}
+    }%
+  }  
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\outputfulladdresses}
+% A user interface to the above command, in case there is no biblio
+% (11 May 2000) 
+%    \begin{macrocode}
+\newcommand{\outputfulladdresses}{\@outputaddressesifnecessary}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\adjustfinalcols}
+% This command starts a new column and should be 
+% used to ensure that the columns balance on the last page. It also
+% outputs the full 
+% author addresses to ensure that this occurs in the left hand
+% column. 
+% The |\par| command is so that the current line will be taken account
+% of when working out |\pagetotal|
+%    \begin{macrocode}
+\newcommand{\adjustfinalcols}{\if@twocolumn\goodbreak\@outputaddresses\newpage\noindent\fi}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\@outputaddresses}
+% Command to do the work of outputting the addresses. 
+% This can be called by 
+% \begin{enumerate}
+% \item an explicit |\adjustfinalcols|
+% \item via |\@outputaddressesifnecessary|, q.v.
+% \end{enumerate}
+%
+%    \begin{macrocode}
+\newcommand{\@outputaddresses}{%
+  % Allow option of suppressing the full addresses, in which case
+  % we just run the hook if we are not in a book style
+  \if@suppressfulladdresses
+%%     \if@book\else\@endofarticlehook\null\fi
+  \else
+  %% save the full addresses in a box for output later
+  \sbox{\@fulladdbox}{\parbox{\textwidth}{\@fulladdresses}}
+  % calculate height of address box  
+  \settoheight{\@fulladdheight}{\usebox{\@fulladdbox}}
+  \settodepth{\@fulladddepth}{\usebox{\@fulladdbox}}
+  \addtolength{\@fulladdheight}{\@fulladddepth}
+  \if@debug
+  { \typeout{Address total height: \the\@fulladdheight}
+    \typeout{Text height: \the\pagetotal}
+    \typeout{Goal height: \the\pagegoal}
+    }
+  \fi
+  % reuse \@fulladdheight to mean the total height of text+addresses
+  \addtolength{\@fulladdheight}{\pagetotal}
+%%  \addtolength{\@fulladdheight}{-\baselineskip}
+  \if@debug\typeout{Adjusted text + addresses height: \the\@fulladdheight}\fi
+  % check it will fit on current page
+  \ifdim\@fulladdheight<\pagegoal
+     %% must shift it to the left
+     %% to compensate for the hanging indentation in the reference list. 
+     %% NOTE: this is not foolproof!
+     %% NB. This will give overfull hbox warnings, which is a bit ugly.
+     \vfill\noindent\if@biblist\hspace*{-\leftmargin}\fi
+     \usebox{\@fulladdbox}
+     % Set this to show we've done it
+     \@needaddressesfalse
+     % and assume we are at the end of the article
+     % so that we do the EOA hook if not in the book style
+%%     \if@book\else\@endofarticlehook\fi
+  \else
+     % if not, just do nothing. With luck, this function will get 
+     % called again on the next page
+     \if@debug{\typeout{Holding over full addresses to next page}}\fi
+  \fi\fi
+  }
+%    \end{macrocode}
+% \end{macro}
+
+% \subsubsection{Commands for editors}
+% \label{sec:editor-commands}
+% Some user/editor commands for doing the TOC and index in the book
+% option. 
+% They are defined here rather in the book-specific part since they
+% need to be always available in order to avoid breaking documents. 
+% \begin{macro}{\listofauthors}
+% \begin{macro}{\@rawauthors}
+% \begin{macro}{\rmaaTOCauthors}
+% The command |\listofauthors| formats an author list for use in the
+% TOC. It should contain the same names as in the |\author| command,
+% but without the affiliation garbage and using |\&| instead of
+% |and|. 
+%    \begin{macrocode}
+\newcommand{\@rawauthors}{Raw Authors}
+\newcommand{\rmaaTOCauthors}{\noexpand\rmaaTOCAuthorStyle{Author list for TOC}}
+\newcommand{\listofauthors}[1]{%
+  \renewcommand{\@rawauthors}{#1}
+  \renewcommand\rmaaTOCauthors{\noexpand\rmaaTOCAuthorStyle{#1}}}
+%    \end{macrocode}
+% \begin{macro}{\indexauthor}\label{indexauthor}
+% The command |\indexauthor| produces an index entry for each
+% author. 
+% This command must come \emph{after} the
+% |\title| and the |\listofauthors| commands. Also, there should be one 
+% |\indexauthor| command for \emph{each} author. We also add the
+% author onto the end of the |\ADS@authors| macro and construct the
+% |\ADS@authorinitial| by a most cunning method (see below), but only
+% for the first author. 
+% 
+% No, No, NO! This was all wrong. Backed out completely: 
+% \begin{quote}
+% Completely rewritten (19 Dec 2002) since we now use the index class, so 
+% as to be able to alphabetize accented characters. A side effect of this is
+% that |\index| no longer expands out the argument after the |@|, so we 
+% instead add all the |\index| commands to a list (|\indexauthor@deferlist|), 
+% which is executed in the |\@begofarticlehook|. 
+% 
+% Note the stuff with |\toks0| is copied from Exercise 20.15 of the \TeX{}book---it is
+% to make sure the latin1-accented name gets passed into the idx
+% file. 
+% \end{quote}
+% We now go back to the old way of doing things, using an optional
+% argument to the \cs{indexauthor} command that has the name without
+% accents. 
+% \changes{3.08}{2003/01/16}{Remerged changes from 3.06 that got
+% dropped from 3.07 after a synchronization disaster. Basically, the
+% accentless optional argument to \cs{indexauthor}. Must add the macro
+% directories to my unison set-up to stop this sort of thing from happening.}
+%    \begin{macrocode}
+\newcommand\@isortkey{}
+\newcommand\@emptykey{empty}
+\newcommand\indexauthor[2][empty]{
+  \renewcommand\@isortkey{#1}
+  \ifx\@isortkey\@emptykey \renewcommand\@isortkey{#2}\fi
+  \index{\@isortkey @{{\rmaaIndexAuthorStyle{#2}}\hskip1em plus1em minus0.4em
+      \rmaaIndexTitle\hskip1em plus2em minus0.4em\penalty-100
+      \rmaaTOCauthors}}
+  \indexauthorADS{#2}
+}
+%%\def\indexauthor@deferlist{\relax}
+%%\long\def\indexauthor#1{
+%%  \def\@@name{#1} \toks0=\expandafter{\@@name}
+%%  \toks1=\expandafter{\indexauthor@deferlist}
+%%  \protected@xdef\indexauthor@deferlist{%
+%%    \the\toks1
+%%    \noexpand\index{\the\toks0@{\noexpand\rmaaIndexAuthorStyle{\the\toks0}\noexpand\hskip1em plus1em minus0.4em 
+%%        \rmaaIndexTitle\noexpand\hskip1em plus2em minus0.4em\noexpand\penalty-100
+%%        \rmaaTOCauthors}}
+%%  }
+%%  \indexauthorADS{#1}
+%%  }
+%%\xdef\indexauthor@deferlist{}
+\newcommand\indexauthorADS[1]{%
+  \if@firstauthor\protected@xdef\ADS@authorinitial{\firstletter{#1}}\fi
+  \protected@xdef\ADS@authors{\ADS@authors\if@firstauthor\else ; \fi
+    #1}
+  \@firstauthorfalse
+}
+%    \end{macrocode}
+% Note that the first |#1| sets the key for the index, making sure it
+% actually starts with  
+% first letter of the surname. Meanwhile, the |@{...}| expression,
+% which starts with some  
+% control sequences is what is written to the |.ind| file. 
+% See the makeindex man page for details. 
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{\KillAllAccents}
+% \begin{macro}{\firstletter}
+% These are utility functions used in the above. |lett| is a counter
+% indicating the current letter in the string. |\firstletter| just
+% prints the first letter of its argument.
+%    \begin{macrocode}
+\newcommand{\KillAllAccents}{\def\'{}\def\`{}\def\~{}\def\.{}\def\i{i}}
+\newcommand\firstletter[1]{\@car #1\@nil}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\SetVolume}
+% \begin{macro}{\SetMSnumber}
+% \begin{macro}{\SetFirstPage}
+% \begin{macro}{\SetYear}
+% \begin{macro}{\ReceivedDate}
+% \begin{macro}{\AcceptedDate}
+% These are for the editors to set the volume number, etc. 
+%    \begin{macrocode}
+\newcommand{\SetVolume}[1]{%
+  \renewcommand{\@volume}{#1}
+  \edef\ADS@volume{\PadToFourWithDots{#1}}
+  \renewcommand{\@volumen}{\rmaa@VolumenStyle{volumen #1}}%
+  }
+\newcommand{\SetMSnumber}[1]{\renewcommand{\@MSnum}{#1}}
+%    \end{macrocode}
+% Note that there is no real reason to use |\SetFirstPage| since all
+% the page numbering is done automatically in the book style. 
+%    \begin{macrocode}
+\newcommand{\SetFirstPage}[1]{\setcounter{page}{#1}}
+\newcommand{\SetYear}[1]{%
+  \renewcommand{\@year}{#1}
+  \renewcommand{\ADS@year}{#1}
+  \renewcommand{\@anyo}{\rmaa@VolumenStyle{#1}}
+  }
+\newcommand{\ReceivedDate}[1]{\renewcommand{\@received}{#1}}
+\newcommand{\AcceptedDate}[1]{\renewcommand{\@accepted}{#1}}
+%    \end{macrocode}
+%
+% \begin{macro}{\DOI}
+% User/editor command to enter the DOI, which will be typeset as a link.
+% \changes{4.0}{2019/11/02}{New user command \cs{DOI} to typeset
+% DOI in the header of first page and add it to ADS info.}
+%    \begin{macrocode}
+\newcommand\DOI[1]{%
+  \def\@DOI@url{\url{https://doi.org/10.22201/ia.01851101p.#1}}%
+  \def\ADS@doi{https://doi.org/10.22201/ia.01851101p.#1}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ORCIDiD}
+% \changes{4.0}{2019/11/12}{Add mechanism for giving ORCID iD links}
+% \begin{macro}{\ORCIDiDfull}
+% \begin{macro}{\@orcid@icon}
+% \begin{macro}{\@orcid@iconbig}
+% Commands to add icon links to ORCID iDs of authors. For example
+% \begin{quote}
+% |\ORCIDiD|\marg{0000-0000-0000-0000}
+% \end{quote}
+% to be used after each author name in the |\author|
+% command and in the |\fulladdresses|.  Alternatively,
+% |\OORCIDiDfull| will typeset the icon plus the full text of the
+% link, but we don't use that at present.  The icon image is stored in |ORCIDiD_iconvector.pdf|, which needs to be on the input path.  In principle, we could make EPS versions if necessary.
+%    \begin{macrocode}
+\newcommand\@orcid@icon{\includegraphics[height=1.8ex]{ORCIDiD_iconvector}}
+\newcommand\@orcid@iconbig{\includegraphics[height=2ex]{ORCIDiD_iconvector}}
+\newcommand\ORCIDiD[1]{\href{https://orcid.org/#1}{\,\@orcid@icon}}
+\newcommand\ORCIDiDfull[1]{%
+  \href{https://orcid.org/#1}{\@orcid@iconbig}\,\url{https://orcid.org/#1}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@volume}
+% \begin{macro}{\@volumen}
+% \begin{macro}{\@artpages}
+% \begin{macro}{\@year}
+% \begin{macro}{\@anyo}
+% \begin{macro}{\@received}
+% \begin{macro}{\@accepted}
+% \begin{macro}{\@MSnum}
+% Default values for the containers used by above commands, plus a
+% few more useful ones. 
+%    \begin{macrocode}
+\newcommand{\@volume}{00}
+\newcommand{\@volumen}{\rmaa@VolumenStyle{00}}
+\newcommand{\@artpages}{%
+  \oldpageref{\articlename:RMAAFirstPage}--\oldpageref{\articlename:RMAALastPage}}
+\newcommand{\@year}{\the\year}
+\newcommand{\@anyo}{\rmaa@VolumenStyle{2007}}
+\newcommand{\@journalname}{\rmaa@JournalNameStyle{%
+    \if@proceedings\RMAASClong\else\RMAAlong\fi}}
+\newcommand{\@received}{}
+\newcommand{\@accepted}{}
+\newcommand{\@MSnum}{0000}
+\newcommand{\@DOI@prefix}{https://doi.org/10.22201/ia.01851101p}
+\def\@DOI@url{\url{https://doi.org/10.22201/ia.01851101p.2099.00.00.00}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% 
+% The following commands are most useful in the \texttt{book}
+% style. However, the |\SetConfTitle| command can now be used in
+% individual articles to set the header for the \texttt{preprint}
+% style. 
+%    \begin{macrocode}
+\newcommand{\@reunionplace}{Lugar de la reuni\'on}
+\newcommand{\@reuniondate}{Fecha de la reuni\'on}
+\newcommand{\@conftitle}{Conference Title}
+\newcommand{\SetReunion}[2]{\renewcommand{\@reunionplace}{#1}\renewcommand{\@reuniondate}{#2}}
+\newcommand{\SetConfTitle}[1]{\renewcommand{\@conftitle}{#1}}
+\newcommand{\@editors}{Juan Ram\'on de la Fuente and ``El Mosh''}
+\newcommand{\SetEditors}[1]{\renewcommand{\@editors}{#1}}
+\newcommand{\@editores}{Juan Ram\'on de la Fuente y ``El Mosh''}
+\newcommand{\SetEditores}[1]{\renewcommand{\@editores}{#1}}
+\newcommand{\@mes}{mes de la publicaci\'on}
+\newcommand{\SetMes}[1]{\renewcommand{\@mes}{\rmaa@VolumenStyle{#1}}}
+%    \end{macrocode}
+
+% \subsection{Notes for Author Proofs and Communication between Editors}
+% \label{sec:notes}
+% We introduce a command \cs{Note} that should be used to describe
+% any change made to the manuscript. These are a bit tricky to get
+% right. In general we use \cs{marginpar} but this only works in outer
+% paragraph mode, so we just bung the box where we are if we are in a
+% figure caption or something. If we are in the preamble, then we just
+% use a \marginpar as part of the \maketitle command.
+%    \begin{macrocode}
+\newif\if@arenotes
+\@arenotesfalse
+\newcounter{notecounter}
+\setcounter{notecounter}{0}
+\newcommand\NotesList{}
+\newcommand\Note[1]{%
+  \if@proof{%
+    \@arenotestrue%
+    \stepcounter{notecounter}%
+    \if@inpreamble\else{%
+      \NoteMark{\arabic{notecounter}}%
+    }\fi
+    \protected@xdef\NotesList{\NotesList 
+      \protect\item #1}%
+  }\fi%
+}
+\newcommand\Changed[2]{Changed ``#1'' to ``#2''.}
+\newcommand\NoteMark[1]{%
+  \ifinner
+  \raisebox{1ex}[0pt][0pt]{\makebox[0pt][l]{\framebox{\footnotesize\bfseries
+        N#1}}}%
+  \else
+  \marginpar{\framebox{\footnotesize\bfseries N#1}}%
+  \fi
+}
+\newcommand\RefNote[1]{\if@proof\NoteMark{\ref{#1}}\relax\fi}
+\newcommand\NoteLabel{\protect\label}
+\newcommand\OutputNotes{%
+  \bgroup
+  \onecolumn
+  \section*{EDITORIAL NOTES}
+  \begin{enumerate}
+    \NotesList
+  \end{enumerate}
+  \egroup
+}
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+
+%    \end{macrocode}
+% \subsection{Bibliographic Records for ADS}
+% \label{sec:ADS}
+% \changes{2.2beta11}{2001/11/27}{Just about finished all the ADS
+% stuff now. Except for the references, which I have given up on for
+% the time being.}
+% \begin{macro}{\ADS@BibCode}
+% \begin{macro}{\ADS@year}
+% \begin{macro}{\ADS@journal}
+% \begin{macro}{\ADS@volume}
+% \begin{macro}{\ADS@firstpage}
+% \begin{macro}{\ADS@authorinitial}
+% We use the |\ADS@BibCode| command to hold the bibliographic code for
+% ADS. It is 
+% used in the |%R| 
+% field of the bibliographic record for each article. 
+% The format is 
+% \begin{quote}
+% \texttt{YYYYJJJJJVVVVMPPPPA}  
+% \end{quote}
+% where \texttt{YYYY} is the year, \texttt{JJJJJ} is the journal code,
+% which is \texttt{RMxAA} or \texttt{RMxAC}, \texttt{VVVV} is the
+% volume number (right-justified), \texttt{M} is not used by us,
+% \texttt{PPPP} is the first page number (right-justified), and
+% \texttt{A} is the initial of the first author's surname. The volume
+% and page fields are padded with periods (`\texttt{.}'), which causes
+% us some fun (this is done with the macro |\PadToFourWithDots| described
+% below) . 
+% 
+% All these individual bits are held in the commands |\ADS@year|,
+% |\ADS@journal|, |\ADS@volume|, |\ADS@firstpage|,
+% |\ADS@authorinitial|. 
+%    \begin{macrocode}
+\newcommand{\SetADSBibCode}[1]{\renewcommand{\ADS@BibCode}{#1}}
+\newcommand{\ADS@BibCode}
+{\ADS@year\ADS@journal\ADS@volume.\PadToFourWithDots{\ADS@firstpage}\ADS@authorinitial}
+\newcommand{\ADS@year}{2001} 
+\newcommand{\ADS@journal}{\if@proceedings RMxAC\else RMxAA\fi}
+\newcommand{\ADS@volume}{....} 
+%    \end{macrocode}
+% These two are just set to default values here, |\ADS@firstpage| is set
+% in the |document| environment for included articles, in the
+% |frontsection| environment, |\tableofcontents| command,  |index| and
+% |abstracts| environments. Also by |\AtBeginDocument| for stand-alone
+% articles. 
+% 
+% God knows how we are going to do |\ADS@authorinitial|!
+%    \begin{macrocode}
+\newcommand{\ADS@firstpage}{....}
+\newcommand{\ADS@authorinitial}{A}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% We also have a whole slew of other fields that can be set. These are
+% all listed in Table~\ref{tab:ADS}. Most of them still have to be
+% defined. 
+% \begin{table}[!ht]\raggedleft
+% \caption{ADS Bibliographic Records}\label{tab:ADS}
+% \begin{tabular}{lp{8em}lp{8em}}\hline
+% Code & Description & Macro Name & Comment \\ \hline
+% |%R| & Bibliographic Code & |\ADS@BibCode| & required \\
+% |%A| & Author list & |\ADS@authors| & required, generate from |\indexauthor| \\
+% |%F| & Author affiliation & |\ADS@affil| & format: AA(\dots)
+% AB(\dots) \dots \\
+% |%J| & Journal Name & |\ADS@journalname| &  \\
+% |%D| & Publication Date & |\ADS@fulldate| &  \\
+% |%L| & Last Page & |\ADS@lastpage| & generate from label \\
+% |%T| & Title & |\ADS@title| & required, generate from |\title| \\
+% |%C| & Abstract Copyright & |\ADS@copyright| & set to IA-UNAM \\
+% |%U| & URL for electronic document & |\ADS@url| & set to PDF file \\
+% |%d| & DOI for article & |\ADS@doi| & set by |\DOI| \\
+% |%K| & Keywords & |\ADS@keywords| & set equal to |\@keywords| \\
+% |%A| & Abstract Text & |\ADS@abstract| & set equal to |\@abstract| \\
+% |%R| & References & |\ADS@references| & generate from the
+% bibliography  \\ \hline
+% \end{tabular}
+% \end{table}
+% A lot of these macros are set by other commands, as mentioned in the
+% Table, but some need to be set  explicitly here. 
+% 
+% \begin{macro}{\ADS@doi}
+% \changes{4.0}{2019/11/08}{Save DOI for ADS}
+% The user/editor command \cs{DOI} is used to set this. 
+%    \begin{macrocode}
+\newcommand{\ADS@doi}{https://doi.org/10.22201/ia.01851101p.0000.00.00.00}
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\ADS@journalname}
+% This
+% does not contain any accents at the moment so as not to cause
+% problems---this maybe should be changed though. 
+%    \begin{macrocode}
+\newcommand{\ADS@journalname}{%
+  \if@proceedings\@conftitle\space (Eds. \@editors) \fi%
+  Revista Mexicana de Astronom\'\i{}a y Astrof\'\i{}sica%
+  \if@proceedings\space (Serie de Conferencias)\fi%
+  \space Vol. \@volume, pp. \ADS@firstpage--\ADS@lastpage\space (\@year)%
+  \space (http://www.astroscu.unam.mx/\~{}rmaa/)
+  }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\ADS@keywords}
+% \begin{macro}{\ADS@abstract}
+% \begin{macro}{\ADS@title}
+% |\ADS@abstract| is straightforward, since we already have the text
+% saved as |\@abstract|. We could do the same with |\ADS@keywords| but
+% to avoid unwanted formatting we explicitly set it in |\keywords|
+% (p.~\pageref{keywords}). |\ADS@title| is just set to |\@rawtitle|,
+% which we were already using for another purpose. 
+%    \begin{macrocode}
+\let\ADS@title=\@rawtitle
+\newcommand{\ADS@keywords}{No keywords specified}
+\newcommand{\ADS@abstract}{No abstract specified}
+%    \end{macrocode}
+% \end{macro}\end{macro}\end{macro}
+% \begin{macro}{\ADS@authors}
+% |\ADS@authors| wants to be in ``Other, A. N.'' format, but with
+% semi-colons between authors. The most natural way to do this seems to
+% be with |\indexauthor| (p.~\pageref{indexauthor}). We append each
+% author to this macro, which means we must explicitly clear it for
+% each new article (done in |\article|). .   
+%    \begin{macrocode}
+\newcommand{\ADS@authors}{}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\ADS@fulldate}
+% \begin{macro}{\ADS@lastpage}
+% \begin{macro}{\ADS@copyright}
+% \begin{macro}{\ADS@website}
+% \begin{macro}{\ADS@url}
+% \begin{macro}{\SetWebsite}
+% \begin{macro}{\SetMonthNumeric}
+% Other sundry data, together with user commands for bits that can be
+% set by the Editors. The |\ADS@url| is constructed from the website
+% (currently |http://www.astrosmo.unam.mx/rmaa/|,
+% the journal descriptor (e.g., |RMxAC..10/|), followed by the
+% path to the PDF file (e.g., |PDF/RMxAC..10_HEW1.pdf|). 
+% 
+%    \begin{macrocode}
+\newcommand{\ADS@website}{http://www.astrosmo.unam.mx/rmaa/}
+\newcommand{\ADS@url}
+{\ADS@website\ADS@journal\ADS@volume\ADS@number/PDF/\ADS@journal\ADS@volume\ADS@number\_\articlename.pdf}
+\newcommand{\ADS@number}{}
+\newcommand{\ADS@fulldate}{00/\ADS@year} 
+\newcommand{\ADS@lastpage}{00} 
+\newcommand{\ADS@copyright}{(C) \ADS@year; Instituto de Astronom\'\i{}a,
+  Universidad Nacional Aut\'onoma de M\'exico} 
+\newcommand{\SetNumber}[1]{\renewcommand{\ADS@number}{-#1}}
+\newcommand{\SetWebsite}[1]{\renewcommand{\ADS@website}{#1}}
+\newcommand{\SetMonthNumeric}[1]{\renewcommand{\ADS@fulldate}{#1/\ADS@year}}
+%    \end{macrocode}
+% \end{macro}\end{macro}\end{macro}\end{macro}\end{macro}\end{macro}\end{macro}
+% \begin{macro}{\ADS@affil}
+% \begin{macro}{\ADS@references}
+% These two are somewhat more problematical. Affiliation currently
+% only works for the first author (see \dots) pending redesign of the
+% user interface. References are now done by wrapping the
+% |thebibliography| environment to open another input stream on the
+% same file and search through for the |\bibitems|. 
+%    \begin{macrocode}
+\newcommand{\ADS@references}{}
+\newcommand{\ADS@affil}{}
+%    \end{macrocode}
+% \end{macro}\end{macro}
+% 
+% Define two macros that expand to the strings
+% |\begin{thebibliography}| and |\end{thebibliography}|. Note that the
+% idea for this and much else is inspired by the code for the docstrip
+% package. Also define |\StartBibX| in case authors use the more
+% standard |\begin{thebibliography}{}| syntax. 
+%    \begin{macrocode}
+\edef\EndBib{\expandafter\@gobble\string\\end\string{thebibliography\string}}
+\edef\StartBib{\expandafter\@gobble\string\\begin\string{thebibliography\string}}
+\edef\StartBibX{\expandafter\@gobble\string\\begin\string{thebibliography\string}\string{\string}}
+%    \end{macrocode}
+% Define two new logical variables. |\ifAnotherline| is true if we
+% want to read another line from the input stream. It is set to false
+% when we encounter the |\end{thebibliography}|. |\ifInBib| is set to
+% true when we frind the |\begin{thebibliography}| and tells us to
+% start saving the following lines. 
+%    \begin{macrocode}
+\newif\ifAnotherLine
+\newif\ifInBib
+%    \end{macrocode}
+% \begin{macro}{makeOther}
+% We need a macro to change the catcodes of lots of things to other. 
+%    \begin{macrocode}
+\def\makeOther#1{\catcode`#1=12\relax}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\RereadBiblio}
+% Define a macro to do all the fiddly stuff. This is used at the
+% beginning of |thebibliography| environment (Sec~\ref{sec:biblio}).
+%    \begin{macrocode}
+\newread\tf@biblio
+\newcommand{\RereadBiblio}{%
+%    \end{macrocode}
+% Open the current file again for reading
+%    \begin{macrocode}
+  \begingroup
+  \immediate\openin\tf@biblio=\articlename
+%    \end{macrocode}
+% Everything in a group to be safe. Initialize logicals. Black magic
+% to change
+% catcodes and avoid blank lines being interpreted as |\par|. 
+%    \begin{macrocode}
+  \AnotherLinetrue\InBibfalse
+  \makeOther\ \makeOther\\\makeOther\$%
+  \makeOther\#\makeOther\^\makeOther\^^K%
+  \makeOther\_\makeOther\^^A\makeOther\%%
+  \makeOther\~\makeOther\{\makeOther\}\makeOther\&%
+  \endlinechar-1\relax
+%    \end{macrocode}
+% Start looping through the file. Read each line to the macro
+% |\Line|. If we have got to EOF or end of biblio then set
+% |\AnotherLinefalse|.
+%    \begin{macrocode}
+  \loop
+  \read\tf@biblio to \Line
+  \ifx\Line\EndBib\AnotherLinefalse\InBibfalse\fi
+  \ifeof\tf@biblio \AnotherLinefalse\fi
+%    \end{macrocode}
+% If we are in the biblio and the line is not blank then append it to
+% the |\ADS@references| macro together with a newline. 
+%    \begin{macrocode}
+  \ifInBib
+  \ifx\Line\empty\else\xdef\ADS@references{\ADS@references\Line^^J}\fi
+  \fi
+%    \end{macrocode}
+% Check if the line we just saw was the start of biblio, then repeat
+% the loop if necessary. 
+%    \begin{macrocode}
+  \ifx\Line\StartBib\InBibtrue\fi
+  \ifx\Line\StartBibX\InBibtrue\fi
+  \ifAnotherLine\repeat
+  \immediate\closein\tf@biblio
+  \endgroup
+  }
+%    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\PadToFourWithDots}
+% Utility function for left-padding a number to 4 characters with
+% periods. Used in 
+% constructing |\ADS@BibCode|. This is a very simple algorithm and
+% \emph{requires} that the argument actually be a number---if it is
+% not then dire consequences will result.  
+%    \begin{macrocode}
+\newcommand{\PadToFourWithDots}[1]{%
+  \ifnum #1 > 999 #1%
+  \else\ifnum #1 > 99 .#1%
+  \else\ifnum #1 > 9 ..#1%
+  \else ...#1%
+  \fi\fi\fi}
+%%  \ifnum \count0 > 999 #1%
+%%  \else\ifnum \count0 > 99 .#1%
+%%  \else\ifnum \count0 > 9 ..#1%
+%%  \else ...#1%
+%%  \fi\fi\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\AuthorADS}
+% \begin{macro}{\ADS@affiliations}
+% New mechanism for setting the affiliations for ADS. The author labels (AA, AB, \dots) are generated using two nested counters.  We use the |\robustify| command from \texttt{etoolbox} so that accented characters in the affiliation addresses do not blow up.  The list of accents may need to be expanded. 
+%    \begin{macrocode}
+\newcounter{AUTHOR}
+\newcounter{author}[AUTHOR]
+\stepcounter{AUTHOR}
+\newcommand\ADS@affiliations{}
+\robustify{\'}\robustify{\i}\robustify{\~}\robustify{\`}
+\def\AuthorADS#1#2{%
+  \begingroup
+  \def\ORCIDiD##1{<ID system="ORCID">##1</ID>}
+  \def\Email##1{<EMAIL>##1</EMAIL>}
+  \def\Affil##1{##1}
+  \stepcounter{author}
+  \ifthenelse{\value{author} > 26}{\stepcounter{AUTHOR}\stepcounter{author}}{}
+  \ifthenelse{\equal{\ADS@affiliations}{\@rmaaEmpty}}{%
+    \xdef\ADS@affiliations{\Alph{AUTHOR}\Alph{author}(#2)}
+  }{%
+    \xdef\ADS@affiliations{\ADS@affiliations, \Alph{AUTHOR}\Alph{author}(#2)}
+  }%
+  \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% %
+% \begin{macro}{\ADS@dumpdata}
+% \changes{4.0}{2019/11/13}{Write all author affiliations for ADS}
+% \begin{macro}{\ADS@write}
+% \begin{macro}{\ADS@openfile}
+% |\ADS@dumpdata| is the macro that actually does the job of writing out all the
+% data to an auxiliary file, using |\ADS@write| to write each
+% field. The file is set up with |\ADS@openfile|, which currently is
+% done in the TOC of a book.  The new multi-author affiliations are used if |\ADS@affiliations| has been set, otherwise it falls back to the single-author version |\ADS@affil|. 
+%    \begin{macrocode}
+\newcommand{\ADSfield}[2]{\relax}
+\newcommand{\ADSvfield}[2]{\relax}
+%%\renewcommand{\ADSfield}[12]{\%#1 #2}
+\newcommand{\ADS@dumpdata}
+{ 
+  \ADS@write{\string\begin{ADSarticle}}
+  \ADS@WRITE{\string\ADSfield{R}{\ADS@BibCode}}
+  \ADS@write{\string\ADSfield{A}{\ADS@authors}}
+  \ifthenelse{\equal{\ADS@affiliations}{\@rmaaEmpty}}{%
+    {\ADS@sanitize\ADS@write{\string\ADSfield{F}{AA(\ADS@affil)}}}
+  }{%
+    {\ADS@sanitize\ADS@write{\string\ADSfield{F}{\ADS@affiliations}}}
+  }
+  \ADS@write{\string\ADSfield{J}{\ADS@journalname}}
+  \ADS@write{\string\ADSfield{D}{\ADS@fulldate}}
+  \ADS@write{\string\ADSfield{L}{\ADS@lastpage}}
+  {\ADS@sanitize\ADS@write{\string\ADSfield{T}{\ADS@title}}}
+  \ADS@write{\string\ADSfield{C}{\ADS@copyright}}
+  \ADS@write{\string\ADSfield{d}{\ADS@doi}}
+  \ADS@write{\string\ADSfield{U}{\ADS@url}}
+  \ADS@write{\string\ADSfield{K}{\ADS@keywords}}
+  {\ADS@sanitize\ADS@write{\string\ADSfield{B}{\ADS@abstract}}}
+  \ADS@write{\string\ADSfield{Z}{\ADS@references}}
+  \ADS@write{\string\end{ADSarticle}}
+  }
+%%\newcommand{\ADS@write}[1]{\if@book\addtocontents{ads}{#1}\fi}
+%%\newcommand{\ADS@openfile}{\@starttoc{ads}}
+\newcommand{\ADS@write}[1]{\set@display@protect\immediate\write\tf@ads{#1}}
+\newcommand{\ADS@WRITE}[1]{\immediate\write\tf@ads{#1}}
+\newcommand{\ADS@openfile}{%
+  \newwrite\tf@ads%
+  \immediate\openout\tf@ads\jobname.ads\relax
+  \ADS@WRITE{\ADS@preamble}}
+\newcommand{\ADS@closefile}{\ADS@WRITE{\ADS@postamble}}
+\def\ADS@preamble{%
+  %%  \string\documentclass{article}
+  %%  \string\begin{document}
+  }
+\def\ADS@postamble{%
+  %%  \string\end{document}
+  \string%\string% Local Variables:^J 
+  \string%\string% mode: LaTeX^J
+  \string%\string% mode: Font-lock^J
+  \string%\string% End:^J
+  }
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% 
+% \subsection{Automatic calculation of the page range}
+% \label{sec:page-range}
+% Another issue that has cost me a lot of grief. Still, it finally
+% seems to be sorted now. All hail Jeff Goldberg. 
+%
+% Cunning trick to get the page numbers from |\pageref|.  Put a label
+% on the first and last page of the document using |\AtBeginDocument|
+% and |\AtEndDocument|. .  This way won't work for the book option.
+% In that case, we do it by defining |\@endofarticlehook| and
+% |\@begofarticlehook| as parallels to |\AtEndDocument| and
+% |\AtBeginDocument|.  Note that we have to defer adding
+% |\@begofarticlehook| to |\AtBeginDocument| to make sure it comes
+% after the redefinitions of |\ref| and |\label|.
+%    \begin{macrocode}
+\if@book\AtEndDocument{\ADS@closefile}\else
+ %\AtBeginDocument{\@begofarticlehook}
+\AtEndDocument{\@endofarticlehook}
+\fi
+%    \end{macrocode}
+% \begin{macro}{\@begofarticlehook}
+% Since we are getting more and more things that need to be done at
+% the beginning of every article, frontsection, etc we define a sister
+% hook to 
+% |\@endofarticlehook|. This hook does the following: 
+% \begin{enumerate}
+% \item Labels the first page
+% \item Sets |\ADS@firstpage|
+% \item runs and then clears |\indexauthor@deferlist|
+% \item resets the keyword counter
+% \end{enumerate}
+% It is executed in the following circumstances: 
+% \begin{enumerate}
+% \item At |\begin{document}| for standalone files
+% \item At |\begin{document}| for each included file
+% \item At beginning of front sections 
+% \item At beginning of TOC
+% \item At beginning of Author Index
+% \item At beginning of abstracts
+% \end{enumerate}
+% For some reason, this is not always within the right group, so we
+% use |\xdef| just to be sure. 
+%    \begin{macrocode}
+\newcommand{\@begofarticlehook}{%
+  \if@frontmatter\frontlabel{RMAAFirstPage}\else\label{RMAAFirstPage}\fi%
+  \xdef\ADS@firstpage{\@arabic{\c@page}}%
+  \if@book\else\makeindex\fi % needed so default index is defined in stand-alone articles
+%%  \indexauthor@deferlist
+%%  \xdef\indexauthor@deferlist{}
+  \@inpreamblefalse
+  \setcounter{kwdcounter}{0}
+  }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@endofarticlehook}
+% This is a hook to be run at the end of each article
+% currently, it just labels the last page and writes out all the ADS
+% data to an auxiliary file.  
+% It should not produce any printed output. 
+% It is modelled on the |\AtEndDocument| command, to which it reduces
+% in the case of a single article. 
+%    \begin{macrocode}
+\newcommand{\@endofarticlehook}{%
+  \if@debug{\ClassWarning{rmaa}{***Doing Hook***}}\fi
+  \if@debug{\ClassWarning{rmaa}{ADSabstract is: \ADS@abstract}}\fi
+  \clearpage\rmaa@lastpagelabel\if@book\ADS@dumpdata\fi
+  \ifx\NotesList\@rmaaEmpty\else\OutputNotes\fi
+  \if@debug{\ClassWarning{rmaa}{Notes list is: \NotesList}}\fi
+}
+%    \end{macrocode}
+% \begin{macro}{\rmaa@lastpagelabel}
+% New version of last page label command copied from Jeff Goldberg's
+% lastpage.sty package - we can't just use |\label| here in case the
+% output routine for the last page has already been called. Instead,
+% we first explicitly clear the page, step back the page counter,
+% explicitly write to the .aux file, then restep the page counter
+% again.
+%
+% But this will conflict with the hyperref package, which does labels differently.  Compensate for that by using the five-argument form.
+% 
+% Also set the |\ADS@LastPage| macro to the appropriate number. 
+%    \begin{macrocode}
+\newcommand{\rmaa@lastpagelabel}{%
+  \addtocounter{page}{-1}%
+  \immediate\write\@auxout{\string
+    \newlabel{\articlename:RMAALastPage}{{}{\thepage}{}{}{}}}%
+  \edef\ADS@lastpage{\thepage}%
+  \addtocounter{page}{1}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+
+% \subsection{Deal with explicit change in number of columns}
+% \label{sec:columns}
+% Sometimes, when formatting a book, we need to switch between
+% one-column articles and two-column articles. For this to work, we
+% need to wrap the standard \LaTeX{} commands to set the |\@rmtwocol|
+% flag appropriately and also reset the package default values of all
+% scalable lengths. .  
+%    \begin{macrocode}
+\let\latexonecolumn=\onecolumn
+\let\latextwocolumn=\twocolumn
+\renewcommand{\onecolumn}{\@rmtwocolfalse\@package@default@lengths\latexonecolumn}
+\renewcommand{\twocolumn}{\@rmtwocoltrue\@package@default@lengths\latextwocolumn}
+%    \end{macrocode}
+% 
+% \subsection{The actual formatting of the title}
+% \label{sec:title-format}
+
+% Note, we have to redefine the |\maketitle| command to use the
+% numbered footnotes. This means we needn't use the atbeginend stuff. 
+%    \begin{macrocode}
+\renewcommand{\maketitle}{\par
+  \begingroup
+%    \end{macrocode}
+% Don't switch to marked footnotes. 
+% This is consistent with existing style but I'm not sure I like it
+%    \begin{macrocode}
+  %%  \renewcommand\thefootnote{\fnsymbol{footnote}}%
+%%  \def\@makefnmark{\hbox to\z@{$\m@th^{\@thefnmark}$\hss}}%
+  \def\@makefnmark{\textsuperscript{\@thefnmark}\hspace{-0.2em}}%
+  \long\def\@makefntext##1{\parindent 1em\noindent
+    \hbox to1.8em{\hss$\m@th^{\@thefnmark}$}##1}%
+  \if@rmtwocol
+  { \if@debug{\ClassWarning{rmaa}{TWO COLUMN}}\fi
+    \twocolumn[\@maketitle]%
+    }
+  \else
+  { \if@debug{\ClassWarning{rmaa}{ONE COLUMN}}\fi
+    \newpage
+    \global\@topnum\z@   % Prevents figures from going at top of page.
+    \if@manuscript \@MSmaketitle \else \@maketitle \fi
+    }
+  \fi
+  \if@manuscript\else\thispagestyle{rmaafirstpage}\@thanks\fi
+  \ifx\NotesList\@rmaaEmpty\else{%
+    \NoteMark{1--\arabic{notecounter}}\vspace*{-2\baselineskip}%
+  }\fi%
+  \endgroup
+%    \end{macrocode}
+% Don't reset footnote counter (not sure whether this is good thing
+% or not).
+%    \begin{macrocode}
+  %%  \setcounter{footnote}{0}%
+  \let\thanks\relax\let\affil\relax\let\altaffil\relax
+  \let\maketitle\relax\let\@maketitle\relax
+  \gdef\@thanks{}\gdef\@author{}\gdef\@title{}}
+%    \end{macrocode}
+
+% \begin{macro}{\@kwhwidth}
+% \begin{macro}{\@kwtwidth}
+% Redefine \cs{@maketitle} to include the abstract, resumen and
+% keywords. Note that in the manuscripty style we use
+% \cs{@MSmaketitle} instead.  
+% \changes{3.16}{2003/04/07}{
+%  Added extra vertical space between authors and accepted date.}
+% \changes{3.26}{2011/08/15}{Add extra label to review articles}
+%    \begin{macrocode}
+\newlength{\@kwhwidth}\newlength{\@kwtwidth}
+\newcommand\reviewname{Review}
+\renewcommand{\@maketitle}{%
+  \newpage
+  \null
+  \if@reviewarticle
+  \smallskip
+  {\large\bfseries\itshape\reviewname}%
+  \bigskip
+  \else
+  \vskip\@before@title@skip%
+  \fi
+  \begin{center}%
+    {\@title \par}%
+    \vskip\@before@author@skip%
+    \parbox{\rmaa@AuthorWidthFrac\textwidth}{\centering
+      \lineskip\@between@author@skip%
+      \@author
+      \par}
+    %% this should be replaced with `Submitted to...' for preprints
+    \if@printdates
+    \vskip\@before@dates@skip%
+    \if@preprint
+    \rmaa@ReceivedStyle{Submitted to RMxAA \@received}
+    \else
+    \rmaa@ReceivedStyle{Received \@received; accepted \@accepted}
+    \fi
+    \fi
+    \if@manuscript
+    \rmaa@ReceivedStyle{Submitted to RMxAA \@received}
+    \fi
+    \if@guide
+    \rmaa@ReceivedStyle{Version \rmaa@version, \rmaa@date}
+    \fi
+    \vskip\@before@abstract@skip%
+    \if@abstractpresent
+    \parbox{\rmaa@AbstractWidthFrac\textwidth}{%
+      \setlength{\parindent}{0.9cm}%
+      \centerline{\rmaa@AbstractHeaderStyle{Abstract}}\par%
+      \vskip\@after@abstracthead@skip%
+      \if@newstyle\noindent\fi\@abstract
+      \vskip\@between@abstract@skip%
+      \centerline{\rmaa@AbstractHeaderStyle{Resumen}}\par%
+      \vskip\@after@abstracthead@skip%
+      \if@newstyle\noindent\fi\@resumen
+      \if@setresumen\else\@abstract\fi % append english abstract if
+                                       % spanish one not set
+      \if@guide\else            %do not use keywords for guide
+      \vskip\@before@kwd@skip%
+      % Format the Key Words with hanging indentation:
+      % They are put in a \parbox with width equal to the line width
+      % minus the width of the header. 
+      { % Widths of keyword
+        \settowidth{\@kwhwidth}{\@keywordheader~}   % header and
+        \setlength{\@kwtwidth}{\linewidth}          % keyword text
+        \addtolength{\@kwtwidth}{-\@kwhwidth}       %
+        \noindent\@keywordheader~\parbox[t]{\@kwtwidth}{%
+          \rmaa@KeywordStyle{\boldmath\uppercase{\@keywords}}}}%
+      \fi
+      }
+      \fi
+  \end{center}%
+  \vspace*{\afterkwdskip}
+  \par
+  }
+\newlength{\afterkwdskip}\setlength{\afterkwdskip}{\z@}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+%
+% \begin{macro}{\reviewarticle}
+% \begin{macro}{\reviewtoc}
+% \begin{macro}{\reviewlof}
+%   User command to specify a review article. Must be used in
+%   preamble. Main effect is to place the text ``Review'' before the
+%   article title.  Also add command for setting a table of contents
+%   and a list of figures at the beginning of the article.
+%    \begin{macrocode}
+\newcommand{\reviewarticle}{\@reviewarticletrue}
+\newcommand\reviewtoc{%
+  \section*{CONTENTS}%
+  \@starttoc{rtc}%
+}
+\newcommand\reviewlof{%
+  \section*{LIST OF FIGURES}%
+  \@starttoc{lof}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\l@section}
+%    \begin{macrocode}
+\renewcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{0.8em \@plus\p@}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode %\bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@MSmaketitle}
+% A special version of |\@maketitle| for the \texttt{manuscript}
+% option. This can deal with a multi-page abstract/resumen. Not very
+% well, mind. 
+%    \begin{macrocode}
+\newcommand{\@MSmaketitle}{%
+  \if@debug\ClassInfo{rmaa}{Using special MS maketitle command}\fi
+  \newpage
+  {
+    \thispagestyle{rmaafirstpage}
+%     \setlength{\parindent}{0pt}
+    \null\vskip 2ex
+    \begin{center}
+      \@title\par
+      \@author\par
+      \rmaa@ReceivedStyle{%
+        \ifx\@received\@rmaaEmpty
+          Draft version: \@date
+        \else
+          Received: \@received
+          \ifx\@accepted\@rmaaEmpty
+          \else
+            ; Accepted: \@accepted
+          \fi
+        \fi}\par
+    \end{center}
+    \@thanks
+    \centerline{\rmaa@AbstractHeaderStyle{Resumen}}
+    \noindent\@resumen\par\vskip 2ex
+    \centerline{\rmaa@AbstractHeaderStyle{Abstract}}
+    \noindent\@abstract\par\vskip 2ex
+    \noindent\@keywordheader~\rmaa@KeywordStyle{\@keywords}\par
+%     \@keywordheader~\rmaa@KeywordStyle{\uppercase{\@keywords}}\par
+  }%
+  }
+%    \end{macrocode}
+% \end{macro}
+
+% \subsection{The sectioning commands}
+% \label{sec:section-commands}
+
+% \begin{macro}{\section}
+% \begin{macro}{\subsection}
+% \begin{macro}{\subsubsection}
+% \begin{macro}{\paragraph}
+% \begin{macro}{\subparagraph}
+% Redefine all the standard commands to use these lengths. 
+%    \begin{macrocode}
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                                   {\abovesectionskip}%
+                                   {\belowsectionskip}%
+                                   %% how do we get upper case here
+                                   {\centering\reset@font\normalsize}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                     {\abovesectionskip}%
+                                     {\belowsectionskip}%
+                                     {\centering\reset@font\normalsize\itshape}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                     {\abovesectionskip}%
+                                     {\belowsectionskip}%
+                                     {\centering\reset@font\normalsize\itshape}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                    {\aboveparaskip}%
+                                    {\belowparaskip}%
+                                    {\reset@font\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                                      {\aboveparaskip}%
+                                      {\belowparaskip}%
+                                      {\reset@font\normalsize\bfseries}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{secnumdepth}
+% Make sure that we number the subsubsections---this is done by
+% default in the |article| class but not the |book| class, which is
+% why we must set it explicitly here.
+%    \begin{macrocode}
+\setcounter{secnumdepth}{3}
+%    \end{macrocode}
+% \end{macro}
+% \changes{2.2beta10}{2001/11/07}{Fixed \cs{secnumdepth} for \cs{book}
+% style.}
+
+% \begin{macro}{\thesubsection}
+% \begin{macro}{\thesubsubsection}
+% For subsection and subsubsection, we want the numbers to be roman
+% but the title to be italic. This seems the easiest way to go about it.
+%    \begin{macrocode}
+\renewcommand{\thesubsection}{{\upshape\thesection.\@arabic\c@subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection{\upshape.\@arabic\c@subsubsection}}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{\@seccntformat}
+% Add ``.'' to the number here so we can remove it from |\thesection|,
+% etc. Reduce gap between number and title WJH 27 Jan 1995
+%    \begin{macrocode}
+\def\@seccntformat#1{\csname the#1\endcsname .\hskip 0.4em}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\@sect}
+% I didn't really want to mess with the |\@sect| command, but it was
+% the only way I could manage to force upper case. Other than the
+% commented parts, it is identical to the standard version. 
+%    \begin{macrocode}
+\def\@sect#1#2#3#4#5#6[#7]#8{
+  \ifnum #2>\c@secnumdepth
+     \let\@svsec\@empty
+  \else
+     \refstepcounter{#1}%
+     \let\@@protect\protect
+     \def\protect{\noexpand\protect\noexpand}%
+     \edef\@svsec{\@seccntformat{#1}}%
+     \let\protect\@@protect
+  \fi
+%    \end{macrocode}
+% This is the bit I changed (27 Jan 1995). Use upper case for
+% |\section|, use mixed case for the rest. 
+%    \begin{macrocode}
+  \ifnum #2=1                   
+     \def\sec@upcase##1{\uppercase{##1}}%
+     \def\sec@shape{\upshape}%
+  \else                         
+     \def\sec@upcase##1{\relax{##1}}%
+     \def\sec@shape{\itshape}%
+  \fi
+  \@tempskipa #5\relax
+  \ifdim \@tempskipa>\z@
+     \begingroup #6\relax
+          \@hangfrom{\hskip #3\relax\@svsec}%
+                    {\interlinepenalty \@M \sec@upcase{#8}\par}%
+     \endgroup
+     \csname #1mark\endcsname{#7}%
+%    \end{macrocode}
+% Only write TOC entries if doing the Guide style. 
+%    \begin{macrocode}
+     \if@guide 
+        \addcontentsline{toc}{#1}{%
+          \ifnum #2>\c@secnumdepth \else
+             \protect\numberline{\csname the#1\endcsname}%
+          \fi
+          #7}%
+     \fi
+%    \end{macrocode}
+% Also allow per-article TOC for review papers
+%    \begin{macrocode}
+     \if@reviewarticle
+        \ifnum #2>2 \else
+           \addcontentsline{rtc}{#1}{%
+             \protect\numberline{\csname the#1\endcsname}%
+             \sec@upcase{\sec@shape #7}}%
+        \fi
+     \fi
+  \else
+     \def\@svsechd{#6\hskip #3\relax  %% \relax added 2 May 90
+       \@svsec #8\csname #1mark\endcsname{#7}%
+       \if@guide
+          \addcontentsline{toc}{#1}{%
+            \ifnum #2>\c@secnumdepth \else
+               \protect\numberline{\csname the#1\endcsname}%
+            \fi
+            #7}%
+       \fi
+       }%
+  \fi
+  \@xsect{#5}}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \subsection{Appendices}
+% \label{sec:appendices}
+% Make sure that appendices in individual articles work properly. We
+% copy the definition from the article class (the book one doesn't do
+% what we want).  
+% \begin{environment}{appendices}
+%   This uses an environment |appendices| inside of which each
+%   |\section| will become a separate appendix.  Note that the
+%   appendices must come before the references (otherwise the full
+%   addresses mechanism will not work properly). We make the equation
+%   numbering be subordinate to the appendix (equations A12, B6,
+%   etc). Finally, we have a medskip followed by APPENDICES to
+%   introduce them. \changes{3.17}{2002/04/08}{ Added appendices environment
+%   that does the right thing.}
+%    \begin{macrocode}
+\newenvironment{appendices}{\par
+  \begingroup
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \renewcommand\thesection{\@Alph\c@section}
+  \renewcommand\theequation{\thesection\arabic{equation}}
+  \medskip
+  \section*{APPENDICES}}
+{\endgroup}
+%    \end{macrocode}
+% \end{environment}
+% \begin{environment}{appendix}
+%   If there is only one appendix, then use |appendix| environment
+%   instead.  \changes{4.0}{2019/11/12}{ Added
+%   appendix environment for case where there is only one section.}
+%    \begin{macrocode}
+\renewenvironment{appendix}{\par
+  \begingroup
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \renewcommand\thesection{\@Alph\c@section}
+  \renewcommand\theequation{\thesection\arabic{equation}}
+  \medskip
+  \section*{APPENDIX}}
+{\endgroup}
+%    \end{macrocode}
+% \end{environment}
+
+% \subsection{Floating thingies}
+% \label{sec:floats}   
+
+%% 
+%    \begin{macrocode}
+\renewcommand{\thetable}{\@arabic\c@table}
+\renewcommand{\thefigure}{\@arabic\c@figure}
+\renewcommand{\figurename}{Fig.}
+\renewcommand{\tablename}{TABLE}
+%\renewcommand{\fnum@table}{\MakeUpperCase{\tablename}~\thetable}
+%    \end{macrocode}
+% For some reason, I have to write `TABLE' explicitly here
+% If I use |\tablename|, it gets converted to mixed case---God knows
+% why. 
+% |\figurename| is also being ignored. 
+%    \begin{macrocode}
+\renewcommand{\fnum@table}{TABLE~\thetable}
+\renewcommand{\fnum@figure}{Fig.~\thefigure}
+%    \end{macrocode}
+
+% Do captions in 9 pt face in the main journal style and in new-style
+% anything. 
+%    \begin{macrocode}
+\long\def\@makefigcap#1#2{%
+  \if@proceedings\else\small\fi
+  \if@newstyle\small\fi 
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1. #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1. #2 \par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+%    \end{macrocode}
+
+% Make sure table caption is upper case. 
+%    \begin{macrocode}
+\long\def\@maketabcap#1#2{%
+  \hbox to\hsize{\hfil #1 \hfil}
+  \vskip 6pt 
+  \centering\MakeUpperCase{#2}\par
+  \vskip 6pt}
+%    \end{macrocode}
+
+%    \begin{macrocode}
+\newlength{\@rottabcapwidth}
+\long\def\@makerottabcap#1#2{%
+  \setbox\@tempboxa\hbox{\MakeUpperCase{#2}}%
+  \ifdim\wd\@tempboxa >.8\vsize
+     \setlength\@rottabcapwidth{.8\vsize}
+  \else
+     \setlength\@rottabcapwidth{\wd\@tempboxa}
+  \fi
+  \rotatebox{90}{%
+    \begin{minipage}{\vsize}\centering
+      \begin{minipage}{\@rottabcapwidth}\centering
+        #1\\ \vskip 6pt \MakeUpperCase{#2}
+      \end{minipage}%
+    \end{minipage}
+    }%
+  \hskip 6pt
+  }
+
+\newenvironment{Sideways}
+    {\begin{sideways}\begin{minipage}{\vsize}\centering}
+    {\end{minipage}\end{sideways}}
+
+\newenvironment{Sidewaystable}
+{%
+  \let\oldcaption=\caption%
+  \def\caption{
+    \def\@captype{table}\renewcommand{\@makecaption}{\@maketabcap}
+    \oldcaption}
+  \begin{sidewaystable}\centering}
+  {\end{sidewaystable}\let\caption=\oldcaption}
+\newenvironment{Sidewaystable*}
+{%
+  \let\oldcaption=\caption%
+  \def\caption{
+    \def\@captype{table}\renewcommand{\@makecaption}{\@maketabcap}
+    \oldcaption}
+  \begin{sidewaystable*}\centering}
+  {\end{sidewaystable*}\let\caption=\oldcaption}
+%    \end{macrocode}
+
+% Not sure why we need to stick these lines in. 
+%    \begin{macrocode}
+\renewenvironment{figure}
+                 {\renewcommand{\@makecaption}{\@makefigcap}\@float{figure}}
+                 {\end@float}
+\renewenvironment{figure*}
+                 {\renewcommand{\@makecaption}{\@makefigcap}\@dblfloat{figure}}
+                 {\end@dblfloat}
+\renewenvironment{table}
+                 {\renewcommand{\@makecaption}{\@maketabcap}\@float{table}}
+                 {\end@float}
+\renewenvironment{table*}
+                 {\renewcommand{\@makecaption}{\@maketabcap}\@dblfloat{table}}
+                 {\end@dblfloat}
+%    \end{macrocode}
+
+% Redefine |\@caption| so that we don't bother with the list of
+% figures. This saves us having to worry about fragile commands in the
+% captions. 
+%    \begin{macrocode}
+\long\def\@caption#1[#2]#3{%
+  \par
+%%  \addcontentsline{\csname ext@#1\endcsname}{#1}%
+%%    {\protect\numberline{\csname the#1\endcsname}{\ignorespaces #2}}%
+  \begingroup
+    \@parboxrestore
+    \if@minipage
+      \@setminipage
+    \fi
+    \normalsize
+    \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+  \endgroup}
+%    \end{macrocode}
+
+% Make tables not quite so cramped. Allow |\hline\hline| to give a
+% poor man's thick rule. 
+%    \begin{macrocode}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\doublerulesep}{0.4pt}
+%    \end{macrocode}
+
+% \begin{macro}{\tablecols}
+% \begin{macro}{\@tablecols}
+% \begin{macro}{\tabcaptioncontinued}
+% |\tablecols| is a user command for setting the number of columns. It
+% is used by commands that try and span the entire table (I think
+% there must be a better way of acheiving
+% this). |\tabcaptioncontinued| is 
+% a user command for setting the caption of a continued table on the
+% next page. 
+%    \begin{macrocode}
+\newcommand{\tablecols}[1]{\renewcommand{\@tablecols}{#1}}
+\newcommand{\@tablecols}{1}
+\newcommand{\tabcaptioncontinued}{%
+  \multicolumn{\@tablecols}{c}{\addtocounter{table}{-1}TABLE~\thetable\ (CONTINUED)} \\ \\
+  }
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \subsubsection{Footnotes in tables}
+% \label{sec:table-footnotes}
+% \begin{macro}{\tablenotemark}
+% \begin{macro}{\tablenote}
+% \begin{macro}{\tablenoteskip}
+% Old user commands |\tablenotemark{MARK}|,
+% |\tablenote{MARK}{TEXT}|---now deprecated. 
+%    \begin{macrocode}
+\newcommand\tablenotemark[1]{$^\mathrm{#1}$} 
+\newcommand\tablenote[2]{\if@proceedings\else\small\fi ${}^\mathrm{#1}$ #2} 
+\newcommand\tablenoteskip{\\[0.5\baselineskip]} 
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{\tabnotemark}
+% \begin{macro}{\tabnotetext}
+% \begin{macro}{\tabnotetextTWO}
+% Alternative way of doing footnotes in tables. 
+%    \begin{macrocode}
+\newcommand{\tabnotemark}[1]{\textsuperscript{\lowercase{#1}}}
+%\newcommand{\tabnotetextTWO}[4]{\tabnotetext{#1}{#2}\tabnotetext{#3}{#4}}
+\newcommand{\tabnotetextTWO}[4]{%
+  \multicolumn{\@tablecols}{l}{%
+    \parbox{0.5\tabnotewidth}{\small\textsuperscript{#1}#2}%
+    \parbox{0.5\tabnotewidth}{\small\textsuperscript{#3}#4}%
+    }%
+  \\}
+\newcommand{\tabnotetext}[2]{%
+  \multicolumn{\@tablecols}{@{}p{\tabnotewidth}@{}}{\small\textsuperscript{#1}#2}\\}
+\newlength{\tabnotewidth}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+
+% \begin{macro}{changemargin}
+%    \begin{macrocode}
+% Command to allow margins to be changed on the fly. Useful to allow
+% tables and Figures to protrude into the margins. 
+%
+% \changes{3.24}{2007/09/14}{Added \texttt{changemargin} environment
+% (copied from TeX FAQ).}
+\newenvironment{changemargin}[2]{% 
+  % From TeX FAQ http://www.tex.ac.uk/cgi-bin/texfaq2html?label=chngmargonfly
+  \begin{list}{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\leftmargin}{#1}%
+    \setlength{\rightmargin}{#2}%
+    \setlength{\listparindent}{\parindent}%
+    \setlength{\itemindent}{\parindent}%
+    \setlength{\parsep}{\parskip}%
+  }%
+  \item[]}{\end{list}}
+%    \end{macrocode}
+% \end{macro}
+
+% \subsection{The bibliography and references}
+% \label{sec:biblio}
+% \begin{macro}{\beforebiblioskip}
+% \begin{macro}{\afterbiblioskip}
+% I'm not entirely sure why I introduced these two commands, since
+% directly putting |\vspace| before and after
+% |\begin{thebibliography}| seems to work well enough. 
+%    \begin{macrocode}
+\newlength{\beforebiblioskip}
+\setlength{\beforebiblioskip}{0pt}
+\newlength{\afterbiblioskip}
+\setlength{\afterbiblioskip}{0pt}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{thebibliography}
+% The environment itself is done as starred section with extra
+% vertical space after heading. This space is currently zero. 
+% In the book style we do the cunning trick with rereading the file in
+% order to get the references into the |\ADS@references| macro.
+% 
+% \changes{3.05}{2003/01/02}{Removed the \cs{beforebiblioskip} and
+% \cs{afterbiblioskip} commands, since they cause unwanted vertical
+% space in some instances.}  
+%    \begin{macrocode}
+\renewenvironment{thebibliography}{%
+  \if@book\RereadBiblio\fi
+%%  \vspace*{\beforebiblioskip}
+  \section*{REFERENCES} \frenchspacing
+%%  \vspace*{\afterbiblioskip}
+  \small
+%    \end{macrocode} 
+% The references themselves are set as a list in order 
+% to get the hanging indentation. They are done in a smaller font and
+% with french spacing so we needn't worry about the distinction
+% between sentence-ending periods and abbreviations. 
+%    \begin{macrocode} 
+  \list{\null}{\leftmargin 1.5em\labelwidth\z@\labelsep\z@\itemindent -1.5em
+    \itemsep\z@\parsep\z@\usecounter{enumi}}
+  \sloppy\clubpenalty4000\widowpenalty4000
+  \sfcode`\.=1000\relax\@biblisttrue}
+{\endlist\@biblistfalse\normalsize\@outputaddressesifnecessary}
+%    \end{macrocode}
+% \end{macro}
+% \subsection{Uniquification of cross-references}
+% \label{sec:uniquification}
+% 
+% \begin{macro}{\articlename}
+% In order that the |\label{}| command in individual articles be
+% guaranteed to give a unique anchor, we append the article name (held
+% in the |\articlename| command) to each key. This requires
+% redefinition of the following commands: |\cite|, |\nocite|, |\ref|,
+% |\pageref|, |\label|. 
+% \begin{macro}{\oldcite}
+% \begin{macro}{\oldnocite}
+% \begin{macro}{\oldref}
+% \begin{macro}{\oldpageref}
+% \begin{macro}{\oldlabel}
+% The original versions of these commands are
+% saved as |\oldcite|, |\oldnocite|, etc. 
+%
+% The uniquifying of cross-references is now always done, so 
+% we don't get multiply-defined labels in the single article case
+%    \begin{macrocode}
+\newcommand{\articlename}{anon}
+\AtBeginDocument{
+  \let\oldcite=\cite 
+  \let\oldnocite=\nocite 
+  \let\oldref=\ref 
+  \let\oldpageref=\pageref
+  \let\oldlabel=\label
+}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% Uniquify all cross-references by prepending the article name.  This now has to go into |\AtBeginDocument| so it is working on the new versions that hyperref.sty has set up.  Then we need to put the |\@begofarticlehook| afterwards, so that the first page label is using the new definitions.
+%    \begin{macrocode}
+\AtBeginDocument{
+  \renewcommand{\ref}[1]{\oldref{\articlename:#1}%
+    \if@debug{\ClassInfo{rmaa}{Reference to \articlename:#1}}\fi}
+  \renewcommand{\pageref}[1]{\oldpageref{\articlename:#1}%
+    \if@debug{\ClassInfo{rmaa}{Page reference to \articlename:#1}}\fi}
+  \renewcommand{\label}[1]{\oldlabel{\articlename:#1}%
+    \if@debug{\ClassInfo{rmaa}{Label for \articlename:#1}}\fi}%
+  \@begofarticlehook
+}%
+%    \end{macrocode}
+% Citations are more complicated since they can contain a list of
+% keys. These are really only here for use with the rmaacite package,
+% which is utterly deprecated (02 Jan 2003) now that I have the natbib
+% code working. The command \cs{cite} should \emph{not} be used with
+% natbib: use \cs{citep}, \cs{citet}, etc.\@ instead. 
+%    \begin{macrocode}
+\renewcommand{\nocite}[1]{\@bsphack
+  \@for\@citeb:=#1\do{%
+    \edef\@citeb{\expandafter\@firstofone\@citeb:\articlename}%
+    \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+    \@ifundefined{b@\@citeb:\articlename}{\G@refundefinedtrue
+      \@latex@warning{Citation `\@citeb' undefined}}{}}%
+  \@esphack}
+\renewcommand{\cite}[1]{\oldcite{#1:\articlename}}
+%   \end{macrocode}
+
+
+% Horrible fiddling with the bibliography citation mechanism. 
+% This has to be globally available in case rmaacite puts it in the
+% \texttt{.aux} file. 
+%    \begin{macrocode}
+\def\lbibcite#1#2#3{\global\@namedef{b@#1}{#2}
+                    \global\@namedef{by@#1}{#3}}
+%    \end{macrocode}
+
+% \begin{macro}{\oldbibitem}
+% \begin{macro}{\@rmaaBibArg}
+% \begin{macro}{\@rmaaSpace}
+% \begin{macro}{rmaabib}
+% Of course, |\bibitem| needs to get the uniquification treatment as
+% well. While we are at it, we redefine it to use consecutive integers
+% for the key if the user leaves it blank (using the counter
+% |rmaabib|). This allows one to put 
+% |\bibitem{}| for all your references without getting annoying
+% messages about multiply-defined labels.
+% 
+% We also take the opportunity to insert the optional argument to
+% \cs{bibitem} if it is missing in the form Author(DATE) so that natbib
+% doesn't try to do numerical citations. Natbib already provides a
+% hook \cs{@extra@b@citeb} to help uniquify the citation key, so we
+% just plug into that. However, it puts it \emph{after} the original
+% key, not before as I had had it. Easiest solution is to change the
+% way that I do it. 02 Jan 2003. Note that the \cs{@extra@b@citeb}
+% does not get written to the .aux  file in the \cs{citation} command
+% but it does work. 
+% \changes{3.14}{06 Feb 2003}{Reinstalled old definition of \cs{bibitem}
+%  for the case where the nonatbib option is requested, so that the
+%  rmaacite package will work. This means that you can't use rmaacite
+%  and natbib in the same volume.}
+%    \begin{macrocode}
+\if@natbib\def\@extra@b@citeb{:\articlename}\fi
+%%\else
+\let\oldbibitem\bibitem
+\newcommand{\@rmaaBibArg}{}
+\newcommand{\@rmaaSpace}{ }
+\newcounter{rmaabib}
+\if@natbib
+\renewcommand{\bibitem}[2][ABC(2003)]{%
+  \renewcommand{\@rmaaBibArg}{#2}
+  \ifx\@rmaaBibArg\@rmaaEmpty
+     \addtocounter{rmaabib}{1}
+     \oldbibitem[#1]{\thermaabib:\articlename}
+  \else\ifx\@rmaaBibArg\@rmaaSpace
+     \addtocounter{rmaabib}{1}
+     \oldbibitem[#1]{\thermaabib:\articlename}
+  \else 
+     \oldbibitem[#1]{#2:\articlename}
+  \fi\fi
+  \renewcommand{\@rmaaBibArg}{}
+  }
+\else
+\renewcommand{\bibitem}[1]{%
+  \renewcommand{\@rmaaBibArg}{#1}
+  \ifx\@rmaaBibArg\@rmaaEmpty
+     \addtocounter{rmaabib}{1}
+     \oldbibitem{\articlename:\thermaabib}
+  \else\ifx\@rmaaBibArg\@rmaaSpace
+     \addtocounter{rmaabib}{1}
+     \oldbibitem{\articlename:\thermaabib}
+  \else
+     \oldbibitem{\articlename:#1}
+  \fi\fi
+  \renewcommand{\@rmaaBibArg}{}
+  }
+\fi
+%%\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+
+% \begin{macro}{oldpcite}
+% \begin{macro}{oldscite}
+% Then, we need to repeat the above scheme, but for the |rmaacite|
+% definition. 
+%    \begin{macrocode}
+\newcommand{\@redefinebibitem}{%
+  \let\oldbibitem\bibitem
+  \let\oldcite\cite
+  \let\oldpcite\pcite
+  \let\oldscite\scite
+  \def\bibitem[##1<##2>]##3{%
+    \renewcommand{\@rmaaBibArg}{##3}
+    \ifx\@rmaaBibArg\@rmaaEmpty
+       \addtocounter{rmaabib}{1}
+       \oldbibitem[##1<##2>]{\thermaabib:\articlename}
+    \else\ifx\@rmaaBibArg\@rmaaSpace
+       \addtocounter{rmaabib}{1}
+       \oldbibitem[##1<##2>]{\thermaabib:\articlename}
+    \else 
+       \oldbibitem[##1<##2>]{##3:\articlename}
+    % trust the author here
+%%       \oldbibitem[##1<##2>]{##3}
+    \fi\fi
+    }
+  }
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+
+
+% \subsection{HTML Table of Contents}
+% \label{sec:hyper-TOC}
+% \begin{macro}{\HyperTOCEntry}
+% \begin{macro}{\HyperTOCpart}
+% \begin{macro}{\HyperTOCmeeting}
+% \begin{macro}{\HyperTOCeditors}
+% \begin{macro}{\HyperTOCpreamble}
+% These commands are used to write information to the \texttt{.htoc}
+% file, which is used in generating a Web Page of the Table of
+% Contents. Since they only ever appear preceded by |\protect| in the
+% argument to an |\addtocontents| command,  they should never need to
+% be expanded by the macros. However, we define them here just in case
+% \dots
+%    \begin{macrocode}
+\newcommand{\HyperTOCEntry}[3]{\relax}
+\newcommand{\HyperTOCpart}[1]{\relax}
+\newcommand{\HyperTOCmeeting}[3]{\relax}
+\newcommand{\HyperTOCeditors}[1]{\relax}
+\newcommand{\HyperTOCpreamble}{\relax}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+
+% \subsection{Formatting the poster abstracts} 
+% These can now be used without using the book option.
+%    \begin{macrocode}
+
+\newcommand{\@makeminititle}{%
+  \newpage
+  \null 
+  \vskip 3em%
+  \begin{center}%
+    {\@title \par}%
+  \end{center}
+  \vskip 3em%
+  }
+
+\newif\if@abstractsads
+\@abstractsadsfalse
+\newcommand\abstractsADS{\@abstractsadstrue}
+
+\if@book\RequirePackage{multicol}\fi
+\newenvironment{abstracts}[1][Abstracts of Contributed Papers]{%
+  %% First, make sure we start on an odd page (06 Jun 2000)
+  \if@book\clearpage\thispagestyle{empty}\cleardoublepage\fi
+  %%
+  \renewcommand{\articlename}{ABSTRACTS}
+  \title{#1}\shortauthor{Abstracts}\shorttitle{Abstracts}
+  \listofauthors{}
+  \if@book
+  \addcontentsline{toc}{chapter}{\protect\@fiddleauthors{\@TOCtitle}{\rmaaTOCauthors}}%
+  \addtocontents{htc}{\protect\HyperTOCEntry{\@rawtitle}{\@rawauthors}{\articlename}}
+  \fi
+  \pagestyle{rmaa} % this now seems necessary (06 Jun 2000)
+  \thispagestyle{rmaafirstpage}
+%%  \twocolumn[\@makeminititle]
+  \renewcommand{\abstract}[1]{%
+    \renewcommand\ADS@abstract{##1}%
+    \renewcommand{\@abstract}{##1}\@writeabstract%
+  }
+  \renewcommand{\title}[2][]{%
+    \gdef\ADS@authors{}%
+    \gdef\ADS@affil{}%
+    \gdef\ADS@references{}%
+    \gdef\ADS@keywords{}%
+    \renewcommand{\@rmaaArg}{##1}
+    \ifx\@rmaaArg\@rmaaEmpty
+       \renewcommand{\@TOCaftertitle}{}
+    \else
+       \renewcommand{\@TOCaftertitle}{ (\@rmaaArg)}
+    \fi
+    \renewcommand{\@title}{\rmaa@TOCTitleStyle{##2}}%
+    \renewcommand{\@TOCtitle}{\rmaa@TOCTitleStyle{##2}\@TOCaftertitle}%
+    \renewcommand{\rmaaIndexTitle}{\rmaa@IndexTitleStyle{##2\@TOCaftertitle.}}%
+    \renewcommand\ADS@title{##2}%
+    \xdef\ADS@firstpage{\@arabic{\c@page}}%
+    }
+  \renewcommand{\author}[1]{\let\@thanks\@empty\renewcommand\@author{##1} }
+  \renewcommand{\footnotetext}[2][XX]{\par\noindent\textsuperscript{##1}~##2}
+  \renewcommand{\footnoterule}{\kern-3\p@ \hrule \@width 3em \kern 2.6\p@}
+  \if@book\@begofarticlehook\fi
+  \if@book\begin{multicols}{2}[\@makeminititle]\else\@makeminititle\fi
+  \begingroup
+  \setcounter{footnote}{0}
+  }% and at the end of the environment....
+  {\endgroup\if@book\end{multicols}\listofabstracts\label{RMAALastPage}\clearpage\fi}
+%% auxiliary commands used:
+%% \@writeabstract does all the actual formatting 
+\newcommand{\@writeabstract}{%
+  \if@book%
+  \addcontentsline{loa}{abstract}{\protect\@fiddleauthors{\@TOCtitle}{\rmaaTOCauthors}}%
+  \fi%
+  \begin{center}\@title\par\@author\end{center}
+  \@abstract
+  \par\noindent\footnoterule\nobreak\footnotesize\@thanks
+  \par\noindent\hrulefill\goodbreak
+  \vskip 1cm \@plus0.5cm
+  %% write ADS entry
+  \if@book\if@abstractsads\ADS@dumpdata\fi\fi%
+  \endgroup % this pair is to make each abstract a self-contained group
+  \begingroup
+  \setcounter{footnote}{0}
+  }
+
+\if@book
+%% List of abstracts (stuff written to .loa file)
+\newcommand{\listofabstracts}{%
+  \begin{multicols}{2}[%
+    \vskip 1.5cm \vfill % leave at least 1.5 cm and go to bottom of page if possible
+    \centerline{\MakeUpperCase{List of Abstracts}}
+    \vskip 1.5cm \@plus0.5cm
+    ][6cm] % this makes it start a new page if there is not at least 6cm of space
+    \renewcommand{\@fiddleauthors}[2]{##1\hskip1em plus2em minus0.4em\penalty-100  ##2}
+    \parindent\z@
+%%    \parskip.5\p@ \@plus .7\p@\relax 
+    \parskip3\p@ \@plus 1\p@ \@minus 1\p@\relax % allow quite a lot of
+                                % leeway here to avoid breaks inside
+                                % entries 
+    \renewcommand{\\}{\relax} % temporarily turn off explicit line breaks just in case
+    \renewcommand{\altaffilmark}[1]{\relax} % ditto with this
+    \@starttoc{loa}
+  \end{multicols}
+  }
+\newcommand*{\l@abstract}[2]{%
+  \par\penalty-1000
+  #1\hskip 1em\penalty0\null\nobreak\hfill#2}
+\fi
+
+%    \end{macrocode}
+ 
+% \subsection{Code for typesetting an entire volume of conference
+% proceedings} \label{sec:whole-volume}
+%    \begin{macrocode}
+
+\if@book
+%% environment for including the individual articles
+\newcommand{\@fiddleauthors}[2]{\relax}
+\renewcommand{\theequation}{\@arabic\c@equation}
+\newenvironment{articles}%
+{ \begingroup % make it a group so that author definitions do not
+              % spill over
+  \gdef\ADS@authors{}
+  \pagestyle{rmaa}
+  \renewenvironment{document}{%
+    \@begofarticlehook
+    \addtocounter{chapter}{1}%
+    \addcontentsline{toc}{chapter}{%
+      \protect\@fiddleauthors{\@TOCtitle}{\rmaaTOCauthors}}%
+    \addtocontents{htc}{\protect\HyperTOCEntry{\@rawtitle}{\@rawauthors}{\articlename}}
+    }{\relax}
+  \renewcommand{\documentclass}[2][foo]{\relax} 
+  \renewcommand{\usepackage}[2][foo]{%
+    \def\@packagename{##2}\def\@rmaacitename{rmaacite}%
+    \ifx\@packagename\@rmaacitename
+    \@rmcitetrue\ClassInfo{rmaa}{This paper uses rmaacite}
+    \makeatletter\input{rmaacite.sty}\makeatother % read it in here so that all changes
+    \else                                         % are local to paper
+    \if@debug\ClassWarning{rmaa}{Package \@packagename\space was requested by \articlename\space}\fi
+    \fi} 
+  %% Don't allow individual articles to mess with the pages, volume or year
+  \renewcommand{\SetFirstPage}[1]{\relax}
+  \renewcommand{\SetYear}[1]{\relax}
+  \renewcommand{\SetVolume}[1]{\relax}
+  \renewcommand{\SetConfTitle}[1]{\relax}
+  %% Don't allow individual articles to change these
+  \renewcommand{\nonstopmode}{\relax}
+  \renewcommand{\scrollmode}{\relax}
+  \renewcommand{\outputplates}{\relax}
+  %% XXXX need to check if using rmaacite and act accordingly
+  %% avoid multiple declarations of the same length
+  \let\oldnewlength=\newlength
+  \renewcommand{\newlength}[1]{%
+    \edef\reserved@a{\expandafter\@gobble\string ##1}%
+    \@ifundefined{\reserved@a}{%
+      \oldnewlength{##1}}{%
+      \if@debug{\ClassInfo{rmaa}{\reserved@a\space already defined: doing nothing}}\fi%
+      \relax}}%
+  \renewcommand\newcommand{\providecommand}
+  }%
+{\endgroup\onecolumn}
+     
+
+%    \end{macrocode}
+% Command to be used in `articles' environment for including an
+% article
+%    \begin{macrocode}
+\newcommand{\article}[2][]{%
+  % optional first argument is extra text to put in brackets after title in TOC
+  % e.g. ``Invited Talk'' or ``Poster''
+  \renewcommand{\articlename}{#2}
+  % reset loads of counters
+  \setcounter{footnote}{0}
+  \setcounter{figure}{0}
+  \setcounter{table}{0}
+  \setcounter{section}{0}
+  \setcounter{equation}{0}
+  \setcounter{rmaabib}{0}
+  \setcounter{author}{0}
+  \setcounter{AUTHOR}{1}
+  \gdef\ADS@authors{}%
+  \gdef\ADS@affil{}%
+  \gdef\ADS@affiliations{}%
+  \gdef\ADS@references{}%
+  \@firstauthortrue
+  \@firstaffiltrue
+  \@firstaltaffiltrue
+  \@firstkwdtrue
+  \@rmcitefalse
+  \if@suppressfulladdresses\else\@needaddressestrue\fi
+  \renewcommand{\@rmaaArg}{#1}
+  \ifx\@rmaaArg\@rmaaEmpty
+     \renewcommand{\@TOCaftertitle}{}
+  \else
+     \renewcommand{\@TOCaftertitle}{ (#1)}
+  \fi
+%    \end{macrocode}
+% In the main journal articles must start on an odd page. 
+%    \begin{macrocode}
+  \if@journal\clearpage\thispagestyle{empty}\cleardoublepage\fi
+%% Now input the file, then run the end-of-article hook (reinstated 28
+  %% Sep 2001)
+  {\input{\@articledir/\articlename.tex}\@endofarticlehook}}
+%    \end{macrocode}
+% Command to separate articles into sessions. Write an entry in the
+% TOC, makes sure we start on an odd page (added 06 Jun 2000), then do
+% a title page if \cs{SessionTitlePages} was called. 
+% \changes{3.12}{04 Feb 2003}{Added option to have title page for each
+% session. Turn it on with \cs{SessionTitlePages}.}
+%    \begin{macrocode}
+\newcommand{\session}[1]{
+  %% this does nothing except write an entry in the TOC
+  \addcontentsline{toc}{part}{\rmaa@TOCPartStyle{#1}}
+  \addtocontents{htc}{\protect\HyperTOCpart{#1}}
+  %% and also makes sure we start on an odd page (added 06 Jun 2000)
+  \clearpage\thispagestyle{empty}\cleardoublepage
+  \stepcounter{part}
+  \if@sessiontitlepages{%
+    \onecolumn
+    \thispagestyle{empty}
+    \renewcommand{\articlename}{Section\thepart TitlePage}
+    \label{RMAAFirstPage}
+    \make@session@title{#1}
+    \label{RMAALastPage}
+    \clearpage\thispagestyle{empty}\cleardoublepage
+  }\fi
+  }
+\newcommand{\make@session@title}[1]{%
+  {%
+    \setlength\parindent{0pt}
+    \vspace*{\stretch{1}}
+    \rule{\linewidth}{1mm}
+    \begin{flushright}\Huge\bfseries\boldmath
+      #1
+    \end{flushright}
+    \rule{\linewidth}{1mm}
+    \vspace*{\stretch{2}}
+  }
+}
+%    \end{macrocode}
+% Command to turn on separate title pages for each session. 
+%    \begin{macrocode}
+\newcommand{\SessionTitlePages}{\@sessiontitlepagestrue}
+\newcommand{\BoldSessionTitles}{%
+  \renewcommand{\rmaa@TOCPartStyle}[1]{\textbf{\rmaa@TOCTitleStyle{##1}}}
+  }
+\newcommand{\ArticleDir}[1]{\renewcommand{\@articledir}{#1/}\graphicspath{{1/}}}
+\newcommand{\@articledir}{.}
+%\newcommand{\ps@rmaafront}{\ps@rmaa}% page style for front matter (same as ever, actually)
+\newcommand{\ps@rmaafront}{% page style for front matter:  page # in each foot
+  \renewcommand\@oddfoot{\hfil{\thepage}}%
+  \renewcommand\@evenfoot{{\thepage}\hfil}%
+  % shorttitle in both heads
+  \renewcommand\@evenhead{\hfil\@shorttitle\hfil}%
+  \renewcommand\@oddhead{\@evenhead}
+  }
+\newcommand{\ps@rmaafrontfirstpage}{% page style for first page of front matter
+  % page # in each foot, on outside edge
+  \renewcommand\@oddfoot{\hfil\thepage}%
+  \renewcommand\@evenfoot{\thepage\hfil}%
+  % nothing in the even heads
+  \renewcommand\@evenhead{\relax}%
+  \renewcommand\@oddhead{\relax}%
+  }
+%% slight modification to the standard \frontmatter and \mainmatter
+%% commands, just to set the \pagestyle
+\renewcommand\frontmatter{%
+  \latexonecolumn
+  \cleardoublepage
+  \@frontmattertrue
+  \@mainmatterfalse
+  \pagenumbering{roman}
+  \pagestyle{rmaafront}
+  \addtocounter{page}{2} % leave space for the title page
+  }
+\renewcommand\mainmatter{%
+  \pagestyle{empty}
+  \if@rmtwocol\twocolumn\fi
+  \cleardoublepage
+  \@frontmatterfalse
+  \@mainmattertrue
+  \pagenumbering{arabic}
+  \pagestyle{rmaa}
+  }
+\renewcommand\backmatter{%
+  \clearpage\pagestyle{empty}\cleardoublepage
+  \@mainmatterfalse
+  %% put extra space in the TOC
+  \addtocontents{toc}{\bigskip}
+  }
+%    \end{macrocode}
+%
+% \subsection{Front sections}\label{sec:front-sections}
+% \begin{macro}{\notitle}
+% \begin{macro}{\shortname}
+% \begin{macro}{frontsection}
+% The environment \texttt{frontsection} is for doing a section in the
+% front matter (preface, list of participants, or whatever). It has 
+% one optional argument:
+% \begin{enumerate}
+% \item[\#1] Short title (no embedded spaces) for
+% use in making PS files. E.g., ``list\_of\_participants''.   
+% \end{enumerate}
+% and two mandatory arguments: 
+% \begin{enumerate}
+% \item[\#2] Title of section (e.g., `Preface')
+% \item[\#3] Commands to be evaluated before processing the contents
+% of the environment. This is mainly useful for putting in the things
+% that would go in the preamble of a normal article  (e.g.,
+% |\listofauthors|, |\indexauthor|, |\notitle|) 
+% \end{enumerate}
+%    \begin{macrocode}
+\newcommand{\notitle}{\@titlevisiblefalse} \newcommand{\shortname}{}
+\newenvironment{frontsection}[3][]{%
+  \begingroup
+  \renewcommand{\shortname}{#1}
+  \ifx\shortname\@rmaaEmpty
+     \renewcommand{\articlename}{#2}
+  \else
+     \renewcommand{\articlename}{\shortname}
+  \fi
+  \@begofarticlehook
+  \@titlevisibletrue % default
+  \thispagestyle{rmaafrontfirstpage}
+  \listofauthors{} % blank out this in case it is not specified
+  \title{{#2}}\shorttitle{#2}\shortauthor{#2}
+  #3 % evaluate the command given as second mandatory arg
+  \addcontentsline{toc}{chapter}{\protect\@fiddleauthors{\@TOCtitle}{\rmaaTOCauthors}}%
+  \addtocontents{htc}{\protect\HyperTOCEntry{\@rawtitle}{\@rawauthors}{\articlename}}
+  \if@titlevisible
+     \vspace*{1cm}\centerline{\rmaa@FrontSecStyle{\@title}}\vspace*{1cm}
+  \fi
+  \setlength{\parskip}{3ex}
+  }{\frontlabel{RMAALastPage}\clearpage\endgroup}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%    \begin{macrocode}
+%% Definition of the command \frontlabel, which rights out something like `F4' to
+%% the .aux file, instead of `\textlatin  {i}'. This is so it is easy to post-process
+%% the file for making PS files of individual sections
+\newcommand{\frontlabel}[1]{%
+  \@bsphack
+  \protected@write\@auxout{}%
+     {\string\newlabel{\articlename:#1}{{}{F\@arabic{\c@page}}}}
+  \@esphack
+  }
+%% User command to say X, Y, Z,\\ Editors of the Proceedings
+\newcommand{\EditorSignature}{\vspace*{\parskip}\rightline{\@editors}%
+  \rightline{Editors of the proceedings}}
+%% Fiddle with \thesection, etc. so that they don't include the chapter number
+%% Basically go back to the `article' definitions of these
+\renewcommand{\thesection}{\@arabic\c@section}
+\renewcommand{\thefigure}{\@arabic\c@figure}
+\renewcommand{\thetable}{\@arabic\c@table}
+
+\newcommand{\@oldargs}{}
+\newcommand{\@newargs}{}
+%% add TOC entry for each paper
+%\renewcommand{\title}[1]%
+%{\renewcommand{\@title}{\rmaa@TitleStyle{#1}}%
+%\addtocounter{chapter}{1}\addcontentsline{toc}{chapter}{#1}%
+%}
+
+%% Formatting of the table of contents
+%% dimensions of various parts
+\newlength{\TOCtextwidth}\setlength{\TOCtextwidth}{12.65cm}
+\newlength{\TOCpagenumwidth}\setlength{\TOCpagenumwidth}{1.3cm}
+\newlength{\TOCentrywidth}\setlength{\TOCentrywidth}{\TOCtextwidth}
+\addtolength{\TOCentrywidth}{-\TOCpagenumwidth} 
+\newlength{\TOCextramargin}\setlength{\TOCextramargin}{1.25cm}
+\newcommand{\TOCbox}[1]{\hspace{\TOCextramargin}\parbox{\TOCtextwidth}{#1}\par}
+\newlength{\TOCextramarginx}\setlength{\TOCextramarginx}{\TOCextramargin}\addtolength{\TOCextramarginx}{4.3cm}
+\newlength{\TOCtextwidthx}\setlength{\TOCtextwidthx}{\TOCtextwidth}\addtolength{\TOCtextwidthx}{-4.3cm}
+\newcommand{\TOCboxx}[1]{\hspace{\TOCextramarginx}\parbox{\TOCtextwidthx}{#1}\par}
+
+\newcommand{\RMAAbannerimage}{rmsc}
+\renewcommand\tableofcontents{%
+  \renewcommand{\articlename}{CONTENTS}
+  \begingroup
+  \@begofarticlehook
+  \if@twocolumn
+     \@restonecoltrue\onecolumn
+  \else
+     \@restonecolfalse
+  \fi
+  %% 9pt for journal style
+  \if@proceedings\else\small\fi
+  \if@newstyle\small\fi %% same for new style
+  \if@proceedings\thispagestyle{rmaafrontfirstpage}\else\thispagestyle{empty}\fi
+  \shortauthor{Contents}\shorttitle{Contents}
+  \vspace*{18mm}
+  \if@printbanner
+  %% put in the banner header (need to get better image of this)
+     \TOCbox{\hspace*{-0.15cm}\includegraphics[width=0.9\TOCtextwidth]{\RMAAbannerimage}}
+     \vspace*{8mm}
+  %% volume and publication date (should really be in funny font)
+     \TOCboxx{\@volumen\\[2mm] \@mes\ \@anyo}
+  \else
+  %% put in the banner header (need to get better image of this)
+     \TOCbox{\hspace*{-0.15cm}\includegraphics[width=0.9\TOCtextwidth]{\RMAAbannerimage}}
+     \vspace*{12.5mm}
+  %% volume and publication date (should really be in funny font)
+     \TOCboxx{~\\[2mm] ~}
+  \fi
+  \vspace*{16mm}
+  %% This is the command that fiddles with the TOC entry so that the
+  %% title is flushleft but the authors are flushright
+  \renewcommand{\@fiddleauthors}[2]{%
+    % first put the paper title
+    \renewcommand{\\}{\relax} % temporarily turn off explicit line breaks just in case
+    \renewcommand{\altaffilmark}[1]{\relax} % ditto with this
+    \renewcommand{\textsuperscript}[1]{\relax} % ditto with this 
+    ##1
+    % now save the author list in a box
+    \sbox\@tempboxa{##2}%
+    % check that box is shorter than the total width available for the entry
+    \ifdim \wd\@tempboxa <\TOCentrywidth
+       % if so, then put it right here, flush against right margin
+       \penalty10000\hskip1em plus10em\penalty0\hbox{}\nobreak\hfill\box\@tempboxa
+       % Note that we force a space of at least 1em between title and authorlist, 
+       % stretchable to 11em since we may have very short titles but still with an 
+       % authorlist too long to go on the same line.  The only linebreak allowed is 
+       % directly before the authorlist.
+    \else
+       % if it is too long, we set the original authorlist text in its own parbox
+       \par\vskip1ex\parbox[b]{\TOCentrywidth}{\raggedleft ##2}
+    \fi
+    }
+  \@starttoc{toc}%
+  \if@restonecol\twocolumn\fi
+  \frontlabel{RMAALastPage}
+  \clearpage
+  \thispagestyle{empty}
+  \cleardoublepage % make sure we start on an odd page
+  \endgroup
+
+  %%% ALSO, do the HTML TOC
+  %% The file that will be used to make the HTML TOC
+  \@starttoc{htc}
+  %% All the stuff in this file does nothing in the book style
+  \addtocontents{htc}{\protect\HyperTOCmeeting{\@conftitle}{\@reunionplace}{\@reuniondate}}
+  \addtocontents{htc}{\protect\HyperTOCeditors{\@editors}}
+  \addtocontents{htc}{\protect\HyperTOCpreamble}
+  \addtocontents{htc}{\protect\HyperTOCEntry{Table of Contents}{}{\articlename}}
+
+  %% and the ADS file
+  \ADS@openfile
+  }
+%% This is now much simpler
+\renewcommand\l@chapter[2]{%TOC entry for articles
+  \ifnum \c@tocdepth >\m@ne
+    \vskip 1.0em \@plus\p@
+    \TOCbox{%
+      \parbox[b]{\TOCentrywidth}{#1}\parbox[b]{\TOCpagenumwidth}{\hfill#2}
+    }
+  \fi} 
+\renewcommand\l@part[2]{%TOC entry for sessions: centered, no page number
+  \ifnum \c@tocdepth >\m@ne
+    \vskip 1.5em \@plus1.5em \goodbreak
+    \TOCbox{%
+      \parbox[b]{\TOCentrywidth}{\hfil#1\hfil}\hfill
+    }
+  \fi\nobreak} 
+
+%% Formatting theindex
+%% strongly encourage page breaks between index entries
+\renewcommand{\@idxitem}{\par\penalty-1000\hangindent.45cm} 
+\renewcommand{\indexspace}{\par\penalty-1000\vskip 10\p@ \@plus15\p@ \@minus3\p@\relax}
+\renewenvironment{theindex}{%
+  %% first, make sure we start on an odd page (06 Jun 2000)
+  \clearpage\thispagestyle{empty}\cleardoublepage
+  %% this looks a bit like an article but is two columns and without abstract, etc
+  \renewcommand{\articlename}{INDEX}
+  \title{Author Index}\shortauthor{Author Index}\shorttitle{Author Index}
+  \listofauthors{}
+  \addcontentsline{toc}{chapter}{\protect\@fiddleauthors{\@TOCtitle}{\rmaaTOCauthors}}%
+  \addtocontents{htc}{\protect\HyperTOCEntry{\@rawtitle}{\@rawauthors}{\articlename}}
+  \pagestyle{rmaa}
+  \thispagestyle{rmaafirstpage}
+  \@begofarticlehook
+  %% 9pt for journal style
+  \if@proceedings\else\small\fi
+  \if@newstyle\small\fi
+  \twocolumn[\@makeminititle]
+  %% vertical spacing (see also definition of \@idxitem and \indexspace
+  \parskip\z@ \@plus .6\p@\relax % allow quite a lot of leaway here to avoid breaks inside entries
+  %% horizontal spacing, breaking and glue parameters (see also the stuff in the definition 
+  %% of \indexauthor
+  \parindent\z@ 
+  \exhyphenpenalty10000 % don't break on explicit hyphens, it always looks bad
+  \rightskip=0pt plus.2em % allow a tiny bit of leeway at the ends of lines
+  \spaceskip.3333em plus.5em minus.15em % a lot of leeway between words
+  \xspaceskip.5em plus.5em minus.4em % this seems to have no effect
+  \let\item\@idxitem
+  \renewcommand{\\}{\relax} % temporarily turn off explicit line breaks just in case
+  \renewcommand{\altaffilmark}[1]{\relax} % ditto with this
+  \renewcommand{\textsuperscript}[1]{\relax} % ditto with this
+  }{\label{RMAALastPage}\clearpage} % clearpage necessary so that we know about \shortauthor
+
+
+
+%% end definitions for book styles
+\fi
+
+%    \end{macrocode}
+% In order to do away with plates, we sometimes want a figure to
+% appear in color only in the online version. The following command
+% can bve used in a figure caption to typeset a note to this effect. 
+%    \begin{macrocode}
+\newcommand\ColorOnlineOnly{%
+  \textsc{Note: this figure is available in color in the electronic
+    version of this article, obtainable from}
+  \texttt{http://\discretionary{}{}{}www.\discretionary{}{}{}astroscu.\discretionary{}{}{}unam.\discretionary{}{}{}mx/\discretionary{}{}{}\~{}rmaa/}.}
+%% Plates
+%% Define 2 counters: plate is the number in the whole document, plateloop is used 
+%% internally by \outputplates
+\newcounter{plate}
+\newcounter{plateloop}
+%% Currently limited to 15 plates in document
+%% when we do a label, we need to write to \newlabel entries to the .aux file, one 
+%% that says RMAAPlateX so that it can be referred to in \ouputplates, and one that
+%% says articlename:RMAAPlateX so that the dvips program can find it and asociate it
+%% with the right article
+\newcommand{\@platelabeli}{\oldlabel{RMAAPlate1}\label{RMAAPlate1}}
+\newcommand{\@platelabelii}{\oldlabel{RMAAPlate2}\label{RMAAPlate2}}
+\newcommand{\@platelabeliii}{\oldlabel{RMAAPlate3}\label{RMAAPlate3}}
+\newcommand{\@platelabeliv}{\oldlabel{RMAAPlate4}\label{RMAAPlate4}}
+\newcommand{\@platelabelv}{\oldlabel{RMAAPlate5}\label{RMAAPlate5}}
+\newcommand{\@platelabelvi}{\oldlabel{RMAAPlate6}\label{RMAAPlate6}}
+\newcommand{\@platelabelvii}{\oldlabel{RMAAPlate7}\label{RMAAPlate7}}
+\newcommand{\@platelabelviii}{\oldlabel{RMAAPlate8}\label{RMAAPlate8}}
+\newcommand{\@platelabelix}{\oldlabel{RMAAPlate9}\label{RMAAPlate9}}
+\newcommand{\@platelabelx}{\oldlabel{RMAAPlate10}\label{RMAAPlate10}}
+\newcommand{\@platelabelxi}{\oldlabel{RMAAPlate11}\label{RMAAPlate11}}
+\newcommand{\@platelabelxii}{\oldlabel{RMAAPlate12}\label{RMAAPlate12}}
+\newcommand{\@platelabelxiii}{\oldlabel{RMAAPlate13}\label{RMAAPlate13}}
+\newcommand{\@platelabelxiv}{\oldlabel{RMAAPlate14}\label{RMAAPlate14}}
+\newcommand{\@platelabelxv}{\oldlabel{RMAAPlate15}\label{RMAAPlate15}}
+\newcommand{\@outputplatelabeli}{\oldlabel{RMAAOutputPlate1}}
+\newcommand{\@outputplatelabelii}{\oldlabel{RMAAOutputPlate2}}
+\newcommand{\@outputplatelabeliii}{\oldlabel{RMAAOutputPlate3}}
+\newcommand{\@outputplatelabeliv}{\oldlabel{RMAAOutputPlate4}}
+\newcommand{\@outputplatelabelv}{\oldlabel{RMAAOutputPlate5}}
+\newcommand{\@outputplatelabelvi}{\oldlabel{RMAAOutputPlate6}}
+\newcommand{\@outputplatelabelvii}{\oldlabel{RMAAOutputPlate7}}
+\newcommand{\@outputplatelabelviii}{\oldlabel{RMAAOutputPlate8}}
+\newcommand{\@outputplatelabelix}{\oldlabel{RMAAOutputPlate9}}
+\newcommand{\@outputplatelabelx}{\oldlabel{RMAAOutputPlate10}}
+\newcommand{\@outputplatelabelxi}{\oldlabel{RMAAOutputPlate11}}
+\newcommand{\@outputplatelabelxii}{\oldlabel{RMAAOutputPlate12}}
+\newcommand{\@outputplatelabelxiii}{\oldlabel{RMAAOutputPlate13}}
+\newcommand{\@outputplatelabelxiv}{\oldlabel{RMAAOutputPlate14}}
+\newcommand{\@outputplatelabelxv}{\oldlabel{RMAAOutputPlate15}}
+\newcommand{\@platerefi}{\oldpageref{RMAAPlate1}}
+\newcommand{\@platerefii}{\oldpageref{RMAAPlate2}}
+\newcommand{\@platerefiii}{\oldpageref{RMAAPlate3}}
+\newcommand{\@platerefiv}{\oldpageref{RMAAPlate4}}
+\newcommand{\@platerefv}{\oldpageref{RMAAPlate5}}
+\newcommand{\@platerefvi}{\oldpageref{RMAAPlate6}}
+\newcommand{\@platerefvii}{\oldpageref{RMAAPlate7}}
+\newcommand{\@platerefviii}{\oldpageref{RMAAPlate8}}
+\newcommand{\@platerefix}{\oldpageref{RMAAPlate9}}
+\newcommand{\@platerefx}{\oldpageref{RMAAPlate10}}
+\newcommand{\@platerefxi}{\oldpageref{RMAAPlate11}}
+\newcommand{\@platerefxii}{\oldpageref{RMAAPlate12}}
+\newcommand{\@platerefxiii}{\oldpageref{RMAAPlate13}}
+\newcommand{\@platerefxiv}{\oldpageref{RMAAPlate14}}
+\newcommand{\@platerefxv}{\oldpageref{RMAAPlate15}}
+\newcounter{figplatei}
+\newcounter{figplateii}
+\newcounter{figplateiii}
+\newcounter{figplateiv}
+\newcounter{figplatev}
+\newcounter{figplatevi}
+\newcounter{figplatevii}
+\newcounter{figplateviii}
+\newcounter{figplateix}
+\newcounter{figplatex}
+\newcounter{figplatexi}
+\newcounter{figplatexii}
+\newcounter{figplatexiii}
+\newcounter{figplatexiv}
+\newcounter{figplatexv}
+%% Printed output should use the counter `plate'
+\renewcommand{\theplate}{\@arabic\c@plate}
+\renewcommand{\theplateloop}{\@arabic\c@plateloop}
+%% Command to output all the saved plates in this paper
+\newcommand{\outputplates}{%
+  \setcounter{plateloop}{0}
+  \if@book\else\@endofarticlehook\fi % not entirely sure why, but this
+                                     % seems to be needed
+  \clearpage % first output the last page of text
+  % now set pagestyle for blank even pages and make sure we start on an odd page
+  \pagestyle{empty}
+  \cleardoublepage
+  \onecolumn
+  \parindent\z@
+  % first put in an extra sheet
+  % the main purpose of this is so there is always a blank even page before 
+  % each plate for filling in the PS file if the article has an odd number
+  % of pages (see splitbook.sh)
+  \null\vfil\centerline{PLATES}\vfil\clearpage\pagestyle{rmaaplate}\cleardoublepage
+  % output each plate in turn
+  \@whilenum\value{plateloop}<\value{plate}\do{%
+    \addtocounter{plateloop}{1}
+    % restore the figure counter from \@figcounti, \@figcountii, etc
+    \setcounter{figure}{\value{figplate\roman{plateloop}}}
+    % spew out the plate (in its own group for safety)
+    {\csname @plate\roman{plateloop}\endcsname\par}
+    }
+  \pagestyle{rmaa}
+  % reset the page number as if nothing had happened
+  \addtocounter{page}{-\value{plate}}
+  \addtocounter{page}{-\value{plate}}
+  }
+\newcommand\figcaption{%
+  \def\@captype{figure}
+  \renewcommand{\@makecaption}{\@makefigcap}
+  \caption}
+\newcommand\tabcaption{%
+  \def\@captype{table}
+  \renewcommand{\@makecaption}{\@maketabcap}
+  \caption}
+
+\newcommand{\plate}[2][1]{%
+  %% User command to make a plate page: 
+  %% Mandatory argument is what goes on the plate - this should not 
+  %% include any floating environments (e.g. figure). Instead, \figcaption 
+  %% should be used to do the captions. 
+  %% Optional argument is the number of figures (i.e. captions) on the plate
+  %% page (default is 1). This is necessary for incrementing the figure counter. 
+  %%
+  %% Note that we have to use a \gdef rather than an \xdef when we 
+  %% save the plate output in a command. This means that in the book styles when it 
+  %% comes to spewing out the plate, we will have forgotten about any user macros 
+  %% that may have been defined. This can be got round by repeating the macros inside the plate.
+  %% (Presumably, one would use a \newcommand rather than \renewcommand if they were new.)
+  % increment global and local counters
+  \addtocounter{plate}{1}
+  % write appropriate label to .aux file
+  \csname @platelabel\roman{plate}\endcsname
+  % define a global macro called \@platei, \@plateii, \@plateiii, \@plateiv, ...
+  \expandafter\gdef\csname @plate\roman{plate}\endcsname{%
+    \csname @outputplatelabel\roman{plateloop}\endcsname
+    \null\vfil #2 \vfil
+    \cleardoublepage
+    }
+  % save the current shortauthor and shorttitle
+  % need to be \xdef to take current values of \@shortauthor, etc 
+  \expandafter\xdef\csname @shorta\roman{plate}\endcsname{\@shortauthor}
+  \expandafter\xdef\csname @shortt\roman{plate}\endcsname{\@shorttitle}
+  % save the current value of the figure counter for later use in \outputplates
+  \setcounter{figplate\roman{plate}}{\value{figure}}
+  % increment the figure counter according to the optional argument
+  \addtocounter{figure}{#1}
+  }
+%% page style for plate pages 
+\newcommand{\ps@rmaaplate}{%
+  % Plate X (see page Y) in the foot
+  \renewcommand\@oddfoot{\hfil\csname @shorta\roman{plateloop}\endcsname\ 
+    (see page~\csname @plateref\roman{plateloop}\endcsname)\hfil}%
+  \renewcommand\@evenfoot{\relax}%
+  % nothing in even heads (blank pages)
+  \renewcommand\@evenhead{\relax}
+  % short title and page num in the odd heads
+  \renewcommand\@oddhead{\hfil\csname @shortt\roman{plateloop}\endcsname%
+    \hfil\llap{PLATE~\theplateloop}}
+  }
+
+
+
+
+
+%% Things for the User Guide
+\if@guide
+%% stolen from doc.sty
+\def\MakeShortVerb#1{%
+  \expandafter\ifx\csname cc\string#1\endcsname\relax
+  \@shortvrbinfo{Made }{#1}%
+  \add@special{#1}%
+  \expandafter
+  \xdef\csname cc\string#1\endcsname{\the\catcode`#1}%
+  \begingroup
+  \catcode`\~\active  \lccode`\~`#1%
+  \lowercase{%
+    \global\expandafter\let
+    \csname ac\string#1\endcsname~%
+    \gdef~{\verb~}}%
+  \endgroup
+  \global\catcode`#1\active
+  \else
+  \@shortvrbinfo\@empty{#1 already}%
+  \fi}
+\def\DeleteShortVerb#1{%
+  \expandafter\ifx\csname cc\string#1\endcsname\relax
+  \else
+  \@shortvrbinfo{Deleted }{#1 as}%
+  \rem@special{#1}%
+  \global\catcode`#1\csname cc\string#1\endcsname
+  \global \expandafter\let \csname cc\string#1\endcsname \relax
+  \ifnum\catcode`#1=\active
+  \begingroup
+  \catcode`\~\active   \lccode`\~`#1%
+  \lowercase{%
+    \global\expandafter\let\expandafter~%
+    \csname ac\string#1\endcsname}%
+  \endgroup \fi \fi}
+\def\@shortvrbinfo#1#2{%
+  \PackageInfo{doc}{%
+    #1\expandafter\@gobble\string#2 a short reference
+    for \string\verb}}
+\def\add@special#1{%
+  \rem@special{#1}%
+  \expandafter\gdef\expandafter\dospecials\expandafter
+  {\dospecials \do #1}%
+  \expandafter\gdef\expandafter\@sanitize\expandafter
+  {\@sanitize \@makeother #1}}
+\def\rem@special#1{%
+  \def\do##1{%
+    \ifnum`#1=`##1 \else \noexpand\do\noexpand##1\fi}%
+  \xdef\dospecials{\dospecials}%
+  \begingroup
+  \def\@makeother##1{%
+    \ifnum`#1=`##1 \else \noexpand\@makeother\noexpand##1\fi}%
+  \xdef\@sanitize{\@sanitize}%
+  \endgroup}
+%% define | as shortcut for \verbatim
+\MakeShortVerb{\|}
+%% comand to specify arguments to LaTeX commands
+\newcommand{\rmArg}[1]{%
+  \ensuremath{\langle}{\scriptsize \textsf{\MakeUpperCase{#1}}}\ensuremath{\rangle}}
+%\newcommand{\rmArg}[1]{\ensuremath{\langle}\textsc{#1}\ensuremath{\rangle}}
+\providecommand{\BibTeX}{{\rmfamily B\kern-.05em%
+    \textsc{i\kern-.025em b}\kern-.08em%
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+%% Environment for code examples
+\newenvironment{Code}{%
+  \begin{list}{}{\setlength{\leftmargin}{0.05\columnwidth}} 
+  \item[]}{\end{list}}
+\fi
+%</package>
+%    \end{macrocode}
+
+% \section{User commands for astronomical articles}
+% \label{sec:user-commands}
+% Some random definitions. These go both into the main class file and
+% also into |adshtml.sty|.
+% 
+% Definitions of the journal name in different incarnations.  
+%    \begin{macrocode}
+%<*package|adshtml-style>
+\newcommand{\RMAA}{RMxAA}
+\newcommand{\RMAAlong}{Revista Mexicana de Astronom\'{\i}a y Astrof\'{\i}sica}
+\newcommand{\RMAASC}{RMxAC}
+\newcommand{\RMAASClong}{\RMAA\ (Serie de Conferencias)}
+%    \end{macrocode}
+% \begin{macro}{\ibidrule}
+% This puts a horizontal rule with a period after it. It is used when
+% the author list of a reference is identical to the preceding one. 
+%    \begin{macrocode}
+\newcommand{\ibidrule}{\rule[-0.03cm]{4.7em}{.01cm}.\ }
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\ThisVolume}
+% References to other articles in the same volume can be coded as,
+% e.g., |\bibitem{} Bloggs, J. \ThisVolume{bloggs}|.
+%    \begin{macrocode}
+\newcommand{\ThisVolume}[1]{%
+  \@year, \if@proceedings\RMAASC\else\RMAA\fi, \@volume,
+  \if@book\oldpageref{#1:RMAAFirstPage}\else 000\fi\ (this volume)}
+%    \end{macrocode}
+% \end{macro}
+% Other stuff that may be useful in ref lists.
+%    \begin{macrocode}
+\newcommand{\etal}{et al.\@}
+%    \end{macrocode}
+% Various new commands from AAS macros
+%    \begin{macrocode}
+\def\acknowledgments{\vskip 3ex plus .8ex minus .4ex}
+\let\acknowledgements=\acknowledgments                  % second spelling
+\let\jnl@style=\rm
+\def\ref@jnl#1{{\jnl@style#1}}
+\DeclareRobustCommand\aj{\ref@jnl{AJ}}                   
+\DeclareRobustCommand\araa{\ref@jnl{ARA\&A}}             
+\DeclareRobustCommand\apj{\ref@jnl{ApJ}}                 
+\DeclareRobustCommand\apjl{\ref@jnl{ApJ}}                
+\DeclareRobustCommand\apjs{\ref@jnl{ApJS}}               
+\DeclareRobustCommand\ao{\ref@jnl{Appl.~Opt.}}           
+\DeclareRobustCommand\apss{\ref@jnl{Ap\&SS}}             
+\DeclareRobustCommand\aap{\ref@jnl{A\&A}}                
+\DeclareRobustCommand\aapr{\ref@jnl{A\&A~Rev.}}          
+\DeclareRobustCommand\aaps{\ref@jnl{A\&AS}}              
+\DeclareRobustCommand\azh{\ref@jnl{AZh}}                 
+\DeclareRobustCommand\baas{\ref@jnl{BAAS}}               
+\DeclareRobustCommand\jrasc{\ref@jnl{JRASC}}             
+\DeclareRobustCommand\memras{\ref@jnl{MmRAS}}            
+\DeclareRobustCommand\mnras{\ref@jnl{MNRAS}}             
+\DeclareRobustCommand\pra{\ref@jnl{Phys.~Rev.~A}}        
+\DeclareRobustCommand\prb{\ref@jnl{Phys.~Rev.~B}}        
+\DeclareRobustCommand\prc{\ref@jnl{Phys.~Rev.~C}}        
+\DeclareRobustCommand\prd{\ref@jnl{Phys.~Rev.~D}}        
+\DeclareRobustCommand\pre{\ref@jnl{Phys.~Rev.~E}}        
+\DeclareRobustCommand\prl{\ref@jnl{Phys.~Rev.~Lett.}}    
+\DeclareRobustCommand\pasp{\ref@jnl{PASP}}               
+\DeclareRobustCommand\pasj{\ref@jnl{PASJ}}               
+\DeclareRobustCommand\qjras{\ref@jnl{QJRAS}}             
+\DeclareRobustCommand\skytel{\ref@jnl{S\&T}}             
+\DeclareRobustCommand\solphys{\ref@jnl{Sol.~Phys.}}      
+\DeclareRobustCommand\sovast{\ref@jnl{Soviet~Ast.}}      
+\DeclareRobustCommand\ssr{\ref@jnl{Space~Sci.~Rev.}}     
+\DeclareRobustCommand\zap{\ref@jnl{ZAp}}                 
+\DeclareRobustCommand\nat{\ref@jnl{Nature}}              
+\DeclareRobustCommand\iaucirc{\ref@jnl{IAU~Circ.}}
+\DeclareRobustCommand\aplett{\ref@jnl{Astrophys.~Lett.}}
+\DeclareRobustCommand\apspr{\ref@jnl{Astrophys.~Space~Phys.~Res.}}
+\DeclareRobustCommand\bain{\ref@jnl{Bull.~Astron.~Inst.~Netherlands}}
+\DeclareRobustCommand\fcp{\ref@jnl{Fund.~Cosmic~Phys.}}
+\DeclareRobustCommand\gca{\ref@jnl{Geochim.~Cosmochim.~Acta}}
+\DeclareRobustCommand\grl{\ref@jnl{Geophys.~Res.~Lett.}}
+\DeclareRobustCommand\jcp{\ref@jnl{J.~Chem.~Phys.}}      
+\DeclareRobustCommand\jgr{\ref@jnl{J.~Geophys.~Res.}}    
+\DeclareRobustCommand\jqsrt{\ref@jnl{J.~Quant.~Spec.~Radiat.~Transf.}}
+\DeclareRobustCommand\memsai{\ref@jnl{Mem.~Soc.~Astron.~Italiana}}
+\DeclareRobustCommand\nphysa{\ref@jnl{Nucl.~Phys.~A}}
+\DeclareRobustCommand\physrep{\ref@jnl{Phys.~Rep.}}
+\DeclareRobustCommand\physscr{\ref@jnl{Phys.~Scr}}
+\DeclareRobustCommand\planss{\ref@jnl{Planet.~Space~Sci.}}
+\DeclareRobustCommand\procspie{\ref@jnl{Proc.~SPIE}}
+\let\astap=\aap
+\let\apjlett=\apjl
+\let\apjsupp=\apjs
+\let\applopt=\ao
+\def\phn{\phantom{0}}
+\def\phd{\phantom{.}}
+\def\phs{\phantom{\ensuremath{-}}}
+\def\phm#1{\phantom{#1}}
+%    \end{macrocode}
+% All these are redone as robust and using more modern commands where
+% possible. The robustness is so they will not get expanded if used in
+% abstracts and titles when these are passed to the ADS file. 
+% \changes{3.16}{2003/04/07}{
+%  Added \cs{Color} command for doing photometric colors.}
+%    \begin{macrocode}
+%%\def\sun{\hbox{$\odot$}}
+\DeclareRobustCommand\sun{\ensuremath{\odot}}
+%%\def\earth{\hbox{$\oplus$}}
+\DeclareRobustCommand\earth{\ensuremath{\oplus}}
+%%\def\lesssim{\mathrel{\hbox{\rlap{\hbox{\lower4pt\hbox{$\sim$}}}\hbox{$<$}}}}
+%%\def\gtrsim{\mathrel{\hbox{\rlap{\hbox{\lower4pt\hbox{$\sim$}}}\hbox{$>$}}}}
+\DeclareRobustCommand\lesssim{\mathrel{\hbox{\smaller\smaller\rlap{\hbox{\lower3pt\hbox{$\sim$}}}\raise1.5pt\hbox{$<$}}}}
+\DeclareRobustCommand\gtrsim{\mathrel{\hbox{\smaller\smaller\rlap{\hbox{\lower3pt\hbox{$\sim$}}}\raise1.5pt\hbox{$>$}}}}
+%%\def\lta{\mathrel{\spose{\lower 3pt\hbox{$\mathchar"218$}}
+%%     \raise 2.0pt\hbox{$\mathchar"13C$}}}
+%%\def\gta{\mathrel{\spose{\lower 3pt\hbox{$\mathchar"218$}}
+%%     \raise 2.0pt\hbox{$\mathchar"13E$}}}
+\DeclareRobustCommand\sq{\hbox{\rlap{$\sqcap$}$\sqcup$}}
+%%\def\arcdeg{\hbox{$^\circ$}}
+%%\def\arcmin{\hbox{$^\prime$}}
+%%\def\arcsec{\hbox{$^{\prime\prime}$}}
+\DeclareRobustCommand\arcdeg{\ensuremath{^\circ}}
+\DeclareRobustCommand\arcmin{\ensuremath{^\prime}}
+\DeclareRobustCommand\arcsec{\ensuremath{^{\prime\prime}}}
+%%\def\fd{\hbox{$.\!\!^{\rm d}$}}
+%%\def\fh{\hbox{$.\!\!^{\rm h}$}}
+%%\def\fm{\hbox{$.\!\!^{\rm m}$}}
+%%\def\fs{\hbox{$.\!\!^{\rm s}$}}
+%%\def\fdg{\hbox{$.\!\!^\circ$}}
+%%\def\farcm{\hbox{$.\mkern-4mu^\prime$}}
+%%\def\farcs{\hbox{$.\!\!^{\prime\prime}$}}
+%%\def\fp{\hbox{$.\!\!^{\scriptscriptstyle\rm p}$}}
+\DeclareRobustCommand\fd{\ensuremath{.\!\!^\mathrm{d}}}
+\DeclareRobustCommand\fh{\ensuremath{.\!\!^\mathrm{h}}}
+\DeclareRobustCommand\fm{\ensuremath{.\!\!^\mathrm{m}}}
+\DeclareRobustCommand\fs{\ensuremath{\mkern0.5mu.\mkern-5mu^\mathrm{s}\mkern-1mu}}
+\DeclareRobustCommand\fdg{\ensuremath{.\!\!^\circ}}
+\DeclareRobustCommand\farcm{\ensuremath{.\mkern-4mu^\prime}}
+\DeclareRobustCommand\farcs{\ensuremath{\mkern1mu.\mkern-6mu^{\prime\prime}\mkern-1.5mu}}
+%%\DeclareRobustCommand\farcs{\ensuremath{.\!\!^{\prime\prime}}}
+\DeclareRobustCommand\fp{\ensuremath{.\!\!^{\scriptscriptstyle\rm p}}}
+%%\def\micron{\hbox{$\mu$m}}
+\DeclareRobustCommand\micron{\ensuremath{\mu\mathrm{m}}}
+\let\la=\lesssim                        
+\let\ga=\gtrsim
+%%\def\case#1#2{\hbox{$\frac{#1}{#2}$}}
+%%\def\slantfrac#1#2{\hbox{$\,^#1\!/_#2$}}
+%%\def\onehalf{\slantfrac{1}{2}}
+%%\def\onethird{\slantfrac{1}{3}}
+%%\def\twothirds{\slantfrac{2}{3}}
+%%\def\onequarter{\slantfrac{1}{4}}
+%%\def\threequarters{\slantfrac{3}{4}}
+\DeclareRobustCommand\case[2]{\ensuremath{\frac{#1}{#2}}}
+\DeclareRobustCommand\slantfrac[2]{\ensuremath{\,^#1\!/_#2}}
+\DeclareRobustCommand\onehalf{\slantfrac{1}{2}}
+\DeclareRobustCommand\onethird{\slantfrac{1}{3}}
+\DeclareRobustCommand\twothirds{\slantfrac{2}{3}}
+\DeclareRobustCommand\onequarter{\slantfrac{1}{4}}
+\DeclareRobustCommand\threequarters{\slantfrac{3}{4}}
+%%\def\ubvr{\hbox{$U\!BV\!R$}}            
+%%\def\ub{\hbox{$U\!-\!B$}}               
+%%\def\bv{\hbox{$B\!-\!V$}}               
+%%\def\vr{\hbox{$V\!-\!R$}}               
+%%\def\ur{\hbox{$U\!-\!R$}}
+%    \end{macrocode}
+% New commands for ``photometric'' colors 
+%    \begin{macrocode}
+\DeclareRobustCommand\ubvr{\ensuremath{U\!BV\!R}}            
+\DeclareRobustCommand\Color[2]{%
+  \ensuremath{%
+    #1\!\ifx#1V\!\fi-\!#2
+  }}
+\DeclareRobustCommand\ub{\Color{U}{B}}
+\DeclareRobustCommand\bv{\Color{B}{V}}
+\DeclareRobustCommand\vr{\Color{V}{R}}
+\DeclareRobustCommand\ur{\Color{U}{R}}
+%% New version of the \ion command, that actually works! 
+%    \end{macrocode}
+% \begin{macro}{\ion}
+% This version of the |\ion| command allows you to write either
+% |\ion{N}{4}| or |\ion{N}{iv}| in order to get N~IV. 
+%    \begin{macrocode}
+\DeclareRobustCommand\ion[2]{%
+  \mbox{#1\kern0.2em%
+    \smaller\rmfamily%
+    \edef\@tempa{\@car#2\@nil}%
+    \ifcat1\@tempa%
+    \@Roman{#2}%
+    \else%
+    \uppercase{#2}%
+    \fi}}
+\newcounter{IonStage}
+\DeclareRobustCommand\plainion[2]{\setcounter{IonStage}{#2}#1 \Roman{IonStage}}
+%%\def\ion#1#2{\ensuremath{\mathrm{#1}\;}{\protect\small\rm\@Roman{#2}}}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\DeclareRobustCommand\nodata{$\cdots$}
+%    \end{macrocode}
+% These are needed by the |\ion| command. Isn't there an easier way of
+% doing this?
+%    \begin{macrocode}
+\let\@small=\small
+\let\@normalsize=\normalsize
+\let\@footnotesize=\footnotesize
+\let\@scriptsize=\scriptsize
+\let\@tiny=\tiny
+\let\@large=\large
+\let\@Large=\Large
+\let\@LARGE=\LARGE
+\let\@huge=\huge
+\let\@Huge=\Huge
+\newcommand{\smaller}{\small}
+\renewcommand{\normalsize}{\renewcommand{\smaller}{\small}\@normalsize}
+\renewcommand{\small}{\renewcommand{\smaller}{\footnotesize}\@small}
+\renewcommand{\footnotesize}{\renewcommand{\smaller}{\scriptsize}\@footnotesize}
+\renewcommand{\scriptsize}{\renewcommand{\smaller}{\tiny}\@scriptsize}
+\renewcommand{\tiny}{\renewcommand{\smaller}{\tiny}\@tiny}
+\renewcommand{\large}{\renewcommand{\smaller}{\normalsize}\@large}  
+\renewcommand{\Large}{\renewcommand{\smaller}{\large}\@Large}  
+\renewcommand{\LARGE}{\renewcommand{\smaller}{\Large}\@LARGE}  
+\renewcommand{\huge}{\renewcommand{\smaller}{\LARGE}\@huge}  
+\renewcommand{\Huge}{\renewcommand{\smaller}{\huge}\@Huge}  
+%</package|adshtml-style>
+%    \end{macrocode}
+
+
+% \section{Other files}
+
+% \subsection{The driver and make files}
+% \label{sec:driver_make}
+% These are put here for completeness, although they still need to be
+% distributed separately since otherwise the user won't be able to
+% unpack this file into its constituent parts.
+% 
+% The |Makefile| has two principal rules: |docs|, and |macros|. The
+% |docs| rule produces a PDF and gzipped PS file of the documentation.
+% I still haven't perfected the combination of rules required to get
+% it to run \LaTeX{} enough times in all circumstances. The |macros|
+% rule runs \LaTeX{} on |rmaa.ins| in order to unpack |rmaa.cls| and
+% all the other little files (including the |Makefile| and the
+% |rmaa.ins| files themselves\dots 
+% 
+% First set up lists of various types of file. 
+%    \begin{macrocode}
+%<*makefile>
+DOCFILES=rmaa.pdf rmaa.ps.gz
+MACRO_LTX_FILES=rmaa.cls rmaa.ins rmaacite.sty adshtml.sty ADS.tex
+SHELLSCRIPTS=makeads.sh
+MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
+MAKEFILE=Makefile
+MACROFILES=$(MACRO_LTX_FILES) $(SHELLSCRIPTS) $(MACRO_OTHER_FILES)         
+SKELETONFILES=ADS.tex 
+%    \end{macrocode}
+% Install the files read only in the parent directory (idea is that
+% the source files are in a subdir of the installation dir).
+%    \begin{macrocode}
+INSTALL=install 
+INSTALL_DIR=..
+%    \end{macrocode}
+% The default rule is to make everything. Installation must be
+% explicitly asked for.
+%    \begin{macrocode}
+all: docs macros
+
+install: install-docs install-macros
+
+%    \end{macrocode}
+% Most files are installed read-only to prevent editing. Skeleton
+% files must be writeable. Must be careful not to overwrite the
+% Makefile in the parent directory. 
+%    \begin{macrocode}
+install-macros: macros
+        $(INSTALL) -m 444 $(MACRO_LTX_FILES) $(MACRO_OTHER_FILES) $(INSTALL_DIR)
+        $(INSTALL) -m 555 $(SHELLSCRIPTS) $(INSTALL_DIR)
+        $(INSTALL) -m 644 $(SKELETONFILES) $(INSTALL_DIR)
+
+install-docs: docs
+        $(INSTALL) rmaa.pdf $(INSTALL_DIR)/rm-fulldocs.pdf
+
+%    \end{macrocode}
+% Make the PDF and gzipped PS files. 
+%    \begin{macrocode}
+docs: $(DOCFILES)
+
+%    \end{macrocode}
+% Make everything else if either the |.dtx| or |.ins| files have
+% changed. 
+%    \begin{macrocode}
+macros: rmaa.dtx rmaa.ins
+%    \end{macrocode}
+% Ensure that all the macro files can be written to then recreate
+% them. The |touch| is there in case any of the files don't exist
+% yet. 
+%    \begin{macrocode}
+        touch $(MACROFILES) $(MAKEFILE)
+        chmod u+w $(MACROFILES) $(MAKEFILE)
+        latex "\input{rmaa.ins}"
+%    \end{macrocode}
+% \TeX{} automatically adds the |.tex| extension to extensionless
+% files, bless it. We fix this and take the opportunity to convert
+% back to TABs all that it has lovingly converted to spaces. 
+%    \begin{macrocode}
+        cp -f $(MAKEFILE) $(MAKEFILE).BCK && unexpand $(MAKEFILE).tex >| $(MAKEFILE)
+%    \end{macrocode}
+% Make the shell scripts executable and everything unwriteable (so
+% they don't get hand-edited by mistake). However, undo this for the
+% files that the user is \emph{supposed} to modify. 
+%    \begin{macrocode}
+        chmod a+x $(SHELLSCRIPTS)
+        chmod a-w $(MACROFILES) $(MAKEFILE)
+        chmod u+w $(SKELETONFILES)
+
+%    \end{macrocode}
+% We now use PDF\LaTeX{} for this.
+%    \begin{macrocode}
+rmaa.aux: rmaa.dtx rmaa.ind rmaa.gls
+        @echo "REGENERATING .aux FILE"
+        pdflatex "\nonstopmode\input{rmaa.dtx}"
+
+rmaa.ind: rmaa.idx
+        @echo "REGENERATING INDEX"
+        makeindex -s gind.ist rmaa
+
+rmaa.gls: rmaa.glo
+        @echo "REGENERATING CHANGELOG"
+        makeindex -s gglo.ist -o rmaa.gls rmaa.glo
+
+rmaa.pdf: rmaa.aux rmaa.ind rmaa.gls
+        @echo "REGENERATING .pdf FILE"
+        pdflatex "\nonstopmode\input{rmaa.dtx}"
+
+clean: 
+        rm -f rmaa.aux rmaa.dvi rmaa.ind rmaa.gls
+%</makefile>
+%    \end{macrocode}
+
+% The |rmaa.ins| file uses the \textsf{docstrip} package to split out
+% all the files and strip off this documentation.
+%    \begin{macrocode}
+%<*ins>
+%%
+%% Installation batch file for the RMAA LaTeX package
+%%
+\def\batchfile{rmaa.ins}
+\input docstrip.tex
+\preamble
+
+PLEASE DO NOT EDIT THIS FILE! It is generated automatically from
+the file rmaa.dtx using the accompanying Makefile and rmaa.ins 
+Any hand-edited changes will be lost
+
+A LaTeX document class for the RMxAA
+
+Author: William Henney (w.henney@crya.unam.mx)
+
+Latest version available from: http://www.crya.unam.mx/rmaa
+
+Copyright (C) 1999-2010 Instituto de Astronomia, UNAM, Mexico
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+\endpreamble
+%    \end{macrocode}
+% Clobber files without asking
+%    \begin{macrocode}
+\askforoverwritefalse
+%    \end{macrocode}
+% Make the \LaTeX{} macro files (class and styles)
+%    \begin{macrocode}
+\generate{% 
+  \file{rmaa.cls}{\from{rmaa.dtx}{package}}
+  \file{rmaa.ins}{\from{rmaa.dtx}{ins}}
+  \file{rmaacite.sty}{\from{rmaa.dtx}{rmaacite}}
+  \file{adshtml.sty}{\from{rmaa.dtx}{adshtml-style}}
+  \file{ADS.tex}{\from{rmaa.dtx}{ads-container}}
+  }
+%    \end{macrocode}
+% Make the other non-\LaTeX{} files. These are done separately since
+% they can't use `\%\%' as a comment character for the
+% preamble/postamble (and Perl files can't have the postamble I don't
+% think). 
+%    \begin{macrocode}
+\generate{\nopreamble\nopostamble% 
+  \file{Makefile}{\from{rmaa.dtx}{makefile}}
+  \file{adshtml.perl}{\from{rmaa.dtx}{adshtml-perl}}
+  \file{makeads.sh}{\from{rmaa.dtx}{ads-shell-script}}
+  \file{sample.latex2html-init}{\from{rmaa.dtx}{latex2html-init}}
+  }
+
+%% Local Variables: 
+%% mode: LaTeX
+%% mode: Font-lock
+%% End:
+%</ins>
+%    \end{macrocode}
+
+% \subsection{Extended citation syntax}
+% Modified from a file called mnrascite.sty
+% I no longer remember where I stole the original version of this from
+% 
+% Alterations to the cite commands to make them do more sensible things.
+% N.B. the bibliography style should produce entries which have labels where
+% the date is delimited by angle brackets '<>' for these macros to work
+% properly. They will not give very sensible error messages if you do not do 
+% this properly.
+% 
+% A new command |\scite{key}| is defined which produces a citation which is 
+% suitable for insertion in a sentence. i.e., it does not put brackets around 
+% the whole citation, only the date. Also |\pcite{key}| produce output with no
+% parentheses whatsoever. 
+% 
+% Should redefine |\@bibitem| really to have any hope of compatibility
+% the command |\lbibcite| is defined to deal with the citations.
+%    \begin{macrocode}
+%<*rmaacite>
+\def\bibitem[#1<#2>]#3{\par\hangindent=1.5em\hangafter=1
+  \if@filesw
+  {\def\protect##1{\string ##1\space}
+    \immediate\write\@auxout{\string\lbibcite{#3}{#1}{#2}}}
+  \fi}
+\@redefinebibitem % what it says
+%    \end{macrocode}
+% Note that the |\lbibcite| defines two types of citation one contains the names,
+% the other the year
+%    \begin{macrocode}
+\def\lbibcite#1#2#3{\global\@namedef{b@#1}{#2}
+                    \global\@namedef{by@#1}{#3}}
+
+\def\@bcite#1#2{({#1\if@tempswa , #2\fi})}
+\def\@pcite#1#2{#1\if@tempswa , #2\fi}
+%    \end{macrocode}
+% This declaration contains what is put between the name and the date
+% \changes{3.11}{2003/01/31}{Moved the \cs{articlename} to after the key for consistency
+% with the new natbib stuff.}
+%    \begin{macrocode}
+\def\@brcite{\ (}
+\def\@ebrcite{)}
+\def\@fmttop#1{\@fmtcite[\csname #1\endcsname]}
+\def\@citex[#1]#2{%
+%%  \if@filesw\immediate\write\@auxout{\string\citation{#2}}\fi
+%% WJH added 16 Jan 2002
+  \@for\@citeb:=#2\do{%
+    \edef\@citeb{\expandafter\@firstofone\@citeb:\articlename}%
+    \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi}%
+%% to here
+  \def\@citea{}%
+  \@cite{\@for\@citeb:=#2\do
+    {%
+      \edef\@citeb{\expandafter\@firstofone\@citeb:\articlename}%
+      \@citea\def\@citea{;\ }\@ifundefined
+      {b@\@citeb}{{\bf ?}\@warning {Citation `\@citeb' on page \thepage \space undefined}}%
+      {\csname b@\@citeb\endcsname\@citebro\csname by@\@citeb\endcsname\@citebrc}}}%
+  {#1}}
+
+\def\cite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@bcite\@tempswatrue\@citex}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@bcite\@tempswafalse\@citex[]}}
+\def\pcite{\@ifnextchar [{\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@pcite\@tempswatrue\@citex}
+                        {\let\@citebro=\space
+                          \let\@citebrc=\relax
+                          \let\@cite=\@pcite\@tempswafalse\@citex[]}}
+\def\scite{\@ifnextchar [{\let\@citebro=\@brcite
+                          \let\@citebrc=\@ebrcite
+                          \let\@cite=\@pcite\@tempswatrue\@citex}
+                        {\let\@citebro=\@brcite
+                          \let\@citebrc=\@ebrcite
+                          \let\@cite=\@pcite\@tempswafalse\@citex[]}}
+
+\renewenvironment{thebibliography}
+  {\section*{REFERENCES}\vspace*{\afterbiblioskip}\small
+    \if@book\RereadBiblio\fi
+    \sloppy\clubpenalty4000\widowpenalty4000
+    \sfcode`\.=1000\relax
+    \setlength\parindent{\z@}\setlength\parskip{\z@}}
+  {\relax\normalsize\@outputaddressesifnecessary} 
+%</rmaacite>
+%    \end{macrocode}
+
+% \subsection{Auxilliary files for generating ADS data}
+
+% The ADS data are written by \LaTeX{} to a |.ads| file. This file
+% then has to be included in the following file (|ADS.tex|),
+% which is run through \LaTeX{}2HTML (see below). 
+
+%    \begin{macrocode}
+%<*ads-container>
+%%
+%% Instructions:
+%% Edit the \input{} line below to reflect the name of your file. 
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{adshtml}
+\newcommand{\ADSfield}[2]
+{\%#1  #2\\}
+%%\newcommand{\ADSvfield}[2]
+%%{\%#1 \begin{verbatim}#2\end{verbatim}}
+\newenvironment{ADSarticle}{}{\par\bigskip}
+\renewcommand{\bibitem}[2][]{\par}
+\setlength{\parindent}{0pt}
+\renewcommand{\ThisVolume}[1]{%  
+  2001, \RMAASC, 12, \oldpageref{#1:RMAAFirstPage}}  
+ 
+
+\begin{document}
+\makeatletter
+\input{rmbooksamp.ads}
+\end{document}
+%</ads-container>
+%    \end{macrocode}
+
+% This is the |adshtml.sty| style file used by |ADS.tex|. It just
+% defines a few 
+% macros that might be used in abstracts, etc (really it should define
+% them all). This now gets all its code from
+% Sec~\ref{sec:user-commands}. 
+%    \begin{macrocode}
+%<*adshtml-style>
+%% Nothing else needs to go here now. 
+%</adshtml-style>
+%    \end{macrocode}
+% The init file for latex2html.
+%    \begin{macrocode}
+%<*latex2html-init>
+$PDFTOCAIRO = "pdftocairo";
+$PDFLATEX = "pdflatex";
+$LATEX = "latex";
+$MAX_SPLIT_DEPTH = 0;
+$HTML_VERSION = "4.0,math";
+$NO_SIMPLE_MATH = 1;
+$ADDRESS = "<p><address><a href=\"mailto:rmaa\@astro.unam.mx\">rmaa\@astro.unam.mx</address></p>"; 
+$INFO = "<p>This document was created using latex2html and the rmaa latex macros</p>"; 
+$NO_NAVIGATION = 1;
+1; 
+%</latex2html-init>
+%    \end{macrocode}
+% This is the |adshtml.perl| file that is used by \LaTeX{}2HTML. Some
+% bizarre \TeX{}y command sometimes show up so we tell it to ignore
+% these. All the astronomy macros that come from AAS are processed in
+% \TeX{}. That way they get made to images but with an |ALT| tag that
+% has the original code, which is what will be picked up by |lynx|,
+% with the result that they get passed intact into the final |.txt|
+% file. 
+%    \begin{macrocode}
+%<*adshtml-perl>
+package main;
+
+$dum = &do_cmd_makeatletter();
+
+sub do_cmd_RMAA {
+    local($_) = @_;
+    "RMxAA" . $_;
+}
+
+sub do_cmd_RMAASC {
+    local($_) = @_;
+    "RMxAASC" . $_;
+}
+
+sub do_cmd_etal {
+    local($_) = @_;
+    "et al\." . $_;
+}
+
+sub do_cmd_ibidrule {
+    local($_) = @_;
+    "<img src=\"foo\" alt=\"\ibidrule\">" . $_;
+}
+
+
+sub do_cmd_bibitem {
+    local($_) = @_;
+    local($key);
+    local($opt, $dummy)=&get_next_optional_argument; 
+    $key = &missing_braces unless
+        ((s/$next_pair_pr_rx/$key = $2; ''/eo)
+        ||(s/$next_pair_rx/$key = $2; ''/eo));
+    "<p>" . $_; 
+}
+
+&ignore_commands (<<_RAW_ARG_CMDS_);
+lowercase
+adjustfinalcols
+textsuperscript # {}
+newline # []
+thinmuskip
+mskip
+smallskip
+medskip
+bigskip
+hspace # {}
+hspacestar # {}
+vspace # {}
+vspacestar # {}
+mathrm
+_at_mathrm
+spacefactor
+discretionary
+unhbox 
+voidb_at_x 
+penalty 
+_at_M
+_at_m
+null
+IeC
+_RAW_ARG_CMDS_
+
+&process_commands_in_tex (<<_RAW_ARG_CMDS_);
+sun
+earth
+lesssim
+gtrsim
+sq
+argdeg
+arcmin
+arcsec
+fd
+fh
+fm
+fs
+fdg
+farcm
+farcs
+fp
+micron
+la
+ga
+case # {} # {}
+slantfrac # {} # {}
+onehalf
+onethird
+twothirds
+onequarter
+threequarters
+ubvr
+ub
+bv
+vr
+ur
+aj
+araa
+apj
+apjl
+apjs
+ao
+apss
+aap
+aapr
+aaps
+azh
+baas
+jrasc
+memras
+mnras
+pra
+prb
+prc
+prd
+pre
+prl
+pasp
+pasj
+qjras
+skytel
+solphys
+sovast
+ssr
+zap
+nat
+iaucirc
+aplett
+apspr
+bain
+fcp
+gca
+grl
+jcp
+jgr
+jqsrt
+memsai
+nphysa
+physrep
+physscr
+planss
+procspie
+_RAW_ARG_CMDS_
+
+1;                              # This must be the last line
+%</adshtml-perl> 
+%    \end{macrocode}
+
+% This is a shell script |makeads.sh| that generates the |_ads.txt| file from
+% |_ads.tex| by using \LaTeX{}2HTML and |lynx|.  \changes{4.0}{2019/11/13}{Make sure that lynx writes utf-8 output instead of latin-1.}
+% \changes{2.2beta13}{2002/03/12}{Complete rewrite of |makeads.sh|. Now much 
+% improved I think}
+% \changes{4.0}{2019/11/13}{Fix the at-sign substitution so that it only eliminates \cs{@} and does not mess with email addresses.}
+
+%    \begin{macrocode}
+%<*ads-shell-script>
+#! /bin/sh
+if [ -z $1 ]; then
+    echo "Usage: $0 basename"
+    exit
+fi
+BASENAME=$1
+ADSBASENAME=${BASENAME}_ads
+AUXFILE=$BASENAME.aux
+TMPFILE=tmp.$$
+
+
+echo "Generating $ADSBASENAME.tex"
+
+# For some reason, must double-up \\ to \\\\ but not \ to \\ - odd!
+cat > $ADSBASENAME.tex <<EOF
+%% PLEASE DO NOT EDIT THIS FILE!  It is generated automatically from
+%% the script makeads.sh.  Any hand-edited changes will be lost
+%% 
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{html}
+\usepackage{adshtml}
+\newcommand{\ADSfield}[2]{\%#1  #2\\\\}
+\newenvironment{ADSarticle}{}{\par\bigskip}
+\setlength{\parindent}{0pt}
+\newcounter{istage}
+\renewcommand{\ion}[2]{\setcounter{istage}{#2}#1 \Roman{istage}}
+\begin{document}
+\makeatletter
+EOF
+echo >> $ADSBASENAME.tex "\input{$BASENAME.ads2}" 
+echo >> $ADSBASENAME.tex "\end{document}"
+
+
+
+echo "Generating $ADSBASENAME.sed" 
+
+# Find type of journal
+grep '\\documentclass\[.*proceedings.*\]' $BASENAME.tex >/dev/null \
+     && JOURNAL='RMxAC' \
+     || JOURNAL='RMxAA'
+
+# Find the year and volume number
+YEAR=`grep '\\SetYear' $BASENAME.tex | sed 's/.*\\SetYear{\(.*\)}.*/\1/'`
+VOLUME=`grep '\\SetVolume' $BASENAME.tex | sed 's/.*\\SetVolume{\(.*\)}.*/\1/'`
+
+# Generate an auxilliary sed script 
+cat > $TMPFILE <<EOF
+s|\\\\newlabel{\(.*\):RMAAFirstPage}{{.*}{\(.*\)}}|s/\\\\\\\\ThisVolume{\1}/$YEAR, RMxAC, $VOLUME, \2/g|g
+EOF
+
+# Now go through the .aux file, looking for \newlabels and use the sed 
+# script just generated in order to make another sed script, one that 
+# will replace \ThisVolume{LABEL} with the correct reference
+grep '^\\newlabel{.*:RMAAFirstPage}' $AUXFILE \
+     | sed -f $TMPFILE > $ADSBASENAME.sed && rm $TMPFILE
+
+# Apend a further sed command to get rid of \@, since redefining 
+# it in _ads.tex didn't work
+echo >> $ADSBASENAME.sed 's/\\\\@//g'
+
+echo "Generating $BASENAME.ads2 from $ADSBASENAME.sed and $BASENAME.ads" 
+
+# Apply this to the .ads file, generating the .ads2 file, which is included
+# by the _ads.tex file.
+sed -f $ADSBASENAME.sed $BASENAME.ads > $BASENAME.ads2
+
+echo "Generating $ADSBASENAME.txt from $ADSBASENAME.tex and $BASENAME.ads2"
+
+# Now run latex2html on the _ads.tex file
+latex2html -no_navigation -info 0 -address 0 -html_version 4.0,math $ADSBASENAME
+
+# Then, convert to utf8 with lynx and tidy it up a bit
+lynx --justify=off --width=100 --dump --nolist --display_charset=utf-8 \
+     $ADSBASENAME/$ADSBASENAME.html | cut -c4- \
+     | sed 's/ibidrule/\\ibidrule/g' > $ADSBASENAME.txt
+%</ads-shell-script>
+%    \end{macrocode}
+
+% \section{Epilogue}
+% Err, that's it \dots
+
+\endinput
+
+
+% \endinput
+% Local Variables:
+% mode: doctex
+% TeX-master: t
+% End:
