@@ -1,9 +1,14 @@
-*~
+# Auxiliary files from LaTeX compilation
 *.aux
 *.log
 *.dvi
-/ADS.tex
-/rmaa.ins
+*.toc
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+# Files made by compilation in the source folder
 /source/sample.latex2html-init
 /source/ADS.tex
 /source/Makefile.BCK
@@ -12,4 +17,8 @@
 /source/makeads.sh
 /source/rmaa.cls
 /source/rmaacite.sty
-source/auto
+/source/rmaa.out
+/source/rmaa.pdf
+# Files made by Emacs editor
+/source/auto
+*~

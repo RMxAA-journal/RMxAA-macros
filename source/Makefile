@@ -2,7 +2,7 @@
 
 
 
-DOCFILES=rmaa.pdf rmaa.ps.gz
+DOCFILES=rmaa.pdf
 MACRO_LTX_FILES=rmaa.cls rmaacite.sty adshtml.sty
 SHELLSCRIPTS=makeads.sh
 MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
@@ -33,6 +33,10 @@ macros: rmaa.dtx rmaa.ins
 	chmod a+x $(SHELLSCRIPTS)
 	chmod a-w $(MACROFILES) $(MAKEFILE)
 	chmod u+w $(SKELETONFILES)
+
+rmaa.idx: rmaa.dtx
+	@echo "REGENERATING .idx FILE"
+	pdflatex "\nonstopmode\input{rmaa.dtx}"
 
 rmaa.aux: rmaa.dtx rmaa.ind rmaa.gls
 	@echo "REGENERATING .aux FILE"

@@ -3827,7 +3827,7 @@ class]
 % First set up lists of various types of file. 
 %    \begin{macrocode}
 %<*makefile>
-DOCFILES=rmaa.pdf rmaa.ps.gz
+DOCFILES=rmaa.pdf
 MACRO_LTX_FILES=rmaa.cls rmaacite.sty adshtml.sty
 SHELLSCRIPTS=makeads.sh
 MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
@@ -3896,6 +3896,10 @@ macros: rmaa.dtx rmaa.ins
 %    \end{macrocode}
 % We now use PDF\LaTeX{} for this.
 %    \begin{macrocode}
+rmaa.idx: rmaa.dtx
+        @echo "REGENERATING .idx FILE"
+        pdflatex "\nonstopmode\input{rmaa.dtx}"
+
 rmaa.aux: rmaa.dtx rmaa.ind rmaa.gls
         @echo "REGENERATING .aux FILE"
         pdflatex "\nonstopmode\input{rmaa.dtx}"
