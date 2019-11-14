@@ -1,0 +1,371 @@
+
+* Fixes to RMAA macros
+
+** DOI and ORCID iDs
++ Summary/recommendation:
+  + DOI
+    + Put DOI below the Journal, Vol, pages (date) line
+      + It doesn't fit on the same line
+    + Format https://doi.org/10.22201/ia.01851101p.2019.55.02.21
+      + This is the recommended format from https://www.crossref.org/display-guidelines/
+      + Previous recommended format doi:10.22201/ia.01851101p.2019.55.02.21 is now deprecated
+    + 
+    + Adding links to the reference list would be a lot of work
+    + Incoming links can still be to PDF, unless we want to make a landing page for each article
+    + ORCID iDs can go at end with link of form https://orcid.org/0000-0001-6208-9109
+    + Also have ORCID iDs in the fulladdresses
+*** DONE Implementation of ORCID iD
+CLOSED: [2019-11-12 Tue 12:49]
++ I have grabbed the SVG of the iD icon and converted it into PDF
++ We want to make it a hyperlink, which requires using ~\href~ command from ~hyperref~ package
++ [X] Unfortunately, this clashes with the way that ~rmaa.cls~ rewrites the internal ~\ref~ and ~\label~ commands, so that needs to be reconciled. /Fixed now/ [2019-11-11 Mon]
++ Also add to full addresses
+  + [X] But how to deal with multiple authors at the same address.  Have to put ORCID after each author  
+*** DONE Implementation of DOI
+CLOSED: [2019-11-08 Fri 18:34]
++ We can use the \url command, either from url.sty or from hyperref.sty
+  + But I don't know whether hyperref is compatible with the dvips workflow (documentation seems to imply that it is)
++ If we use ~\@oddhead~ then the argument is only one line, so to split it into two lines we need to use a parbox
+
+*** DONE Survey of current practices [2019-11-05 Tue]
+CLOSED: [2019-11-08 Fri 18:34]
++ RMAA (by hand)
+  + PDF has DOI on separate line under the header
+  + Format "DOI: https://doi.org/10.22201/ia.01851101p.2019.55.02.21" with the link text in typewriter font and small
+  + Incoming DOI links go straight to the PDF
+  + No links in references
++ MNRAS
+  + PDF has DOI in right-hand header
+    + Format: doi:10.1093/mnras/stz2283, which is not a link
+    + On same level as journal/vol/page/date
+    + Underneath masthead
+  + PDF has no ORCID info
+  + References in PDF
+    + Journal name is link to DOI
+  + HTML gives DOI link after journal/vol/issue/date/pages, following comma
+  + References in HTML have DOI link
+  + HTML has no ORCID info
+  + Incoming DOI links are to full text HTML
++ ApJ
+  + PDF has DOI in right-hand header
+    + Format: https://doi.org/10.3847/1538-4357/ab46be and it is a link
+    + On same level as journal/vol/page/date
+    + At top of page
+  + PDF has ORCID iDs at end, before references
+  + References in PDF:
+    + Journal name is link to DOI
+    + Vol, page is link to ADS
+  + HTML has no DOI
+  + References in HTML have links to ADS, Google Scholar, and (CrossRef or IOP)
+  + HTML has no ORCID info
+  + Incoming DOI links are to full-text HTML
++ A&A
+  + PDF has DOI in left-hand header
+    + Format https://doi.org/10.1051/0004-6361/201935869 and it is a link
+    + It is on the line below Journal, Vol Article (Year)
+    + And above copyright line
+    + The three lines are balanced with the Astronomy & Astrophysics logo on the right
+  + PDF has no ORCID info
+  + PDF references are links to http://linker.aanda.org which redirects to ADS 
+  + HTML has DOI in header at top
+  + HTML references have links to ADS, CrossRef, GoogleScholar, but do not include DOI
+    + But turns out that Crossref is the DOI
+  + Incoming DOI links are to HTML abstract with links to other formats
+
+
+
+** Test on typesetting whole volume
++ This is necessary to make sure that the ADS mechanism is working
+
+*** Compatibility with hyperref
++ This now works ok with ~rmbooksamp~ after applying patch to ~\@combinedblfloats~
++ Still a problem with the page numbers being wrong for the links
+*** Compiling the text file for ADS
++ I installed latex2html from homebrew
++ I needed to add various things to the ~.latex2html-init~ so it would find the executables.
+  #+begin_example
+    $PDFTOCAIRO = "pdftocairo";
+    $PDFLATEX = "pdflatex";
+    $LATEX = "latex";
+  #+end_example
++ Necessary to set language variables with ~LC_ALL=C~ so that ~sed~ works properly:
+   #+begin_example
+     LC_ALL=C sh makeads.sh rmbooksamp
+   #+end_example
+** Designing a new scheme for author affiliations
+*** Mock-ups of user interface
+**** Semi-automatic version
++ Builds on current interface
++ Define macros for each full address to save repetition
++ Adds one new command ~\AuthorADS~, in which affiliation, orcid, and email are specified
++ Disadvantages
+  + There is still some repetition. In particular, ORCID has to be specified in 3 places
++ Advantages
+  + Maintains flexibility for different ways of typesetting addresses (after group of names, or as footnotes)
+  + Easy to program
+#+begin_src latex
+  \author{
+    W. J. Henney\ORCIDiD{0000-0001-6208-9109},\altaffilmark{1} 
+    A. Collaborator,\altaffilmark{2}
+    and L. Author\altaffilmark{2,3,4}}
+
+  \altaffiltext{1}{Instituto de Radioastronom\'\i{}a y Astrof\'\i{}sica,
+    UNAM, Morelia, M\'exico.}
+  \altaffiltext{2}{Instituto de Astronom\'\i{}a, UNAM, CDMX, M\'exico.}
+
+  % Authors for running headers - surnames only, et al. if more than 3. 
+  \shortauthor{Henney, Collaborator, \& Author}
+
+
+  % Define macros for each full address to save repetition
+  \newcommand\IRyA{Instituto de Radioastronom\'\i{}a y Astrof\'\i{}sica,
+    UNAM, M\'exico} {Instituto de Radioastronom\'\i{}a y
+    Astrof\'\i{}sica, Universidad Nacional Aut\'onoma de M\'exico,
+    Apartado Postal 3--72, 58090 Morelia, Michoac\'an, M\'exico}
+  \newcommand\IAUNAM{Instituto de Astronom\'\i{}a, Universidad Nacional
+    Aut\'onoma de M\'exico, Apartado Postal 70-264, M\'exico, CDMX,
+    C.P. 04510}
+
+
+  % Full postal addresses (in alphabetical surname order!)
+  % plus email addresses in parentheses. 
+  \fulladdresses{
+  % Formatted in list environment, so each group is an \item
+  \item Last Author\ORCIDiD{0000-0001-6208-9109} and Another
+    Collaborator\ORCIDiD{0000-0001-6208-9109}: \IAUNAM{} (la,
+    ac@astro.unam.mx).
+  % Note final period.
+  \item William J. Henney\ORCIDiD{0000-0001-6208-9109}: \IRyA{}
+    (w.henney@irya.unam.mx). }
+
+  % List of authors used to construct table of contents
+  \listofauthors{W. J. Henney, A. Collaborator, \& L. Author}
+  % Each author in Surname, Initials format, used in generating Author
+  % Index entries.
+  \indexauthor{Henney, W. J.}
+  \indexauthor{Collaborator, A.}
+  \indexauthor{Author, L.}
+
+  % Give data for ADS affiliations
+  \AuthorADS{Henney, W. J.}{
+    \Affil{\IRyA} \ORCIDiD{0000-0001-6208-9109} \Email{w.henney@irya.unam.mx}
+  }
+  \AuthorADS{Collaborator, A.}{
+    \Affil{\IAUNAM} \ORCIDiD{0000-0000-0000-0000} \Email{ac@astro.unam.mx}
+  }
+  \AuthorADS{Author, L.}{
+    \Affil{\IAUNAM} \ORCIDiD{0000-0000-0000-0000} \Email{la@astro.unam.mx}
+  }
+#+end_src
+**** Fully automatic version
++ Input structure
+  + First define each affiliation with ~\NewAffiliation~, with 3 arguments
+    1. Label
+    2. Abbreviated affiliation
+    3. Full affiliation with postal address
+  + Then define author list with ~\AuthorList~, which contains multiple ~\Author~ entries, each of which can set ~FullName~, ~\ORCIDiD~, ~\Email~, ~\Affiliation~, etc
++ These then get used for
+  - Typesetting author list at front
+    - *But* it can only be with footnoted affiliations
+  - Typesetting full addresses at end
+    - *But* grouping of authors with the same affiliation will require some complicated programming, and then they need to be put in alphabetic order
+  - Outputting the ADS affiliations
+    - This will be the easiest part, since it maps directly onto ~\Authorlist~ data structure
++ /Evaluation/: This does not look promising. Requires complicated programming and will still be inflexible compared with current method
+#+begin_src latex
+  \NewAffiliation{IRyA} {%
+    Instituto de Radioastronom\'\i{}a y Astrof\'\i{}sica, UNAM, Morelia,
+    M\'exico%
+  } {%
+    Instituto de Radioastronom\'\i{}a y Astrof\'\i{}sica, Universidad
+    Nacional Aut\'onoma de M\'exico, Apartado Postal 3--72, 58090
+    Morelia, Michoac\'an, M\'exico%
+  }
+
+  \NewAffiliation{IAUNAM} {%
+    Instituto de Astronom\'\i{}a, UNAM, CDMX, M\'exico%
+  } {%
+    Instituto de Astronom\'\i{}a, Universidad Nacional Aut\'onoma de
+    M\'exico, Apartado Postal 70-264, M\'exico, CDMX, C.P. 04510%
+  }
+
+  \AuthorList{
+    \Author{AA}{
+      \FullName{William J. Henney}
+      \ShortName{W. J. Henney}
+      \IndexName{Henney, W. J.}
+      \ORCIDiD{0000-0001-6208-9109}
+      \Email{w.henney@irya.unam.mx}
+      \Affiliation{IRyA}
+    }
+    \Author{AB}{
+      \FullName{Another Collaborator}
+      \ShortName{A. Collaborator}
+      \IndexName{Collaborator, A.}
+      \ORCIDiD{0000-0000-0000-0000}
+      \Email{ac@astro.unam.mx}
+      \Affiliation{IAUNAM}
+    }
+    \Author{AC}{
+      \FullName{Last Author}
+      \ShortName{L. Author}
+      \IndexName{Author, L.}
+      \ORCIDiD{0000-0000-0000-0000}
+      \Email{la@astro.unam.mx}
+      \Affiliation{IAUNAM}
+    }
+  }
+#+end_src
+*** Implementation
+** Plan of action
+
+*** List of points decided in Skype meeting [2019-10-31 Thu]
+1. [X] Incluir el numero DOI – en el macro para cada artículo
+2. [X] Incluir el DOI en el copyright
+   - Moved copyright to the header
+3. [X] Lo del DOI es importante para hacer la compilación final en forma automática
+4. [X] Prever dejar espacio para el ORCHID (aunque todavía no lo hemos usado)
+   - [X] icon in the author list at front of paper
+   - [X] icon in the full addresses
+     - Full text link is cancelled
+   - [X] Move the code from demo document to class file
+5. [ ] Dejar separado los macros para las dos revistas pues están en páginas distintas
+   - I don't understand exactly what is meant by this
+6. [X] Para el ADS
+   + [X] Filiaciones de todos lo autores
+     + There are two broad options for dealing with this:
+       1. /DONE/ No changes to current method of typesetting the authors at beginning and end of the paper (\author, \affil, \altaffilmark, \fulladdresses, etc).  I would create a separate command to give the affiliations for ADS.  This means that Héctor will have to enter the same information twice.
+       2. /CANCELLED/ I design a new method for entering the affiliations and ORCID iDs once only, and then automatically using that information for three purposes:
+          1) Typesetting the author list and short affiliations at the top of the article
+          2) Typesetting the full address list at the end of the article
+          3) Writing the data for ADS
+   + [X] El DOI
+     + This is "%d" according to https://adsabs.github.io/help/actions/export
+     + This is now automatically written with the ADS info, which ends up in ~XXX_ads.txt~
+   + [X] El ORCID (?)
+     + I wrote to ADS about this and Carolyn Stern told me that this should be included in the author affiliations, like this:
+       : %F AA(Author 1 affiliation <EMAIL>author email</EMAIL> <ID system="ORCID">0000-0000-0000-0000</ID>), AB(Author 2 ...), ...
+     + This is now donw.
+
+
+
+*** DONE Incorporate changes that Hector has done
+CLOSED: [2019-11-06 Wed 10:45]
++ Hector's edited version
+  + [[file:~/Dropbox/RMAA/hector-version-2019-11][file:~/Dropbox/RMAA/hector-version-2019-11]]
++ Latest published version
+  + Website says 3.26b
+    + from Feb 2015
+    + this was a change to slitbook.sh only, not to rmaa.cls
+    + Changes in splitbook.sh are checked in to repo in [[file:~/Dropbox/RMAA/]]
+    + Other files were updated at same time (also added to repo)
+      + README
+      + bugs.html
+      + index.html
+      + individ.html
+      + old-news.html
+  + Previous version is 3.26
+    + from Aug 2011
+    + Last one where rmaa.cls was changed
++ Beta directory
+  + Latest changes are from 2013
++ Differences
+  #+begin_src sh :eval no
+    diff -u /Users/will/Dropbox/RMAA/rmaa.cls /Users/will/Dropbox/RMAA/hector-version-2019-11/rmaa.cls
+  #+end_src
++ Port differences over to my version
+  + [X] All RevMexAA -> RMxAA (I suppose for consistency with ADS)
+  + [X] All RevMexAA(SC) -> RMxAC 
+  + [X] Abstract moved to before Resumen
+  + [X] APPENDICES changed to APPENDIX (need to check original motivation)
+    + I have made another environment, ~appendix~ for case of only one section
+
+
+**** Message from Héctor [2019-10-31 Thu]
+#+begin_quote
+El único cambio que tiene, es que el ABSTRACT aparece primero y después el RESUMEN, además del DOI.
+
+El macro que uso para la Serie de Conferencias (RMxAC), no le he modificado nada.
+#+end_quote
+
+
+
+
+*** Other things
+
+**** Broken links from RMAA web page
++ http://www.astroscu.unam.mx/~rmaa/rmaa55_ads.html
++ Currently produces a frame (!!!) around the following:
+  + "http://adsabs.harvard.edu/cgi-bin/nph-abs_connect?bibstem=RMxAA&volume=55&sort=PAGE&return_req=no_params&nr_to_return=500"
+  + Which doesn't work any more - need to update to the new API, and need to ditch the frame
+
+
+** Initial message from Chris and Silvia 
++ [2019-10-28 Mon]
+#+begin_quote
+    Habrás notado que las revistas han estado cambiando. Hasta ahora, 
+las modificaciones necesarias las ha hecho manualmente Héctor Cejudo.  
+Sin embargo, Silvia y yo pensamos que ya es necesario considerar una 
+modificación más a fondo de las macros de las revistas, la cual 
+incorpore los cambios que ya han ocurrido y nos permita mayor 
+flexibilidad y facilidad.
+
+     Nos gustaría hablar contigo sobre este asunto.  ¿Tienes contemplado 
+un viaje a la CDMX en un futuro próximo?  En caso contrario, podríamos 
+quizás organizar una videoconferencia.  Por favor haznos saber tus ideas 
+a este respeco.
+
+#+end_quote
+
+
+** Skype call with Chris and Silvia
++ [2019-10-31 Thu]
+
+
+*** Problemas
++ DOI en el macro
++ ORCID en el macro
++ Copyright in macros
++ Modificar bibtex para incluir DOI
++ Separate macros for emaa y rmsc
++ ADS
++ Hector
+  + change order of resumen/abstract
+  + ADS 
+
+*** Things to bring up
++ [ ] progress on getting DOI
+  + zenodo?
++ [ ] what features of other journals do they want to emulate?
+  1. HTML version?
+  2. Supplementary material?
+     + Figsets, movies
+     + Tables in CDS
+     + Archiving of data
+  3. Typsetting changes
+
+* Copy editing tweaks
+Some small things I have noticed when looking at recent RMAA papers.
++ Should make sure to use minus sign instead of hyphen for negative numbers in tables
++ Should use better font for code examples - underscore looks weird in Christophe shock paper
+
+
+* Longer term plans
++ Integrate with Overleaf?
++ Revamp the production process
+  + Replace latex + dvips + ps2pdf with pdflatex
+  + Replace shell, m4, and perl scripts with python?
+  + Generate HTML version of full papers
+    + Using latex2html?
+      + https://github.com/latex2html/latex2html
+      + Old, but it is still sporadically maintained
+      + And it is what we have used before
+    + Using tex4ht?
+      + see [[https://tex.stackexchange.com/questions/464112/not-obsolete-latex-to-html-converter][answers to this stackexchange question]]
+    + Using pandoc?
+      + https://pandoc.org
+    + Using LatexML (or engrafo, which is based on it)
+      + https://github.com/brucemiller/LaTeXML
+      + https://github.com/arxiv-vanity/engrafo
+      + This is used by arxiv-vanity project
+        + E.g., https://www.arxiv-vanity.com/papers/1908.08579/
