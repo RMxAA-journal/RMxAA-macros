@@ -79,8 +79,8 @@ echo "Generating $ADSBASENAME.txt from $ADSBASENAME.tex and $BASENAME.ads2"
 # Now run latex2html on the _ads.tex file
 latex2html -no_navigation -info 0 -address 0 -html_version 4.0,math $ADSBASENAME
 
-# Then, convert to plaintext with lynx and tidy it up a bit
-lynx --justify=off --width=100 --dump --nolist \
+# Then, convert to utf8 with lynx and tidy it up a bit
+lynx --justify=off --width=100 --dump --nolist --display_charset=utf-8 \
      $ADSBASENAME/$ADSBASENAME.html | cut -c4- \
      | sed 's/ibidrule/\\ibidrule/g' > $ADSBASENAME.txt
 

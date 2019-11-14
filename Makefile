@@ -9,8 +9,8 @@ SCSAMPFILES=rm-extenso.tex rm-onepage.tex rm-shortabstract.tex
 SCSAMPFILES_PS=$(SCSAMPFILES:.tex=.ps)
 SCSAMPFILES_PDF=$(SCSAMPFILES:.tex=.pdf)
 
-FIGFILES=example-fig.eps example-badfig.eps example-fig.pdf example-badfig.pdf
- 
+FIGFILES=example-fig.eps example-badfig.eps example-fig.pdf example-badfig.pdf \
+  ORCIDiD_iconvector.eps ORCIDiD_iconvector.pdf
 #SAMPFILES=rmtest.tex rmprocsamp.tex rmpostsamp.tex rmplatesamp.tex 
 #PSFILES=rmprocsamp_fig1.ps rmprocsamp_fig2.ps rmprocsamp_fig3.ps rmplatesamp_fig.ps
 MISCFILES=README GPL 
@@ -21,6 +21,7 @@ EDITORUTILFILES=splitbook.sh fixbb.sh fixhtml.sh sanitizeps.sh makeads.sh \
   config.LinHi config.RMSC config.RMAA RMAAheader.ps RMSCheader.ps \
   adshtml.perl .latex2html-init
 EDITORPSFILES=rmsc.ps rmsc_blank.ps 
+EDITORPDFFILES=$(EDITORPSFILES:.ps=.pdf)
 EDITORDOCFILES=rm-fulldocs.pdf rmeditor.tex
 
 HTMLDIR=html
@@ -34,7 +35,7 @@ FILES=$(STYFILES) authorguide.pdf $(SAMPFILES) $(FIGFILES) $(MISCFILES)
 SCFILES=$(STYFILES) rmsc-authorguide.pdf $(SCSAMPFILES) $(FIGFILES) README.rmsc GPL
 
 # files to go in editor tarball
-EDFILES=$(FILES) $(EDITORSTYFILES) rmsc-authorguide.pdf $(EDITORSAMPFILES) $(EDITORPSFILES) $(EDITORUTILFILES) $(EDITORDOCFILES)
+EDFILES=$(FILES) $(EDITORSTYFILES) rmsc-authorguide.pdf $(EDITORSAMPFILES) $(EDITORPSFILES) $(EDITORPDFFILES) $(EDITORUTILFILES) $(EDITORDOCFILES)
 
 # files to be copied to web dir for individual download
 INDIVIDFILES=$(STYFILES) $(DOCFILES) $(SAMPFILES) $(PSFILES) $(MISCFILES) \
