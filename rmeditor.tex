@@ -1,0 +1,422 @@
+\documentclass[guide]{rmaa}
+      
+\title{The \RMAA\ \LaTeX\ Macros: A Guide for Editors\altaffilmark{1}}
+\author{W. J. Henney\altaffilmark{2}
+  \affil{Instituto de Astronom\'{\i}a, UNAM, Morelia} 
+  }
+\altaffiltext{1}{\protect\raggedright The latest version of the macros 
+  should be available from
+  \texttt{http://www.astrosmo.unam.mx/rmaa}} 
+\altaffiltext{2}{Email: \texttt{will@astrosmo.unam.mx}}
+\fulladdresses{
+  \item W. J. Henney: Instituto de Astronom\'{\i}a, UNAM, J. J. Tablada
+    1006, Lomas de Santa Mar\'{\i}a, 58090 Morelia, M\'exico
+    (will@astrosmo.unam.mx)} 
+    
+\shortauthor{Henney} \shorttitle{\RMAA\ Editor Guide}
+
+\ReceivedDate{2000 Feb 09} 
+\AcceptedDate{2000 Feb 09} 
+\SetYear{2000}
+\resumen{Este documento describe como usar el ``\LaTeX\ document
+  class'' \texttt{rmaa.cls} para preparar un n\'umero entero de la
+  \emph{\RMAAlong} o \emph{\RMAASClong}.  } 
+
+\abstract{This document describes how to use the \LaTeX\ document
+  class \texttt{rmaa.cls} to produce an entire issue of the
+  \emph{\RMAAlong} or \emph{\RMAASClong}.}
+
+\keywords{Typesetting: \LaTeX\  --- Journals: Astronomical} 
+
+\makeglossary{} 
+
+\begin{document}
+\maketitle
+\tableofcontents 
+
+\section{Introduction}
+\label{sec:introduction}
+
+This Guide discusses some of the trickier aspects of using the
+\texttt{rmaa} class. In particular, how to use it to format an entire
+volume of the \RMAA\ or \RMAASC\ by writing a container file that
+simply |\input|'s the individual stand-alone article files. With very
+little extra effort on the part of the editors, a fully
+cross-referenced ``Table of Contents'' and ``Index of Authors'' will
+be automatically generated. Commands also exist for producing the
+``Preface'', ``Group Photograph'', ``List of Participants'', etc., and
+for formatting the abstracts of authors who couldn't manage to write
+up their contribution \emph{in extenso} on time. Furthermore, a script
+is provided that will then extract the postscript files of the
+individual components (articles\footnote{Appending plate pages if
+  appropriate.}, index, preface, etc.) and generate an HTML table of
+contents that points at them\footnote{The HTML part still needs some
+  work.}. The idea is that these can then be linked to from ADS.
+
+\subsection{Intended audience}
+\label{sec:intended-audience}
+
+This guide may be of interest to the following:
+\begin{itemize}
+\item My future self
+\item Guest editors of volumes of \RMAASC
+\item Editors/editorial assistants of \RMAA
+\item Even authors, if they're brave\dots
+\end{itemize}
+
+
+\subsection{Shortcomings of this Guide}
+\label{sec:shortcomings}
+Many, I'm sure, but most notably: 
+\begin{itemize}
+\item It is far from complete
+\item I assume throughout that you are working on a Unix (or Linux)
+  system. 
+\end{itemize}
+
+\section{Individual papers}
+\label{sec:individual-papers}
+
+Before you try to format the entire book, you should first make sure
+that each individual paper is exactly how you want it and can be
+\LaTeX ed without producing any errors.  Most of the necessary
+information is given in the Guide for Authors, but in this section I
+give further technical details.
+
+\subsection{References}
+\label{sec:references}
+
+These are a major source of author errors. References to conference
+proceedings are particularly troublesome, especially when the
+proceedings are part of a series. Try to follow ApJ style, but don't
+worry about it too much, even they are inconsistent sometimes.
+
+\subsection{Figures}
+\label{sec:figures}
+
+Here I discuss various issues related to figures: how to get them to
+come out where you want them, how to curmudgeon misbehaving PostScript
+files into submission, and how to deal with plates.
+
+\subsubsection{Figure placement}
+\label{sec:figure-placement}
+
+If you are having problems with a floating figure appearing where it
+is not wanted, then using \texttt{[!t]} as the optional argument to
+the \texttt{figure} environment usually does the trick. The \texttt{t}
+asks \LaTeX\ to put the figure at the top of a page, while the
+\texttt{!} overrides any qualms it may have about minimum text
+fractions or other such niceties.
+
+If all else fails, you can ditch the \texttt{figure} environment
+entirely and place it by hand. In this case, you must use
+|\figcaption| instead of |\caption|. The same can be done with tables
+(using |\tabcaption|). Obviously, it's not a good idea to do this
+until you have virtually finished editing the paper. 
+
+\subsubsection{Recalcitrant PostScript files}
+\label{sec:postscript-files}
+
+Many authors will send you totally broken PostScript files. Examples
+include figures that stubbornly refuse to be re-sized, or that always
+appear in the bottom right corner of the page, or that mysteriously
+rub out bits of the surrounding text. Prime offenders seem to be
+SuperMongo and sundry MS-Windows and Mac programs. 
+
+In many cases, the problem is due to the lack of a proper BoundingBox
+(\LaTeX\ needs this in order to know the size of the figure). Look for
+a line like 
+\begin{Code}
+  |%%BoundingBox: 0 0 612 792|
+\end{Code}
+near the top of the PostScript file. If the file doesn't have one,
+then you will have to add one. The easiest way to do this is with
+\texttt{gs} (Ghostscript). If you type something like `\texttt{gs
+  -sDEVICE=bbox -q -dNOPAUSE example.ps}', you should get something
+like
+\begin{Code}
+  |%%BoundingBox: 97 231 514 561| \\
+  |%%HiResBoundingBox: 97.999995 231.000|\dots\\
+  |GS>| 
+\end{Code}
+Just type `\texttt{quit}' at the |GS>| and then paste the
+|%%BoundingBox| line into the top of the file (in this case,
+\texttt{example.ps}). With luck, your problems will then disappear.
+
+In other cases, however, the problem lies with some of the PostScript
+operators used in the file. Somewhere I remember seeing a list of
+operators that should not be used in ``encapsulated''\footnote{That
+  is, files intended to be embedded inside another document, rather
+  than just being sent straight to a printer.} PostScript files. An
+example is the command \texttt{initmatrix}, beloved of SuperMongo.
+Sometimes, simply removing the offending command from the file is
+sufficient. At other times, more drastic measures are required, such
+as the use of \texttt{pstoedit} to convert the file to the FIG format.
+The resulting \texttt{.fig} file can then be edited with \texttt{xfig}
+and subsequently re-saved as another PostScript file. This can produce
+miraculous results in many (but not all) cases\footnote{Sometimes you
+  will have to adjust the line widths with \texttt{xfig}}. 
+
+If none of the above work, then you can always print out the figure
+and rescan it as a bitmap. To get good results with this, print out
+the figure at the largest size you can manage. Then, carefully select
+the magnification on your scanner\footnote{Make sure you scan it as a
+  1-bit image (B\&W only, no color, no grays).} so that the resolution
+of the scanned bitmap will match that of your printer (or an integer
+divisor thereof)\footnote{300dpi is a reasonable compromise between
+  image quality and file size.} \emph{after it has been scaled to its
+  desired size in the document}.\footnote{This sounds a lot more
+  complicated than it really is.}
+
+\subsubsection{Plates}
+\label{sec:plates}
+First, ask yourself if you really need them. If you do, then you can
+use the |\plate| command in the following way: 
+\begin{Code}
+      |\plate{|\\
+      |  \includegraphics[width=\textwidth]|\\
+      |                  {example.ps}|\\
+      |  \figcaption{Caption to plate figure|\\
+      |     \label{fig:example} } }|
+\end{Code}
+Note that you do \emph{not} use the \texttt{figure} environment inside
+the argument of the |\plate| command. As a result, you must use
+|\figcaption| instead of |\caption|. It is possible to include
+multiple figures in a single plate (if they will fit), in which case
+you should specify the number of distinct figures, i.e.\ |\figcaption|
+commands, as an optional first argument to |\plate|\footnote{This is
+  so that the macros can increment the \texttt{figure} counter
+  accordingly. The plate itself is not output until the end of the
+  document.}, for example:
+\begin{Code}
+  |\plate[2]{|\\
+  |  \includegraphics[width=\textwidth]|\\
+  |                  {example1.ps}|\\
+  |  \figcaption{Caption to first figure|\\
+  |     \label{fig:example1} } }|\\
+  |  \vfil|\\
+  |  \includegraphics[width=\textwidth]|\\
+  |                  {example2.ps}|\\
+  |  \figcaption{Caption to second figure|\\
+  |     \label{fig:example2} } }|
+\end{Code}
+You can freely mix |\plate| commands and \texttt{figure} environments
+in a document and the figure numbering should always come out right
+(so long as you use the optional argument discussed above). The only
+restriction is that if there are multiple figures in one plate, then
+these will be numbered consecutively (e.g., you can't have Figures~4
+and 6 on a single plate page with Figure~5 appearing normally in the
+text).
+
+The plates are actually formatted by the |\outputplates| command,
+which should appear at the very end of the article, just before the
+|\end{document}|. 
+
+\subsection{Balancing the columns on the last page}
+\label{sec:Balanc-final-columns}
+In the two-column style, the columns on the last page should be as
+close to the same length as possible. Making \LaTeX\ do this
+automatically is beyond my capabilities, so authors are requested to
+balance the columns manually by using the |\adjustfinalcols|
+command. This command should be inserted at the place in the text
+where the left-hand column should break to give two columns of equal
+length. Obviously, this should be left until the final draft of the
+document, or left to the editors even.
+
+\subsubsection{Full addresses and column balancing}
+\label{sec:full-addr-column}
+\textit{This section applies to the main journal only. Conference
+  proceedings should not have the full addresses at the end of
+  articles.}
+
+The |\adjustfinalcols| command also tries to typeset the authors' full
+addresses (previously specified by the |\fulladdresses| command, see
+%% \ref{sec:Author-Commands}
+\S~3.3 of the ``Author Guide'') at the bottom of the final page. If this
+is not possible because of lack of space, then the addresses are put
+on the next page. Please note that the mechanism to achieve this is
+rather fiddly and, although I have tested it extensively, I can't
+guarantee it will work in all conceivable circumstances. Please let me
+know if you run across any problems. It does not do a very good job if
+there are footnotes on the final page (but is this likely?).  If the
+|\adjustfinalcols| command is not used then the full addresses will be
+set after the end of the \texttt{thebibliography} environment (on the
+same page unless there is no room or we are in the second column of
+double-column mode).  If you don't have a bibliography for whatever
+reason and you are not using |\adjustfinalcols|, you can explicitly
+trigger the full addresses with the |\outputfulladdresses| command.
+
+
+\section{Putting them all together}
+\label{sec:putting-them-all}
+
+Now you are ready to make a single \LaTeX\ document of the entire
+volume. First, I recommend copying the final version of all the
+individual articles (\texttt{.tex} file plus and \texttt{.ps} figures)
+to a clean directory. Now, create a new \texttt{.tex} file, which will
+be the master file for the entire volume. In what follows, I will
+assume it is called \texttt{master.tex}, but you can call it what you
+like\footnote{Maybe something like \texttt{RMAA25-2.tex} for \RMAA,
+  vol.~25, num.~2.}. In this file, you should use the \texttt{book}
+option to the |\documentclass| command, e.g.:
+\begin{Code}
+  |\documentclass[proceedings,book]{rmaa}|
+\end{Code}
+
+
+\subsection[What to put in the preamble]{What to put in the
+  preamble\footnote{That is, before the
+    \textbackslash\texttt{begin\{document\}}.}}
+\label{sec:what-put-preamble}
+
+Eventually\footnote{Ignore this paragraph on your first reading --- it
+  will make more sense later.}, you may need some |\usepackage|
+commands here if optional packages have been loaded by individual
+authors. Look for lines like
+\begin{Code}
+  \texttt{Class rmaa Warning: Package floatflt was requested by
+    rksmith  on input line 3.} 
+\end{Code}
+in the output when you \LaTeX\ \texttt{main.tex}. In the example
+given, you would need to add |\usepackage{floatflt}|. The reason for
+this is that |\usepackage| is one of the commands that is disabled
+within individual articles in the \texttt{book} style, since it is
+illegal to try and load the same package twice.
+
+You will probably want the following commands to set up the details of
+the volume: 
+\begin{Code}
+  |% publication details of volume                                     |\\
+  |\SetVolume{10}                                                      |\\
+  |\SetYear{2000}                                                      |\\
+  |\SetMes{junio}                                                      |
+\end{Code}
+and if it is a \RMAASC\ volume you may want these:
+\begin{Code}
+  |% details of meeting                                                |\\
+  |\SetReunion{M\'exico, D.~F.}|\\
+  |           {octubre 25--29}                        |\\
+  |\SetEditors{S.~Jane~Arthur,| \dots |}|
+\end{Code}
+Finally, you want
+\begin{Code}
+  |\makeindex                                                          |
+\end{Code}
+so that the index will be generated.
+
+
+\subsection[What to put in the main body]{What to put in the main
+  body\footnote{After the \textbackslash\texttt{begin\{document\}}}} 
+\label{sec:what-put-main}
+First off, you do \emph{not} want a |\maketitle| command. 
+
+
+\subsubsection{Front matter}
+
+Second, you should put
+\begin{Code}
+  |\frontmatter| 
+\end{Code}
+to begin the front matter (this turns on roman page numbering and a
+few other necessary things). Then, you put
+\begin{Code}
+  |\tableofcontents|
+\end{Code}
+which will make the ``Table of Contents'' magically appear when it is
+ready. 
+
+Next, you can put all the other material that you want to have before
+starting the articles proper. This can include (but need not be
+limited to) a Preface, a List of Participants, a Group Photograph,
+etc. All these can be formatted using the \texttt{frontsection}
+environment, which has the following syntax: 
+\begin{Code}
+  |\begin{frontsection}[|\rmArg{shorttitle}|]{|\rmArg{title}|}{%|
+      \dots\\
+      \rmArg{commands}\\
+      \dots |}| \\
+    \dots \\
+  |\end{frontsection}|
+\end{Code}
+
+\subsubsection{Main matter}
+
+Include individual articles. Optionally separate them with |\part|
+commands. 
+
+\subsubsection{Short abstracts}
+
+\begin{Code}
+  |\begin{abstracts}|\\
+  |   \title{|\dots|}|\\
+  |   \author{|\dots|}|\\
+  |   \listofauthors{|\dots|}|\\
+  |   \indexauthor{|\dots|}|\\
+  |   \abstract{|\dots|}|\\
+  \dots\\
+  |\end{abstracts}|
+\end{Code}
+
+\subsubsection{The index}
+
+Explain how it is done. 
+
+\subsubsection{The plates}
+\label{sec:plates-1}
+The \texttt{book} option disables the |\outputplates| command in the
+individual articles, so you must put this command at the end of the
+master file if any of the included articles contain plates. The plates
+will then all appear at the end of the book. 
+
+A further point to remember is that any macros defined by the author
+in his/her article will have been ``forgotten'' by the time the plates
+are being output\footnote{I have made all such user macros local to
+  their article so that there is no problem with ``contaminating''
+  subsequent articles (e.g., Author~A redefines
+  \textbackslash\texttt{alpha} to be something weird, while Author~B
+  is still expecting it to be $\alpha$).}. Hence, if any macros are
+used in the caption text of the plate figures, then the definitions of
+these must be repeated inside the argument of the |\plate|
+command\footnote{And better use \textbackslash\texttt{def} rather than
+  \textbackslash(\texttt{re})\texttt{newcommand}.}.
+
+
+\section{Glossary}
+\label{sec:Gloss}
+
+
+\begin{description}
+\item[Auxiliary Files] 
+\item[Bounding Box] 
+\item[Class] See \textbf{Document Class}. 
+\item[Document Class] A self-contained set of \LaTeX\ macros that
+  specify the markup for a certain type of document. These are found
+  in files with the \texttt{.cls} suffix, and can be used as the
+  argument of a |\documentclass| command. Examples include
+  \texttt{rmaa}, \texttt{article}, and \texttt{letter}.
+  Compare \textbf{Package}.
+\item[Encapsulated PostScript] 
+\item[Float] 
+\item[\LaTeXe] 
+\item[Main Body] 
+\item[Package] A set of \LaTeX\ macros to acheive a particular task,
+  that can be used with many different \textbf{Document Classes} (qv).
+  These are found in files with the \texttt{.sty} suffix, and can be
+  used as the argument of a |\usepackage| command. Examples include
+  \texttt{inputenc}, \texttt{babel}, \texttt{color}.   
+\item[Preamble] The \LaTeX\ commands that come between the
+  |\documentclass| command and |\begin{document}|. These commands
+  should not produce any printed output. 
+\item[Style File] 
+\end{description}
+
+\acknowledgments
+
+\paragraph{Acknowledgments:} Many of the comments in \S~\ref{sec:individual-papers} were inspired
+by the experiences of Jane Arthur while editing the ``Astrophysical
+Plasmas 1999'' proceedings. I am also very gratful to Jane for testing (to
+destruction) early versions of the macros and to Luis Felipe Rodr\'\i
+guez and Elisabeth Themsel for reporting problems and mistakes and for
+advice on editorial style..
+\glossary{hello}
+\end{document}

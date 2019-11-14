@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" 
+       "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+  <head>
+    <title>Known bugs for rmaa.cls</title>
+    <link rel="stylesheet" type="text/css"
+      href="http://www.astrosmo.unam.mx/~will/css/rmaa.css">
+  </head>
+
+  <body>
+    <h1>Known bugs for rmaa.cls</h1>
+
+    <p> Please report any problems directly to <a
+    href="mailto:w.henney@crya.unam.mx">me</a>. From time to time, I
+    will release new corrected versions of the macros. In the mean
+    time, corrections and work arounds will be posted here.  </p>
+    
+
+<h3> Versions 3.24b and earlier </h3>
+
+<p>Error messages like:
+<pre>
+! LaTeX Error: Command \bibfont already defined.
+              Or name \end... illegal, see p.192 of the manual.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...
+
+l.127 \newcommand\bibfont{\small}
+</pre>
+when compiling with recent versions of latex or when uploading to arxiv.org. Fixed in 3.25, which unfortunately took a long time to get posted to the website. Thanks to Roberto Vázquez, Grażyna Stasińska, Gary Ferland, Vladimir Ávila, Hector Aceves, and Luis Felipe Rodríguez for reporting this.
+
+</p>
+
+<h3> Any Recent Version </h3>
+
+    <p>Error messages like
+      <pre>
+! LaTeX Error: Unknown option `longnamesfirst' for package `natbib'.
+      </pre>
+      or
+      <pre>
+! LaTeX Error: File `paralist.sty' not found.
+      </pre>
+      when compiling <tt>rm-extenso.tex</tt> or other files. This is not
+      really a bug, it is just because you have a decade-old TeX set-up
+      with out-of-date versions of some necessary style
+      files. <b>Solution:</b> Update your TeX installation to a newer version.
+
+
+    <h3> Version 3.08 </h3>
+
+    <p>The example files no longer compile. Fixed in 3.09. Thanks to
+      Bob O'Dell for spotting this.</p> 
+
+    <h3> Version 2.1 </h3>
+
+    <p>The page range doesn't get put in the header properly for
+      one-page posters. Don't worry about this - it works fine when
+      the poster is included in the full volume.</p> 
+
+    <h3> Version 2.0 </h3>
+
+    <p>The <tt>\ion</tt> command doesn't work very well. In fact, it
+      never did - serves me right for copying it from the AAS
+      macros. This is now fixed in version 2.1 with a super-duper
+      <tt>\ion</tt> command that does the right thing in all
+      conceivable circumstances (I hope).</p>
+
+    <h3> Version 1.8 </h3>
+
+    <p>The <tt>manuscript</tt> option doesn't work very well. The
+      double-spacing and large margins can cause figure captions to go
+      off the bottom of the page. I will fix this soon. Thanks to
+      Leticia Carigi for pointing this out.</p>
+
+    <h3> Version 1.4 </h3>
+
+    Some people have had problems with the graphics commands when
+    using an old version of LaTeX, which the macros were not designed
+    to work with. There are two possible solutions:
+    <ol>
+      <li>Update your LaTeX installation</li>
+      <li>Grab the latest version of the macros, which includes a
+	subdirectory <tt>OLDLATEX/</tt> containing some style files
+	which are absent in pre-1995 LaTeX versions. </li>
+    </ol>
+     
+
+    <h3> Version 0.7 </h3>
+
+    If you still have this version. you should <a href="rmaa.tar.gz">upgrade</a>. 
+
+    <ol>
+      <li>The line <pre>\usepackage[american]{babel}</pre> in
+	<tt>rmaa.cls</tt> causes an
+	error on some older (pre-1995) versions of LaTeX. <br> 
+	<p>
+	  Reported by Chris Mauche (<tt>mauche@cygnus.llnl.gov</tt>), 
+	  1999/10/05</p>
+	<p> <strong>Solution</strong> (1999/10/06): Comment out the offending
+	  line: it is only necessary in rare cases. Alternatively,
+	  browbeat your system administrator into updating your LaTeX installation.</p> </li>
+    </ol>
+
+
+    <hr>
+    Page maintained by
+    <address>
+      <a href="http://www.crya.unam.mx/~will/">William J. Henney</a>
+    </address>
+<!-- Created: Wed Oct  6 10:11:50 CDT 1999 -->
+<!-- hhmts start -->Last modified: Tue Sep 27 10:53:16 CDT 2011 <!-- hhmts end -->
+  </body>
+</html>

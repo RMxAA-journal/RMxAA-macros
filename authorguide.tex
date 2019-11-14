@@ -1,0 +1,646 @@
+\documentclass[debug,guide]{rmaa}
+\usepackage[latin1]{inputenc}
+\usepackage[pdftex, debug]{hyperref}
+
+      
+\title{The \RMAA\ \LaTeX\ Macros: A Guide for Authors\altaffilmark{1}}
+\author{W. J. Henney\altaffilmark{2}
+  \affil{CRyA-UNAM, Morelia, Mexico} 
+  }
+\altaffiltext{1}{\protect\raggedright The latest version of the macros 
+  should be available from
+  \url{http://www.astrosmo.unam.mx/rmaa}} 
+\altaffiltext{2}{\url{mailto:will@astrosmo.unam.mx}}
+\fulladdresses{
+\item W. J. Henney: Centro de Radioastronomía y Astrofísica, UNAM Apdo
+  Postal 72-3, 58090 Morelia, Michoac\'an, M\'exico
+  (\url{mailto:w.henney@astrosmo.unam.mx})}
+    
+\shortauthor{Henney} \shorttitle{\RMAA\ Author Guide}
+
+\SetYear{2007} 
+
+\resumen{Este documento describe el uso del ``\LaTeX\ document class''
+  \texttt{rmaa.cls}, lo cu\'al est\'a dise\~nado para preparar
+  art\'{\i}culos para publicaci\'on en la \emph{\RMAAlong}. }
+
+\abstract{This document describes the use of the \LaTeX\ document
+  class \texttt{rmaa.cls}, designed for the preparation of papers to
+  be published in the main journal \emph{\RMAAlong}.} 
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+\label{sec:General}
+
+The version of the \texttt{rmaa} document class described in this User
+Guide is \rmVersion{} (\rmDate). Its use requires a relatively recent
+version of \LaTeX\ (post-1994). Some familiarity with the use of
+\LaTeX\ is assumed in this guide. For the author requiring a general
+introduction to \LaTeX, there are several books
+\citep[e.g.][]{Latex,Comp} available, as well as many online tutorials
+(see list at
+\url{http://www.tex.ac.uk/cgi-bin/texfaq2html?label=tutorials*}). This
+guide aims to cover basic usage of the macros from an author's point
+of view; more advanced topics are discussed in the ``Guide for
+Editors'' \citep{EdGuide}.
+
+Note that the PDF version of this document contains clickable links,
+both for internal cross-references (e.g., in the Table of Contents)
+and for external URLs.  
+
+\section{Download and Installation}
+\label{sec:downl-inst}
+The latest version of the macros can always be obtained from
+\url{http://www.astrosmo.unam.mx/rmaa}. There are three different
+packages, each designed for a different audience: authors of main
+journal papers (e.g., \texttt{rmaa\rmVersion{}.tar.gz}), authors of
+contributions to conference proceedings (e.g.,
+\texttt{rmsc\rmVersion{}.tar.gz}), and editors of the main journal or
+conference proceedings (e.g.,
+\texttt{rmaa\_editor\rmVersion{}.tar.gz}). Please make sure you have
+the right package. All packages are also provided in \texttt{.zip}
+format, chiefly for the convenience of MS Windows users.
+
+Once you have downloaded the relevant package archive file, move it to
+the directory (folder) where you wish to work and unpack the
+archive. The procedure to do this may vary between systems. From the
+command line on Unix, Linux, or Mac OS X, you can use something like
+\texttt{tar -zxf rmaa\rmVersion{}.tar.gz}. 
+
+In order to test that everything is working, you should compile the
+example document \texttt{rm-journal-example.tex}. You will need to invoke
+\LaTeX{} twice to get the cross references right. The procedure to
+view and print the document will vary between systems. On Unix, Linux,
+or Mac OS X, you can use \texttt{latex} and \texttt{dvips} to generate
+a postscript file (which can be converted to PDF via \texttt{ps2pdf}),
+or alternatively you can use \texttt{pdflatex} to generate a PDF file
+directly. Note that in the first case, any included graphics must be
+in EPS format, while in the second case, they must be in PDF, PNG, or
+JPG format. It is recommended that you omit the file extension from
+the filenames in the |\includegraphics| command, so that both
+\texttt{latex} and \texttt{pdflatex} can automatically find the
+correct figure file.
+
+Assuming that the example document compiled and printed correctly, you
+can now start writing your own paper, using the example document as a
+template. 
+
+\section{The preamble}
+\label{sec:preamble}
+
+The first line to appear in your document should be
+\begin{Code}
+  |\documentclass{rmaa}|
+\end{Code}
+or
+\begin{Code}
+  |\documentclass[|\rmArg{optionlist}|]{rmaa}|
+\end{Code}
+which sets up the document to use the \texttt{rmaa} class, using the
+default \texttt{manuscript} option, which is designed for use by
+authors submitting papers to the \RMAA{} main journal.  The following
+commands can be used after the |\documentclass| command, but before
+the |\begin{document}|.
+
+\subsection{The title page}
+\label{sec:Author-Commands}
+
+\begin{Code}
+  |\title{| \rmArg{title text} |}|
+\end{Code}
+The |\title| command defines the title of the article. The
+title text should be entered in mixed case. It will be
+automatically converted to upper case when typesetting the title page,
+but remains in mixed case for the index. 
+\begin{Code}
+  \begin{tabbing}
+    |\author{| \= \rmArg{name\#1} |and|  \rmArg{name\#2} \\
+      \>|\affil{| \rmArg{address} |} }|
+  \end{tabbing}
+\end{Code}
+The |\author| command defines the authors of the article. Within this
+command, one can use the |\affil| command to define the authors'
+affiliation. This will be typeset below the authors' names.
+The individual authors should be entered in the style |A.~B.~Lastname|
+to avoid line breaks within the name. Line breaks may be inserted by
+hand using |\\|.  If the authors have various different affiliations,
+then one should use the alternative form:
+\begin{Code}
+  \begin{tabbing}
+    |\altaffiltext{1}{|\rmArg{address\#1}|}| \\
+    |\altaffiltext{2}{|\rmArg{address\#2}|}| \\
+    $\cdots$ \\
+    |\author{| \= \rmArg{name\#1} |\altaffilmark{| \rmArg{list\#1} |}| \\
+      \> \rmArg{name\#2} |\altaffilmark{| \rmArg{list\#2} |} }| \\
+  \end{tabbing}
+\end{Code}
+Each separate affiliation is specified with the |\altaffiltext|
+command and will be typeset in a footnote.\footnote{Each address
+  should end with a period.} The first argument to
+|\altaffiltext| is the number of the footnote and the second argument
+is the text of the affiliation.  The |\altaffilmark| command is then
+used within the |\author| command to specify a list of footnoted
+affiliations for each author, e.g.\ |\altaffilmark{1,3,4}|. Care
+should be taken that the |\altaffiltext| commands are entered in the
+correct order, starting with number~1.  It is also possible to combine the
+|\affil| and |\altaffilmark| commands.  See the sample document for a more
+complicated example.
+
+The affiliations entered via the |\affil| and |\altaffiltext| commands
+should be as brief as possible. Full postal and email addresses are
+typeset at the end of the article by means of the |\fulladdresses|
+command (see below).  
+
+\begin{Code}
+  |\resumen{| \rmArg{Spanish text} |}| \\
+  |\abstract{| \rmArg{English text} |}| 
+\end{Code}
+These two commands define the abstract in Spanish and English. The
+abstract text may contain several paragraphs, but it should not be
+overly long, since both abstracts must fit on the first page unless
+you are using the \texttt{manuscript} option.
+%\footnote{If they don't, then dire things may happen in the
+%  current version.}  
+If the author does not use the |\resumen|
+command, the Spanish text will be set equal to the English text.
+\begin{Code}
+  |\setkeyword{| \rmArg{keyword text} |}| 
+\end{Code}
+The |\setkeyword| command adds \rmArg{keyword text} to the list of
+keywords (or subject headings). The keywords should be entered in
+alphabetical order in the following style and should be chosen from
+the
+list\footnote{\url{http://www.journals.uchicago.edu/ApJ/keywords.html}}
+used by ApJ, AJ, A\&A, and MNRAS (please do not invent new
+keywords!). No more than six keywords are allowed. 
+
+
+\subsection{Running headers}
+\label{sec:running-headers}
+\begin{Code}
+  |\shortauthor{| \rmArg{name} |}| \\ |\shorttitle{| \rmArg{title} |}|
+\end{Code}
+These define a shortened version of the author and title for use in
+the running headers. Only the author surnames should be used here
+(first author et~al.\ if there are more than 3) and ``|\&|'' should be
+used instead of ``|and|''. 
+
+
+\subsection{Postal addresses}
+\label{sec:postal-addresses}
+
+The affiliations entered with the |\affil| and |\altaffiltext|
+commands should be quite short --- the full postal addresses of the
+authors should be entered with the |\fulladdresses| command:
+\begin{Code}
+  |\fulladdresses{| \\
+  |   \item| \rmArg{namelist\#1}|:| \rmArg{address\#1}
+  |(|\rmArg{email\#1}|)| \\
+  |   \item| \rmArg{namelist\#2}|:| \rmArg{address\#2}
+  |(|\rmArg{email\#2}|)| \\
+  |   | $\cdots$  |}| 
+\end{Code}
+An example of the use of this command can be found in the sample
+document.  These addresses will be typeset at the end of the article.
+Note that each address should end with a period.
+
+
+
+\subsection{Indexing}
+\label{sec:indexing}
+
+The following commands are used in constructing the table of contents
+and index when the \texttt{book} style option is used to typeset an
+entire volume:
+\begin{Code}
+  |\listofauthors{| \rmArg{namelist} |}| \\
+  |\indexauthor{| \rmArg{author\#1} |}| \\
+  $\cdots$\\
+  |\indexauthor{| \rmArg{author\#N} |}|
+\end{Code}
+where \rmArg{namelist} is in the format |A.~N.~Other,| |B.~Second,|
+|\& C.~Third|, while \rmArg{author\#1} \dots \rmArg{author\#N} are in
+the format \texttt{Other, A.~N.}  There should be one |\indexauthor|
+command for each author and it is important that these appear
+\emph{after} the |\listofauthors| and |\title| commands. Although
+these commands produce no printed output when working on an individual
+paper, it would save the editors some work if you put them in.
+
+
+\subsection{Other commands for editors}
+\label{sec:edit}
+
+The following commands are designed principally for the use of the
+editors, rather than authors. 
+\begin{Code}
+  |\SetVolume{| \rmArg{volume \#} |}| \\
+  |\SetFirstPage{| \rmArg{page \#} |}| \\
+  |\SetYear{| \rmArg{year} |}| \\
+  |\ReceivedDate{| \rmArg{date} |}| \\
+  |\AcceptedDate{| \rmArg{date} |}| \\
+  |\SetMSnumber{| \rmArg{manuscript \#} |}| 
+\end{Code}
+These should all be self-explanatory. The first three commands set
+quantities that are used in constructing the header to the first page.
+The page range for the article is calculated automatically. This means
+that \LaTeX\ must be run twice after changing the first page with
+|\SetFirstPage|. The |\SetMSnumber| command is for use with the
+\texttt{manuscript} option. 
+
+
+\section{The Main Body}
+\label{sec:main-text}
+
+The main body of the document should be enclosed within the following
+pair of commands: 
+\begin{Code}
+  |\begin{document}| \\
+    \dots \\
+    \rmArg{article text} \\
+    \dots \\
+    |\end{document}|
+\end{Code}
+The first command after the |\begin{document}| should be 
+\begin{Code}
+  |\maketitle|
+\end{Code}
+This will format title, authors, abstracts and keywords. 
+
+Within the main body of the document all standard \LaTeX\ commands can
+be used. Commands provided by the many optional packages distributed
+with \LaTeX\ may also be used so long as the package is loaded via the 
+|\usepackage| command in the preamble. However, authors are requested
+to avoid using commands that change the document fonts, page layout or 
+other ``stylistic'' parameters. One should also bear in mind that not
+all optional packages have been checked for compatibility with the
+\texttt{rmaa} class. 
+
+
+\subsection{Sectioning commands and cross references}
+\label{sec:Sectioning-commands}
+Authors are encouraged to use the standard \LaTeX\ sectioning commands 
+to subdivide their article:
+\begin{Code}
+  |\section{| \rmArg{Title} |}| \\
+  |\subsection{| \rmArg{Title} |}| \\
+  |\subsubsection{| \rmArg{Title} |}| \\
+  |\paragraph{| \rmArg{Title} |}|
+\end{Code}
+These will be automatically typeset in the RevMexAA style.
+Cross-referencing is made easier by the use of the
+|\label{|\rmArg{label}|}| command immediately after each sectioning
+command, where \rmArg{label} is any mnemonic string.  Elsewhere in the
+document, the section can then be referred to as
+|\S~\ref{|\rmArg{label}|}|. The |\label| command can also be used with
+equations and with figures and tables (see below). The style that
+should be used for cross-references is, for example, Figure~3,
+Table~1, equation~(12), and \S~5.1, where the section symbol ``\S'' is
+produced by the \LaTeX\ command ``|\S|''.
+
+\subsection{Tables}
+\label{sec:Tables}
+Tables should be entered using the \texttt{table} and \texttt{tabular}
+environments in the following way:
+\begin{Code}
+  |\begin{table}|\\
+    |\caption{|\rmArg{Table Heading}| \label{|\rmArg{label}|} }|\\
+    |\begin{tabular}{|\rmArg{Format}|}\toprule|\\
+      \rmArg{Header Line}| \\ \midrule|\\
+      \rmArg{First Data Line}| \\|\\
+      \dots\\
+      \rmArg{Last Data Line}| \\ \bottomrule|\\
+    |\end{tabular}| \\
+  |\end{table}| \\
+\end{Code}
+In two-column styles, if it is required that the table span both
+columns, then |\begin{table*}| \dots |\end{table*}| should be used
+instead. Details of more advanced techniques, together with advice on
+producing high-quality tables is given in \citet{booktabs}. 
+
+Footnotes to the table caption, to column headings, or to individual
+entries can be specified by the |\tabnotemark| and |\tabnotetext|
+commands. An example of their use is given in the sample document
+\texttt{rm-journal-example.tex}. 
+
+Experimental support for multi-page tables is provided via the
+\texttt{longtable} environment. Advice on its use will be provided on
+request. 
+%% TODO - WJH 10 Sep 2007 - document longtable usage
+
+\subsection{Figures}
+\label{sec:Figures}
+Figures should be included using the standard \LaTeX\ figure
+environment. Authors are encouraged to embed postscript figures
+directly in their document, for which we strongly recommend the use of
+the standard \LaTeX\ command
+|\includegraphics|.\footnote{Historically, many different macro
+  packages for the inclusion of postscript figures have been in use
+  because older versions of \LaTeX\ lacked a standard interface (e.g.
+  \texttt{epsf}, \texttt{psfig}). There is no longer any reason to use
+  these.} The extended features of the |\includegraphics| command
+provided by the \texttt{graphicx} package may be used. There is no
+need to explicitly load this package, it is loaded automatically.
+
+For a single-column figure, the following commands
+could be used: 
+\begin{Code}
+  |\begin{figure}\centering|\\
+      |\includegraphics{|\rmArg{psfilename}|}|\\
+  |\caption{|\rmArg{fig caption}| \label{|\rmArg{label}|} }| \\
+  |\end{figure}|
+\end{Code}
+By default, the graphics file will be scaled to the full column
+width. Alternatively, one of the optional arguments \texttt{width},
+\texttt{height}, or \texttt{scale} can be used to set the desired
+size. Further examples are given in \texttt{rm-journal-example.tex}.  For
+figures that span two columns, one should use \texttt{figure*} instead
+of \texttt{figure}.  For further information, authors are encouraged
+to consult \citet{Graph}, which contains a wealth of detail on the use
+of imported graphics.  More details on the preparation of figures is
+also given in the ``Guide for Editors'', q.v.
+
+
+
+% Plates aren't used any more - WJH 10 Sep 2007
+% \subsection{Plates}
+% \label{sec:plates}
+
+% If you want any of your figures to appear as glossy plates, then you
+% should inform the editors of the journal or conference proceedings. The
+% |\plate| command that is used for formatting these is decribed in the
+% ``Guide for Editors''.  
+
+\subsection{Reference list and citations}
+\label{sec:Reference-List}
+
+
+There are three broad methods for dealing with citations.
+
+\subsubsection{Semi-automatic method}
+\label{sec:semi-autom-meth}
+This is currently the recommended method for most authors. The
+reference list at the end of the article is constructed by hand
+(preferably using entries generated by ADS), whereas the in-text
+citations are handled automatically using commands from the
+\texttt{natbib} package.\footnote{The \texttt{natbib} package is
+  loaded and configured automatically by \texttt{rmaa.cls}.}
+
+\paragraph{How to enter the reference list}
+
+The reference list should appear at the end of the article and should
+be formatted using the standard \LaTeX\ \texttt{bibliography}
+environment as follows:
+\begin{Code}
+  |\begin{thebibliography}|\\
+    |\bibitem[|\rmArg{authoryear}|]{|\rmArg{key}|} |\rmArg{text} \\
+    \dots \\
+  |\end{thebibliography}|
+\end{Code}
+The required format of the |\bibitem|s is best explained by examples:
+\begin{verbatim}
+\bibitem[Garc{\'{\i}}a-D{\'{\i}}az \&
+  Henney(2007)] {2007AJ....133..952G}
+  Garc{\'{\i}}a-D{\'{\i}}az, M.~T., \&
+  Henney, W.~J.\ 2007, \aj, 133, 952
+
+\bibitem[Henney et al.(2007)]
+  {2007AJ....133.2192H} Henney, W.~J.,
+  O'Dell, C.~R., Zapata, L.~A.,
+  Garc{\'{\i}}a-D{\'{\i}}az, M.~T.,
+  Rodr{\'{\i}}guez, L.~F., \& Robberto,
+  M.\ 2007, \aj, 133, 2192
+
+\bibitem[Henney(2007)]
+  {2007dmsf.book..103H} Henney, W.~J.\
+  2007, in Diffuse Matter from Star Forming
+  Regions to Active Galaxies: A Volume
+  Honouring John Dyson, Edited by
+  T.~W. Hartquist, J.~M. Pittard, and
+  S.~A.~E.~G. Falle. Series:
+  Astrophysics and Space Science
+  Proceedings. ISBN-10 1-4020-5424-6
+  (Dordrecht: Springer), p.103
+\end{verbatim}
+By far the easiest way of obtaining the |\bibitem|s is by using
+ADS. Select the references you need by ticking the boxes in the
+``Query Results from the ADS Database'' list. Then go down to the
+section that says ``Retrieve the above records in other formats or
+sort order'' and choose ``AASTeX format'' from the first drop-down
+list. If you have selected many references at once, then you may also
+want to choose ``Sort by first author name''. The resultant
+|\bibitem|s can then be cut-and-pasted into your paper. In the case of
+references to papers in common astronomy journals, the ADS results are
+nearly always fine. For references to books and conference
+proceedings, the quality is very variable and the diligent author may
+need to edit the result to conform to the standard style (see recent
+issues of \RMAA{} or \RMAASC{} for examples).
+ 
+If you have long FTP or HTTP addresses in your reference list (or
+anywhere else), then you should use the |\url| command, which avoids
+problems with special characters in the address (such as |~|) and
+allows \LaTeX{} to choose sensible linebreaks:
+\begin{Code}
+  |\url{http://www.astroscu.unam.mx/~rmaa}|
+\end{Code}
+
+\paragraph{How to cite references in the text}
+
+For a citation used as a noun in a normal sentence, one should use
+|\citet{|\rmArg{key}, \rmArg{key}, \dots|}|, where each \rmArg{key}
+matches that of a |\bibitem| in the \texttt{thebibliography}
+environment:
+\begin{Code}
+\begin{verbatim}
+\dots following the excellent suggestion 
+of \citet{2007AJ....134.1679O}. 
+\end{verbatim}
+  \itshape
+  \dots following the excellent suggestion of
+  \citet{2007AJ....134.1679O}. 
+\end{Code}
+For a parenthetical citation, one should use |\citep{|\rmArg{key},
+  \rmArg{key}, \dots|}|:
+\begin{Code}
+\begin{verbatim}
+The subject of photoionized stellar jets 
+\citep{2007AJ....133..952G, 
+2007AJ....133.2192H} is a fascinating 
+one.
+\end{verbatim}
+  \itshape
+  The subject of photoionized stellar jets \citep{2007AJ....133..952G,
+    2007AJ....133.2192H} is a fascinating one.
+\end{Code}
+A useful quick-reference sheet for the \texttt{natbib} commands is
+\citet{natnotes}, which explains more complicated techniques, such as
+in the following example:
+\begin{Code}
+\begin{verbatim}
+However,
+\citeauthor{2007AJ....133.2192H}'s
+model fails to consider (pace
+\citealp{2007AJ....133.2343O}) the
+incontrovertible argument of
+\citet[eq.~13]{2007A&A...471..193S},
+
+which renders futile any such effort
+\citep[see also][]{2007AJ....134.1679O} 
+and which should already have been well 
+known in \citeyear{2007AJ....133.2192H}.
+\end{verbatim}
+  \itshape
+  However, \citeauthor{2007AJ....133.2192H}'s model fails to consider
+  (pace \citealp{2007AJ....133.2343O}) the incontrovertible argument
+  of \citet[eq.~13]{2007A&A...471..193S}, which renders futile any
+  such effort \citep[see also][]{2007AJ....134.1679O} and which should
+  already have been well known in \citeyear{2007AJ....133.2192H}.
+\end{Code}
+
+
+\subsubsection{Fully automatic method}
+\label{sec:fully-autom-meth}
+This method is currently experimental, although it seems to work
+fine. The in-text citations are specified using \texttt{natbib}
+commands in exactly the same way as in the previous method, but now
+\BibTeX{} is used to automatically generate the reference list
+too. The big advantage of this method is that it guarantees
+consistency between the in-text citations and the reference list and
+ensures that the reference list is in the correct order.
+
+You will need one or more \texttt{.bib} files that contain all your
+references in \BibTeX{} format. Instead of using the
+\texttt{thebibliography} environment, you simply put 
+\begin{Code}
+  |\bibliography{|\rmArg{bibfile}, \rmArg{bibfile}, \dots|}|
+\end{Code}
+at the end of your document, where each \rmArg{bibfile} is the name of
+a \texttt{.bib} file (but without the \texttt{.bib} extension). There
+is no problem if the \rmArg{bibfile}s contain many more references
+than you will use---\BibTeX{} will just select the ones that you
+cite. 
+
+One very easy way to create a useful \texttt{.bib} file is as
+follows. Create a ``Private Library'' in ADS for your project and
+populate it with every paper that might conceivably be relevant. This can
+be done in various stages, starting of with relevant keyword, object,
+or author searches. Once you have saved a few core papers, you can
+``grow'' the library by retrieving all the references in or citations
+to the papers already in the library. Once you have a few hundreds (or
+thousands) of papers in the library, then you can dump it all in
+\BibTeX{} format by pressing the ``Select all records'' button,
+choosing ``BIBTEX reference list'' as the return format, and then
+pressing the ``Retrieve selected records'' button.
+
+%% TODO - WJH 10 Sep 2007 - Add description of RefTeX mode here someday
+
+Using this method requires an extra step when compiling your
+document. After adding new citations you have to run \LaTeX{},
+\BibTeX{}, then \LaTeX{} again. 
+
+\subsubsection{Manual method}
+\label{sec:manual-method}
+
+Of course, it is also possible to enter both the reference list and
+the in-text citations by hand. However, this is tedious and
+error-prone, so it is not recommended. 
+
+\subsection{Special commands}
+\label{sec:Special-commands}
+For the convenience of authors, special commands 
+for astronomical
+journals and some common 
+astronomical and mathematical symbols are
+provided. These are the same as those provided by the AAS macros
+\citep{AAS}. 
+
+\subsection{Appendices}
+\label{sec:appendices}
+
+If you have appendices to your article, you can use something like the
+following: 
+\begin{Code}
+\begin{verbatim}
+\begin{appendices}
+
+  \section{First Appendix}
+  \label{sec:ap-A}
+
+  Text of first appendix.
+
+  \section{Second Appendix}
+  \label{sec:ap-B}
+
+  Text of second appendix.
+
+\end{appendices}
+\end{verbatim}
+\end{Code}
+This goes after the acknowledgments but before the
+bibliography. Equations in appendices will be labeled A1, A2, B1, B2,
+etc.
+
+\adjustfinalcols
+
+\begin{thebibliography}
+
+
+\bibitem[American Mathematical Society(2002)]{amsmath} American
+  Mathematical Society 2002, ``User's Guide for the amsmath Package
+  (Version 2.0)'', available from
+  \url{http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/amsldoc.pdf}
+
+\bibitem[Biemesderfer \& Barnes(1995)]{AAS} Biemesderfer, C. \&
+  Barnes, J.\@ 1995, ``The AAS\TeX\ Macros for Manuscript Preparation'', 
+  available at \url{http://www.journals.uchicago.edu/AAS/AASTeX/}
+
+\bibitem[Daly(2007)]{natnotes} Daly, P. W.\@ 2007 ``Reference sheet
+  for \texttt{natbib} usage'', available from
+  \url{http://tug.ctan.org/macros/latex/contrib/natbib/natnotes.pdf}
+
+\bibitem[Fear(2005)]{booktabs} Fear, S. 2005, ``Publication quality
+  tables in LATEX'', available from
+  \url{http://www.ctan.org/tex-archive/macros/latex/contrib/booktabs/booktabs.pdf}
+
+\bibitem[Mittelbach et al.{}(2004)]{Comp} Mittelbach, F., Goosens, M., 
+  Braams, J., Carlisle, D., Rowley, C.\@ 2004, ``The \LaTeX\ Companion
+  (2nd Ed)'', (Reading, MA: Addison-Wesley)
+\bibitem[Henney(2000)]{EdGuide} Henney, W. J.\@ 2000 ``The \RMAA\
+  \LaTeX\ Macros: A Guide for Editors'', available as file
+  \texttt{rmeditor.tex} in the |rmaa_editor| distribution
+\bibitem[Lamport(1985)]{Latex} Lamport, L.\@ 1985, ``\LaTeX\ --- A
+  Document Preparation System --- User's Guide and Reference Manual''
+  (Reading, MA: Addison-Wesley) 
+\bibitem[Reckdahl(1997)]{Graph} Reckdahl, K.\@ 1997, ``Using Imported
+  Graphics in \LaTeXe'', available from
+  \url{http://tug.ctan.org/info/epslatex.ps}
+
+\bibitem[O'Dell et al.(2007b)]{2007AJ....134.1679O} O'Dell, C.~R., Sabbadin, 
+F., \& Henney, W.~J.\ 2007, \aj, 134, 1679 
+
+
+\bibitem[Stasi{\'n}ska et al.(2007)]{2007A&A...471..193S} Stasi{\'n}ska, 
+G., Tenorio-Tagle, G., Rodr{\'{\i}}guez, M., \& Henney, W.~J.\ 2007, \aap, 
+471, 193 
+
+
+\bibitem[O'Dell et al.(2007a)]{2007AJ....133.2343O} O'Dell, C.~R., Henney, 
+W.~J., \& Ferland, G.~J.\ 2007, \aj, 133, 2343 
+
+
+\bibitem[Henney et al.(2007)]{2007AJ....133.2192H} Henney, W.~J., O'Dell, 
+C.~R., Zapata, L.~A., Garc{\'{\i}}a-D{\'{\i}}az, M.~T., Rodr{\'{\i}}guez, 
+L.~F., \& Robberto, M.\ 2007, \aj, 133, 2192 
+
+
+\bibitem[Garc{\'{\i}}a-D{\'{\i}}az \& Henney(2007)]{2007AJ....133..952G} 
+Garc{\'{\i}}a-D{\'{\i}}az, M.~T., \& Henney, W.~J.\ 2007, \aj, 133, 952 
+
+%in {\texttt{docs/latex/general/}} of most \LaTeX\ 
+%  distributions. 
+
+\end{thebibliography}
+
+\end{document}
