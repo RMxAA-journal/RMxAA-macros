@@ -3,14 +3,14 @@
 
 
 DOCFILES=rmaa.pdf rmaa.ps.gz
-MACRO_LTX_FILES=rmaa.cls rmaa.ins rmaacite.sty adshtml.sty ADS.tex
+MACRO_LTX_FILES=rmaa.cls rmaacite.sty adshtml.sty
 SHELLSCRIPTS=makeads.sh
 MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
 MAKEFILE=Makefile
 MACROFILES=$(MACRO_LTX_FILES) $(SHELLSCRIPTS) $(MACRO_OTHER_FILES)
 SKELETONFILES=ADS.tex
 INSTALL=install
-INSTALL_DIR=..
+INSTALL_DIR=../packages
 all: docs macros
 
 install: install-docs install-macros
@@ -27,9 +27,9 @@ docs: $(DOCFILES)
 
 macros: rmaa.dtx rmaa.ins
 	touch $(MACROFILES) $(MAKEFILE)
-	chmod u+w $(MACROFILES) $(MAKEFILE)
+	chmod u+w $(MACROFILES) $(MAKEFILE) rmaa.ins
 	latex "\input{rmaa.ins}"
-	cp -f $(MAKEFILE) $(MAKEFILE).BCK && unexpand $(MAKEFILE).tex >| $(MAKEFILE)
+	cp -f $(MAKEFILE) $(MAKEFILE).BCK && unexpand $(MAKEFILE).tex >| $(MAKEFILE) && rm $(MAKEFILE).tex
 	chmod a+x $(SHELLSCRIPTS)
 	chmod a-w $(MACROFILES) $(MAKEFILE)
 	chmod u+w $(SKELETONFILES)

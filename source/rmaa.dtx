@@ -3828,18 +3828,17 @@ class]
 %    \begin{macrocode}
 %<*makefile>
 DOCFILES=rmaa.pdf rmaa.ps.gz
-MACRO_LTX_FILES=rmaa.cls rmaa.ins rmaacite.sty adshtml.sty ADS.tex
+MACRO_LTX_FILES=rmaa.cls rmaacite.sty adshtml.sty
 SHELLSCRIPTS=makeads.sh
 MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
 MAKEFILE=Makefile
 MACROFILES=$(MACRO_LTX_FILES) $(SHELLSCRIPTS) $(MACRO_OTHER_FILES)         
 SKELETONFILES=ADS.tex 
 %    \end{macrocode}
-% Install the files read only in the parent directory (idea is that
-% the source files are in a subdir of the installation dir).
+% Install the files read only into the package directory, specified via a path relative to the source directory. \changes{4.0}{2019/11/14}{Reorganize folder layout so that hardly anything is in the top level.  That way, things are clearer on github.}
 %    \begin{macrocode}
 INSTALL=install 
-INSTALL_DIR=..
+INSTALL_DIR=../packages
 %    \end{macrocode}
 % The default rule is to make everything. Installation must be
 % explicitly asked for.
@@ -3877,14 +3876,14 @@ macros: rmaa.dtx rmaa.ins
 % yet. 
 %    \begin{macrocode}
         touch $(MACROFILES) $(MAKEFILE)
-        chmod u+w $(MACROFILES) $(MAKEFILE)
+        chmod u+w $(MACROFILES) $(MAKEFILE) rmaa.ins
         latex "\input{rmaa.ins}"
 %    \end{macrocode}
 % \TeX{} automatically adds the |.tex| extension to extensionless
-% files, bless it. We fix this and take the opportunity to convert
+% files. We fix this and take the opportunity to convert
 % back to TABs all that it has lovingly converted to spaces. 
 %    \begin{macrocode}
-        cp -f $(MAKEFILE) $(MAKEFILE).BCK && unexpand $(MAKEFILE).tex >| $(MAKEFILE)
+        cp -f $(MAKEFILE) $(MAKEFILE).BCK && unexpand $(MAKEFILE).tex >| $(MAKEFILE) && rm $(MAKEFILE).tex
 %    \end{macrocode}
 % Make the shell scripts executable and everything unwriteable (so
 % they don't get hand-edited by mistake). However, undo this for the
