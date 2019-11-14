@@ -4289,7 +4289,7 @@ _RAW_ARG_CMDS_
 %    \end{macrocode}
 
 % This is a shell script |makeads.sh| that generates the |_ads.txt| file from
-% |_ads.tex| by using \LaTeX{}2HTML and |lynx|. 
+% |_ads.tex| by using \LaTeX{}2HTML and |lynx|.  \changes{4.0}{2019/11/13}{Make sure that lynx writes utf-8 output instead of latin-1.}
 % \changes{2.2beta13}{2002/03/12}{Complete rewrite of |makeads.sh|. Now much 
 % improved I think}
 % \changes{4.0}{2019/11/13}{Fix the at-sign substitution so that it only eliminates \cs{@} and does not mess with email addresses.}
@@ -4368,8 +4368,8 @@ echo "Generating $ADSBASENAME.txt from $ADSBASENAME.tex and $BASENAME.ads2"
 # Now run latex2html on the _ads.tex file
 latex2html -no_navigation -info 0 -address 0 -html_version 4.0,math $ADSBASENAME
 
-# Then, convert to plaintext with lynx and tidy it up a bit
-lynx --justify=off --width=100 --dump --nolist \
+# Then, convert to utf8 with lynx and tidy it up a bit
+lynx --justify=off --width=100 --dump --nolist --display_charset=utf-8 \
      $ADSBASENAME/$ADSBASENAME.html | cut -c4- \
      | sed 's/ibidrule/\\ibidrule/g' > $ADSBASENAME.txt
 %</ads-shell-script>
