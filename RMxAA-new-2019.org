@@ -223,9 +223,12 @@ CLOSED: [2019-11-15 Fri 10:46]
 + Héctor said [2019-11-14 Thu]
   : aparte de la página web lo que se quiere, es que Serie de Conferencias y la Revista Mexicana, tengan sus macros independientes.
 + Will said [2019-11-14 Thu]
-  : OK, eso se puede hacer por supuesto, pero antes de empezar quisiera aclarar mejor sus requerimientos.  Entonces, si les entiendo bien, ustedes no quieren que sea el mismo "rmaa.cls" que sirve para ambos RMxAA y RMxAC (la situación actual).  Quieren que existen dos archivos completamente distintas (dígamos, rmxaa.cls y rmxac.cls), así que ya no habrá necesidad de las opciones "journal" y "proceeedings" para seleccionar entre las dos, y quieren que cada uno tiene su página de web distinto para descargar el paquete correspondiente, entonces un autor de un artículo para las memorias ni tiene que enterrarse de la existencia de la revista regular (y igualmente al revés).  
+  : OK, eso se puede hacer por supuesto, pero antes de empezar quisiera aclarar mejor sus requerimientos.  Entonces, si les entiendo bien, ustedes no quieren que sea el mismo "rmaa.cls" que sirve para ambos RMxAA y RMxAC (la situación actual).  Quieren que existen dos archivos completamente distintas (dígamos, rmxaa.cls y rmxac.cls), así que ya no habrá necesidad de las opciones "journal" y "proceeedings" para seleccionar entre las dos, y quieren que cada uno tiene su página de web distinto para descargar el paquete correspondiente, entonces un autor de un artículo para las memorias ni tiene que enterrarse de la existencia de la revista regular (y igualmente al revés).  ¿Eso es lo que están buscando?
 
-¿Eso es lo que están buscando?
+** Beta testing by Héctor
+*** Mail from Héctor [2019-11-16 Sat]
+: Hola Will, hice la compilación de este artículo y me marco errores en varias referencias, te lo envío. Otra cosa, quise hacer lo del ADS con el ejemplo que enviaste, pero no tuve exito, el makeads.sh que use, no pude generarlo.
+
 ** Plan of action
 
 *** List of points decided in Skype meeting [2019-10-31 Thu]
