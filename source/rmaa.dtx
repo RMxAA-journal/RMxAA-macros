@@ -312,10 +312,16 @@ class]
 % etoolbox for patching and robustifying at the moment.  In the
 % future, I want to port a lot of other stuff over to it.  For
 % instance, replace the ifthen package and the TeX ifs too.
+%
+% We target the latest version (1.7) of PDF, rather than the default
+% of 1.5.  This reduces the chance of getting warnings from included
+% graphics.  This is not strictly related to hyperref, but we put it
+% here anyway.
 %    \begin{macrocode}
 \RequirePackage{etoolbox}
 \RequirePackage{hyperref}
 \hypersetup{hidelinks}
+\pdfminorversion=7
 %    \end{macrocode}
 % We patch the \cs{@combinedblfloats} following a suggestion by Heiko
 % Oberdiek at \url{https://tex.stackexchange.com/a/249743/3843}, which
@@ -2684,7 +2690,12 @@ class]
 % \end{macro}
 % \end{macro}
 %
-% Uniquify all cross-references by prepending the article name.  This now has to go into |\AtBeginDocument| so it is working on the new versions that hyperref.sty has set up.  Then we need to put the |\@begofarticlehook| afterwards, so that the first page label is using the new definitions.
+% Uniquify all cross-references by prepending the article name.  This
+% now has to go into |\AtBeginDocument| so it is working on the new
+% versions that hyperref.sty has set up.  Then we need to put the
+% |\@begofarticlehook| afterwards, so that the first page label is using
+% the new definitions.  If amsmath is loaded, then we also need to patch
+% the special label command that they use. \changes{4.0}{2019/11/18}{Fix labels for amsmath display equations, in case that package has been loaded.}
 %    \begin{macrocode}
 \AtBeginDocument{
   \renewcommand{\ref}[1]{\oldref{\articlename:#1}%
@@ -2693,6 +2704,11 @@ class]
     \if@debug{\ClassInfo{rmaa}{Page reference to \articlename:#1}}\fi}
   \renewcommand{\label}[1]{\oldlabel{\articlename:#1}%
     \if@debug{\ClassInfo{rmaa}{Label for \articlename:#1}}\fi}%
+  \ifdef{\label@in@display}{%
+    \let\oldlabel@in@display=\label@in@display
+    \renewcommand{\label@in@display}[1]{\oldlabel@in@display{\articlename:#1}%
+      \if@debug{\ClassInfo{rmaa}{AMSTeX Label for \articlename:#1}}\fi}%
+  }{}
   \@begofarticlehook
 }%
 %    \end{macrocode}

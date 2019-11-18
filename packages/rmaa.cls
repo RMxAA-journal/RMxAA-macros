@@ -167,6 +167,7 @@ class]
 \RequirePackage{etoolbox}
 \RequirePackage{hyperref}
 \hypersetup{hidelinks}
+\pdfminorversion=7
 \urlstyle{same}
 \newcommand\email{\begingroup \urlstyle{rm}\Url}
 \patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
@@ -1366,6 +1367,11 @@ class]
     \if@debug{\ClassInfo{rmaa}{Page reference to \articlename:#1}}\fi}
   \renewcommand{\label}[1]{\oldlabel{\articlename:#1}%
     \if@debug{\ClassInfo{rmaa}{Label for \articlename:#1}}\fi}%
+  \ifdef{\label@in@display}{%
+    \let\oldlabel@in@display=\label@in@display
+    \renewcommand{\label@in@display}[1]{\oldlabel@in@display{\articlename:#1}%
+      \if@debug{\ClassInfo{rmaa}{AMSTeX Label for \articlename:#1}}\fi}%
+  }{}
   \@begofarticlehook
 }%
 \renewcommand{\nocite}[1]{\@bsphack

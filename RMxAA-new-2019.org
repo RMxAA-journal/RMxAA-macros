@@ -228,6 +228,15 @@ CLOSED: [2019-11-15 Fri 10:46]
 ** Beta testing by Héctor
 *** Mail from Héctor [2019-11-16 Sat]
 : Hola Will, hice la compilación de este artículo y me marco errores en varias referencias, te lo envío. Otra cosa, quise hacer lo del ADS con el ejemplo que enviaste, pero no tuve exito, el makeads.sh que use, no pude generarlo.
+*** Checking compilation of the problem files
++ Work space [[file:~/tmp/rmaa-hector-test/]]
++ Use RMAA distro [[file:~/Dropbox/RMAA/rmaa4.0pre.zip]]
++ First problem is interaction with amsmath, which somehow undoes the changes I make to the \ref commands inside equations
+  + AMSmath uses a new command ~\label@in@display~, which it ~\let~'s ~\label~ to inside display environments
+  + So the simplest solution would be to just patch that as well
++ Some of the warnings can be eliminated by setting
+  : \pdfminorversion=7
+  which makes pdftex write PDF 1.7 - hopefully, this won't cause incompatibilities.
 
 ** Plan of action
 
