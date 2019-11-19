@@ -13,7 +13,7 @@ FIGFILES=example-fig.eps example-badfig.eps example-fig.pdf example-badfig.pdf \
   ORCIDiD_iconvector.eps ORCIDiD_iconvector.pdf
 #SAMPFILES=rmtest.tex rmprocsamp.tex rmpostsamp.tex rmplatesamp.tex 
 #PSFILES=rmprocsamp_fig1.ps rmprocsamp_fig2.ps rmprocsamp_fig3.ps rmplatesamp_fig.ps
-MISCFILES=README GPL 
+MISCFILES=README LICENSE 
 
 EDITORSTYFILES=rmaa.ist adshtml.sty
 EDITORSAMPFILES=rmbooksamp.tex rmbooksamp_HTOC.tex rmsummsamp.tex rm-minimal-test.tex $(SAMPFILES) $(SCSAMPFILES)
@@ -32,7 +32,7 @@ HTMLFILES=index.html individ.html bugs.html README .htaccess
 FILES=$(STYFILES) authorguide.pdf $(SAMPFILES) $(FIGFILES) $(MISCFILES)
 
 # new distro specifically for the Conference Series
-SCFILES=$(STYFILES) rmsc-authorguide.pdf $(SCSAMPFILES) $(FIGFILES) README.rmsc GPL
+SCFILES=$(STYFILES) rmsc-authorguide.pdf $(SCSAMPFILES) $(FIGFILES) README.rmsc LICENSE
 
 # files to go in editor tarball
 EDFILES=$(FILES) $(EDITORSTYFILES) rmsc-authorguide.pdf $(EDITORSAMPFILES) $(EDITORPSFILES) $(EDITORPDFFILES) $(EDITORUTILFILES) $(EDITORDOCFILES)
