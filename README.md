@@ -17,6 +17,9 @@ This repository will mainly be of interest to those wishing to contribute to *de
 ## Recent changes and plans for the future ##
 
   * The next release of the macros will be 4.0, which is currently in beta testing
-  * This adds support for DOI and ORCID iD links. It also probably breaks compatibility with very old (last century) versions of LaTeX. 
-  * Further details are [here](RMxAA-new-2019.org)
+      * This adds support for DOI and ORCID iD links. It also probably breaks compatibility with very old (last century) versions of LaTeX. 
+      * [Remaining issues for version 4.0](https://github.com/will-henney/RMxAA/milestone/1)
+      * Further details are [here](RMxAA-new-2019.org)
+  * More far-reaching changes are planned for the future
+      * Planned features on [GitHub issues](https://github.com/will-henney/RMxAA/milestone/2)
 
