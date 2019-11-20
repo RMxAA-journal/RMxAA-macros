@@ -3,7 +3,7 @@
 
 
 DOCFILES=rmaa.pdf
-MACRO_LTX_FILES=rmaa.cls rmaacite.sty adshtml.sty
+MACRO_LTX_FILES=rmxaa.cls rmxac.cls rmaacite.sty adshtml.sty
 SHELLSCRIPTS=makeads.sh
 MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
 MAKEFILE=Makefile

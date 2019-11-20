@@ -8,6 +8,7 @@
 *.idx
 *.ilg
 *.ind
+*.out
 # Files made by compilation in the source folder
 /source/sample.latex2html-init
 /source/ADS.tex
@@ -23,4 +24,5 @@
 /source/rmxac.cls
 # Files made by Emacs editor
 /source/auto
+/packages/auto
 *~

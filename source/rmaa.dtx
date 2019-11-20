@@ -1,8 +1,49 @@
-% \def\fileversion{4.0} \def\filedate{2019/11/12}
+% \iffalse meta-comment
+%
+% Copyright (c) 1999-2019 Instituto de Astronomia, UNAM, Mexico
+%  
+% Permission is hereby granted, free of charge, to any person
+% obtaining a copy of this software and associated documentation files
+% (the "Software"), to deal in the Software without restriction,
+% including without limitation the rights to use, copy, modify, merge,
+% publish, distribute, sublicense, and/or sell copies of the Software,
+% and to permit persons to whom the Software is furnished to do so,
+% subject to the following conditions:
+%  
+% The above copyright notice and this permission notice shall be
+% included in all copies or substantial portions of the Software.
+%  
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+% EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+% MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+% NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+% BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+% ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+% CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+% SOFTWARE.
+%
+% The current maintainer of this work is William Henney
+%
+% \fi
+% \iffalse
+%<driver>\ProvidesFile{rmaa.dtx}
+%<j-class|p-class>\newcommand{\rmaa@version}{4.0pre}\newcommand{\rmaa@date}{2019/11/19}
+%<j-class|p-class>\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+%<*j-class>
+\ProvidesClass{rmxaa}[\rmaa@date v\rmaa@version RMxAA journal class]
+%</j-class>
+%<*p-class>
+\ProvidesClass{rmxac}[\rmaa@date v\rmaa@version RMxAC proceedings class]
+%</p-class>
+% \fi
+%
 % \MakeShortVerb{\|}
-% \title{A \LaTeX{} document class for the Revista Mexicana de
-% Astronom\'\i a y Astrof\'\i sica\thanks{This file has version
-% \fileversion{} last revised \filedate{}.}}
+%
+% \title{A pair of \LaTeX{} document classes for the main journal and
+% conference proceedings of the Revista Mexicana de Astronom\'\i a y
+% Astrof\'\i sica\thanks{This file has version \fileversion{} last
+% revised \filedate{}.}}
+%
 % \author{William J. Henney\thanks{w.henney@irya.unam.mx}}
 % \date{\filedate}
 % \maketitle
@@ -40,14 +81,11 @@
 % 
 % \changes{3.24}{2007/09/14}{Added user access to the macro version
 % and date via \cs{rmVersion} and \cs{rmDate}}
-% 
+% \changes{4.0}{2019/11/19}{Update needed latex format date to be the same as hyperref.}
 %    \begin{macrocode}
-%<*package>
-\newcommand{\rmaa@version}{3.26}
-\newcommand{\rmaa@date}{2011/08/15}
+%<*j-class|p-class>
 \newcommand\rmVersion{\rmaa@version}
 \newcommand\rmDate{\rmaa@date}
-\NeedsTeXFormat{LaTeX2e}[1995/06/01]
 %    \end{macrocode}
 % \changes{4.0}{2019/11/02}{Change abstract to appear before
 % resumen. Change RevMexAA to RMxAA for consistency with ADS.}
@@ -110,10 +148,6 @@
 %   think} \changes{0.1}{1999/05/26}{ Just about working - still
 %   missing Fig/Tab/Refs} \changes{0.0}{1999/05/21}{ So bored today,
 %   decided to rewrite RMAA LaTeX macros from scratch}
-%    \begin{macrocode}
-\ProvidesClass{rmaa}[\rmaa@date\space v\rmaa@version\space RMxAA article
-class]
-%    \end{macrocode}
 % \subsection{Option Handling}
 % \label{sec:options}
 % Declarations that are needed in options
@@ -168,6 +202,13 @@ class]
 \newif\if@boldkeywords
 \@boldkeywordsfalse
 %    \end{macrocode}
+% Packages needed during the option processing.  We use etoolbox for
+% better conditional structures. \changes{4.0}{2019/11/19}{Move
+% etoolbox loading earlier in the file, so it is available during
+% option processing.}
+%    \begin{macrocode}
+\RequirePackage{etoolbox}
+%    \end{macrocode}
 % The option handling---mainly setting various booleans.
 % \changes{2.2beta11}{2001/11/26}{Made twocol and
 % newstyle the default for proceedings.}
@@ -176,7 +217,9 @@ class]
 % suppressed for proceedings style.}
 % \changes{3.24}{2007/09/14}{New option \texttt{boldkeywords} that
 % does the keywords in the old ugly way. Now off by default.}
+% The following options are only defined for main journal articles. 
 %    \begin{macrocode}
+%<*j-class>
 \DeclareOption{manuscript}{\typeout{Manuscript for referee} 
   \@manuscripttrue\@journalfalse\@rmtwocolfalse
   \PassOptionsToClass{10pt}{article}}
@@ -190,14 +233,23 @@ class]
 \DeclareOption{guide}{\typeout{User guide option}%
   \@guidetrue\@journalfalse\@rmtwocoltrue\@manuscriptfalse
   \PassOptionsToClass{10pt}{article}}
-\DeclareOption{preprint}{\typeout{Preprint option}%
-  \@preprinttrue\@manuscriptfalse\PassOptionsToClass{10pt}{article}}
-\DeclareOption{proof}{\typeout{Author proof option}%
-  \@prooftrue\@manuscriptfalse}
+%</j-class>
+%    \end{macrocode}
+% Keep a proceedings option for now, but only for rmxac.cls
+%    \begin{macrocode}
+%<*p-class>
 \DeclareOption{proceedings}{\typeout{Proceedings option}%
   \@proceedingstrue\@journalfalse\@rmtwocoltrue\@newstyletrue
   \@suppressfulladdressestrue
   \@printdatesfalse\@manuscriptfalse\PassOptionsToClass{10pt}{article}} 
+%</p-class>
+%    \end{macrocode}
+% Whereas the remaining options apply to both main journal and proceedings.
+%    \begin{macrocode}
+\DeclareOption{preprint}{\typeout{Preprint option}%
+  \@preprinttrue\@manuscriptfalse\PassOptionsToClass{10pt}{article}}
+\DeclareOption{proof}{\typeout{Author proof option}%
+  \@prooftrue\@manuscriptfalse}
 \DeclareOption{printdates}{\typeout{Force printing of received/accepted dates}%
   \@printdatestrue} 
 \DeclareOption{book}{\typeout{Whole issue option}%
@@ -218,7 +270,6 @@ class]
 \DeclareOption{twocolumn}{\@rmtwocoltrue}
 \DeclareOption{onecolumn}{\@rmtwocolfalse}
 \DeclareOption{twoside}{\PassOptionsToClass{\CurrentOption}{article}}
-\DeclareOption{boldkeywords}{\@boldkeywordstrue}
 %    \end{macrocode}
 % Bold, upper-case keywords used to be the default. Now they must be
 % turned on explicitly with the \texttt{boldkeywords} option. 
@@ -232,17 +283,23 @@ class]
 % Default options are to be two-sided and based on the standard
 % \LaTeX{} \texttt{article} class,
 % unless we are processing the entire book, in which case we base
-% ourselves on the standard \texttt{book} class. Default is to use
-% manuscript option unless otherwise specified. 
+% ourselves on the standard \texttt{book} class. No longer default to 
+% manuscript option. 
 %    \begin{macrocode}
-\ExecuteOptions{twoside,manuscript} \ProcessOptions\relax
-\if@book
-\if@rmtwocol\LoadClass[twocolumn]{book}\else\LoadClass{book}\fi
-\newcommand{\abstract}{\relax}
-\newcommand{\@maketitle}{\relax}
-\else
-\if@rmtwocol\LoadClass[twocolumn]{article}\else\LoadClass{article}\fi
-\fi
+%<j-class>\ExecuteOptions{twoside,journal}
+%<p-class>\ExecuteOptions{twoside,proceedings}
+\ProcessOptions\relax
+\ifbool{@book}{%
+  \ifbool{@rmtwocol}{%
+    \LoadClass[twocolumn]{book}
+  }{\LoadClass{book}}
+  \newcommand{\abstract}{\relax}
+  \newcommand{\@maketitle}{\relax}
+}{%
+  \ifbool{@rmtwocol}{
+    \LoadClass[twocolumn]{article}
+  }{\LoadClass{article}}
+}
 %    \end{macrocode}
 % Attempt to use natbib for citations 02 Jan 2003. 
 % \changes{3.05}{2003/01/02}{If the natbib option is used, then set
@@ -318,7 +375,6 @@ class]
 % graphics.  This is not strictly related to hyperref, but we put it
 % here anyway.
 %    \begin{macrocode}
-\RequirePackage{etoolbox}
 \RequirePackage{hyperref}
 \hypersetup{hidelinks}
 \pdfminorversion=7
@@ -517,11 +573,7 @@ class]
 % First use of this new infrastructure: set interparagraph space to be
 % zero but with a small amount of stretchiness.
 %    \begin{macrocode}
-%   \ifthenelse{\boolean{@manuscript}}{%
-%     \@set@scalable@length{parskip}{0.5\baselineskip}{0.3\p@}{0.1\p@}
-%   }{
-    \@set@scalable@length{parskip}{0\p@}{0.3\p@}{0\p@}
-%   }
+\@set@scalable@length{parskip}{0\p@}{0.3\p@}{0\p@}
 %    \end{macrocode}
 % \end{macro}
 % 
@@ -608,7 +660,7 @@ class]
 % from onecolumn to twocolumn). 
 %    \begin{macrocode}
 \newcommand{\@package@default@lengths}{%
-  \ifthenelse{\boolean{@rmtwocol}}{%
+  \ifbool{@rmtwocol}{%
     %% twocolumn mode
     \abovesectionskip@set@SCALE{0.5}
     \belowsectionskip@set@SCALE{0.5}
@@ -619,7 +671,7 @@ class]
     \intextsep@set@SCALE{0.5}
     \dblfloatsep@set@SCALE{0.5}
     \dbltextfloatsep@set@SCALE{0.5}
-    }{%
+  }{%
     %% onecolumn mode
     \abovesectionskip@set@SCALE{1}
     \belowsectionskip@set@SCALE{1}
@@ -630,8 +682,8 @@ class]
     \intextsep@set@SCALE{1}
     \dblfloatsep@set@SCALE{1}
     \dbltextfloatsep@set@SCALE{1}
-    }%
-  }
+  }%
+}
 \@package@default@lengths
 %    \end{macrocode}
 % \end{macro}
@@ -818,7 +870,7 @@ class]
 % The style of the keywords depends on whether we are using the
 % \texttt{newstyle} option or not. If we are, then they are small. 
 %    \begin{macrocode}
-\ifthenelse{\boolean{@newstyle}}{
+\ifbool{@newstyle}{
   \newcommand{\rmaa@KeywordStyle}[1]{%
     {\small%
       \if@boldkeywords 
@@ -826,15 +878,16 @@ class]
       \else
       \raggedright #1
       \fi
-    }}
+    }}%
   \newcommand{\rmaa@KeywordHeaderStyle}[1]{%
-    {\small\itshape#1}}}
-{
+    {\small\itshape#1}}%
+}{%
   \newcommand{\rmaa@KeywordStyle}[1]{%
     {\normalsize%
       \if@boldkeywords\bfseries\fi\raggedright #1}}
   \newcommand{\rmaa@KeywordHeaderStyle}[1]{%
-    {\normalsize\itshape#1}}}
+    {\normalsize\itshape#1}}%
+}%
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -1059,7 +1112,7 @@ class]
 \newcounter{kwdcounter}\setcounter{kwdcounter}{0}
 \newcommand{\addkeyword}[1]{%
   \addtocounter{kwdcounter}{1}
-  \ifthenelse{\thekwdcounter > 6}{
+  \ifnumgreater{\thekwdcounter}{6}{
     \ClassError{rmaa}{Too many keywords. A maximum of 6 keywords is allowed.}{}
   }{}
   \if@firstkwd%
@@ -1194,26 +1247,25 @@ class]
 %    \begin{macrocode}
 \newcommand{\@outputaddressesifnecessary}{%
   \ClassInfo{rmaa}{Calling @outputaddressesifnecessary}
-  \ifthenelse{\boolean{@needaddresses}}{%
+  \ifbool{@needaddresses}{%
     %% If in one column style, or in the first column of a two column
     %% style then we can try to put it on this page 
-    \ifthenelse{\boolean{@firstcolumn} \or \not\boolean{@rmtwocol}}{%
+    \ifboolexpr{bool {@firstcolumn} or not bool {@rmtwocol}}{%
       \@outputaddresses}{%
       %% otherwise give warning it will be on a separate page
       \ClassWarning{rmaa}{Full addresses will go on a separate
         page (please see User Guide for how to remedy this)}}%
     %% If we haven't managed yet, put it on its own page
-    \ifthenelse{\boolean{@needaddresses}}{%
+    \ifbool{@needaddresses}{%
       \if@debug{\ClassWarning{rmaa}{In this silly bit!}}\fi
       \clearpage\vfill\@outputaddresses}{}%
     }{
     %% If we don't need them, we still might need to do the eoa hook 
-    \ifthenelse{\boolean{@suppressfulladdresses}}{%
+    \ifbool{@suppressfulladdresses}{%
       \if@debug{\ClassWarning{rmaa}{XXX}}\fi
-%%      \if@book\else\@endofarticlehook\null\fi
-      }{}
-    }%
-  }  
+    }{}%
+  }%
+}
 %    \end{macrocode}
 % \end{macro}
 
@@ -1845,8 +1897,8 @@ class]
   \def\Email##1{<EMAIL>##1</EMAIL>}
   \def\Affil##1{##1}
   \stepcounter{author}
-  \ifthenelse{\value{author} > 26}{\stepcounter{AUTHOR}\stepcounter{author}}{}
-  \ifthenelse{\equal{\ADS@affiliations}{\@rmaaEmpty}}{%
+  \ifnumgreater{\value{author}}{26}{\stepcounter{AUTHOR}\stepcounter{author}}{}
+  \ifdefempty{\ADS@affiliations}{%
     \xdef\ADS@affiliations{\Alph{AUTHOR}\Alph{author}(#2)}
   }{%
     \xdef\ADS@affiliations{\ADS@affiliations, \Alph{AUTHOR}\Alph{author}(#2)}
@@ -1874,7 +1926,7 @@ class]
   \ADS@write{\string\begin{ADSarticle}}
   \ADS@WRITE{\string\ADSfield{R}{\ADS@BibCode}}
   \ADS@write{\string\ADSfield{A}{\ADS@authors}}
-  \ifthenelse{\equal{\ADS@affiliations}{\@rmaaEmpty}}{%
+  \ifdefempty{\ADS@affiliations}{%
     {\ADS@sanitize\ADS@write{\string\ADSfield{F}{AA(\ADS@affil)}}}
   }{%
     {\ADS@sanitize\ADS@write{\string\ADSfield{F}{\ADS@affiliations}}}
@@ -3599,7 +3651,7 @@ class]
   \begin{list}{}{\setlength{\leftmargin}{0.05\columnwidth}} 
   \item[]}{\end{list}}
 \fi
-%</package>
+%</j-class|p-class>
 %    \end{macrocode}
 
 % \section{User commands for astronomical articles}
@@ -3609,7 +3661,7 @@ class]
 % 
 % Definitions of the journal name in different incarnations.  
 %    \begin{macrocode}
-%<*package|adshtml-style>
+%<*j-class|p-class|adshtml-style>
 \newcommand{\RMAA}{RMxAA}
 \newcommand{\RMAAlong}{Revista Mexicana de Astronom\'{\i}a y Astrof\'{\i}sica}
 \newcommand{\RMAASC}{RMxAC}
@@ -3820,7 +3872,7 @@ class]
 \renewcommand{\LARGE}{\renewcommand{\smaller}{\Large}\@LARGE}  
 \renewcommand{\huge}{\renewcommand{\smaller}{\LARGE}\@huge}  
 \renewcommand{\Huge}{\renewcommand{\smaller}{\huge}\@Huge}  
-%</package|adshtml-style>
+%</j-class|p-class|adshtml-style>
 %    \end{macrocode}
 
 
@@ -3844,7 +3896,7 @@ class]
 %    \begin{macrocode}
 %<*makefile>
 DOCFILES=rmaa.pdf
-MACRO_LTX_FILES=rmaa.cls rmaacite.sty adshtml.sty
+MACRO_LTX_FILES=rmxaa.cls rmxac.cls rmaacite.sty adshtml.sty
 SHELLSCRIPTS=makeads.sh
 MACRO_OTHER_FILES=adshtml.perl sample.latex2html-init
 MAKEFILE=Makefile
@@ -3987,7 +4039,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 % Make the \LaTeX{} macro files (class and styles)
 %    \begin{macrocode}
 \generate{% 
-  \file{rmaa.cls}{\from{rmaa.dtx}{package}}
+  \file{rmxaa.cls}{\from{rmaa.dtx}{j-class}}
+  \file{rmxac.cls}{\from{rmaa.dtx}{p-class}}
   \file{rmaa.ins}{\from{rmaa.dtx}{ins}}
   \file{rmaacite.sty}{\from{rmaa.dtx}{rmaacite}}
   \file{adshtml.sty}{\from{rmaa.dtx}{adshtml-style}}
