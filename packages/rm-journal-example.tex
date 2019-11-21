@@ -12,7 +12,7 @@
 \usepackage{psfrag,color}
 
 % Allow accented characters to be entered directly
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 %%%
 %%% Define any personal macros here
 %%% 
@@ -27,12 +27,6 @@
 
 % Needed for landscape tables
 \usepackage{pdflscape}
-
-% \newcommand\orcidicon{\includegraphics[height=1.8ex]{ORCIDiD_iconvector}}
-% \newcommand\orcidiconbig{\includegraphics[height=2ex]{ORCIDiD_iconvector}}
-% %\newcommand\href[2]{#2}
-% \newcommand\ORCIDiD[1]{\href{https://orcid.org/#1}{\,\orcidicon}}
-% \newcommand\ORCIDiDfull[1]{\href{https://orcid.org/#1}{\orcidiconbig}\,\url{https://orcid.org/#1}}
 
 
 %%%
@@ -134,12 +128,12 @@
 
 % Spanish abstract - leave blank and it will be translated by the
 % editors. 
-\resumen{Este documento (\texttt{rm-journal-example.tex}---鷏tima
-  actualizaci髇 12 de noviembre del 2019) proporciona un tutorial
-  breve en el uso de la versi髇 3 de los macros de \LaTeX{}
-  \texttt{rmaa} y adem醩 puede servir c髆o modelo para la preparaci髇
-  de los art韈ulos que se publicar醤 en la revista principal. Se puede
-  encontrar m醩 detalles en la gu韆 del usuario
+\resumen{Este documento (\texttt{rm-journal-example.tex}---煤ltima
+  actualizaci贸n 12 de noviembre del 2019) proporciona un tutorial
+  breve en el uso de la versi贸n 3 de los macros de \LaTeX{}
+  \texttt{rmaa} y adem谩s puede servir c贸mo modelo para la preparaci贸n
+  de los art铆culos que se publicar谩n en la revista principal. Se puede
+  encontrar m谩s detalles en la gu铆a del usuario
   (\texttt{authorguide.pdf}). Se supone que usted es ya familiar con
   los rudimentos del \LaTeX{}. En el caso contrario, se dan
   algunas referencias convenientes en el \texttt{authorguide.pdf}.}
@@ -680,10 +674,11 @@ errors, it is preferable to use commands from the \texttt{natbib}
 package to automate the references in the text, as in the following
 example:
 \begin{Example}
-  \dots it has been found \citep{2005astro.ph.11035A,
-    1991ApJ...374..580B, 2005MNRAS.358..291D} that \dots following
-  \citet{1996ApJ...469..171G} \dots is not true (despite what
-  \citealp{1939ApJ....89..526S} maintains) \dots
+  \dots it has been found \citep{Arthur:2006a, Lazarian:2019a,
+    Alarie:2019a} that \dots following \citet{Baldwin:1991a} \dots is
+  not true (despite what \citealp{Stromgren:1939a} maintains) \dots
+  which confirms the claim by \citeauthor{Chau-Giang:2019a} in a
+  recent preprint.
 \end{Example}
 See \texttt{authorguide.pdf} for more examples and explanation.  For
 the reference keys, one can use the ADS bibliographic code, which is
@@ -709,132 +704,7 @@ command, which simply adds a bit of vertical space.
 \end{appendix}
 
 
-
-\begin{thebibliography}
-\bibitem[Arthur \& Hoare(2006)]{2005astro.ph.11035A} Arthur, S.~J., \&
-Hoare, M.~G.\ 2006, \apj, in press (astro-ph/0511035)
-\bibitem[Baldwin et al.(1991)]{1991ApJ...374..580B} Baldwin, J.~A., 
-Ferland, G.~J., Martin, P.~G., Corbin, M.~R., Cota, S.~A., Peterson, B.~M., 
-\& Slettebak, A.\ 1991, \apj, 374, 580 
-\bibitem[Bedijn \& Tenorio-Tagle(1981)]{1981A&A....98...85B} Bedijn, P.~J., 
-\& Tenorio-Tagle, G.\ 1981, \aap, 98, 85 
-\bibitem[Bodenheimer et al.(1979)]{1979ApJ...233...85B} Bodenheimer, P., 
-Tenorio-Tagle, G., \& Yorke, H.~W.\ 1979, \apj, 233, 85 
-\bibitem[Carlqvist et al.(2003)]{2003A&A...403..399C} Carlqvist, P., Gahm, 
-G.~F., \& Kristen, H.\ 2003, \aap, 403, 399 
-\bibitem[Dale et al.(2005)]{2005MNRAS.358..291D} Dale, J.~E., Bonnell, 
-I.~A., Clarke, C.~J., \& Bate, M.~R.\ 2005, \mnras, 358, 291 
-\bibitem[Elmegreen \& Scalo(2004)]{2004ARA&A..42..211E} Elmegreen,
-B.~G., \& Scalo, J.\ 2004, \araa, 42, 211 
-\bibitem[Eulderink \& Mellema(1995)]{1995A&AS..110..587E} Eulderink, F., \& 
-Mellema, G.\ 1995, \aaps, 110, 587 
-\bibitem[Ferland(2000)]{2000RMxAC...9..153F} Ferland, G.~J.\ 2000, Revista 
-Mexicana de Astronom\'\i{}a y Astrof\'\i{}sica Conference Series, 9, 153 
-\bibitem[Franco et al.(1989)]{1989RMxAA..18...65F} Franco, J., 
-Tenorio-Tagle, G., \& Bodenheimer, P.\ 1989, Revista Mexicana de
-Astronom\'\i{}a y Astrof\'\i{}sica, 18, 65 
-\bibitem[Franco et al.(1990)]{1990ApJ...349..126F} Franco, J., 
-Tenorio-Tagle, G., \& Bodenheimer, P.\ 1990, \apj, 349, 126 
-\bibitem[Garc\'\i a-Segura \& Franco(1996)]{1996ApJ...469..171G}
-  Garc\'\i a-Segura, G., \& Franco, J.\ 1996, \apj, 469, 171
-\bibitem[Giuliani(1979)]{1979ApJ...233..280G} Giuliani, J.~L.\ 1979,
-\apj, 233, 280 
-\bibitem[Henney(2006)]{2006-FS-Will} Henney, W.~J.\ 2006, In:
-  \textit{Diffuse Matter from Star Forming Regions to Active Galaxies:
-    A Volume Honouring John Dyson.} Eds.\ T.~W. Harquist,
-  J.~M. Pittard, \& S.~A.~E.~G. Falle. (Dordrecht: Springer), in press
-  (astro-ph/0602626)
- \bibitem[Henney et al.(2005a)]{2005ApJ...627..813H} Henney, W.~J.,
-Arthur, S.~J., \& Garc{\'{\i}}a-D{\'{\i}}az, M.~T.\ 2005, \apj, 627, 813 
-\bibitem[Henney et al.(2005b)]{2005ApJ...621..328H} Henney, W.~J., Arthur, 
-S.~J., Williams, R.~J.~R., \& Ferland, G.~J.\ 2005, \apj, 621, 328 
-\bibitem[Hester et al.(1996)]{1996AJ....111.2349H} Hester, J.~J., et
-al.\ 1996, \aj, 111, 2349 
-\bibitem[Iliev et al.(2006a)]{reion_sim} Iliev, I. T., Mellema, G.,
-  Pen, U.-L., Merz, H., Shapiro, P. R., \& Alvarez, M.~A.  2006a,
-  MNRAS, submitted (astro-ph/0512187)
-\bibitem[Iliev et al.(2006b)]{2006astro.ph..3199I} Iliev, I.~T., et
-  al.\ 2006b, \mnras, submitted (astro-ph/0603199)
-\bibitem[Iliev et al.(2006c)]{2006CodeComparison} Iliev, I.~T., et
-  al.\ 2006c, in preparation (Cosmological Radiative Transfer Code Comparison  
-  \url{http://www.mpa-garching.mpg.de/tsu3/})
-\bibitem[Kahn(1954)]{1954BAN....12..187K} Kahn, F.~D.\ 1954, \bain, 12, 187 
-\bibitem[Klessen et al.(2000)]{2000ApJ...535..887K} Klessen, R.~S.,
-  Heitsch, F., \& Mac Low, M.-M.\ 2000, \apj, 535, 887
-\bibitem[Lada \& Lada(2003)]{2003ARA&A..41...57L} Lada, C.~J., \&
-Lada, E.~A.\ 2003, \araa, 41, 57 
-\bibitem[Larson(1981)]{1981MNRAS.194..809L} Larson, R.~B.\ 1981,
-\mnras, 194, 809 
-\bibitem[Li et al.(2004)]{2004ApJ...610..339L} Li, Y., Mac Low, M.-M.,
-\& Abel, T.\ 2004, \apj, 610, 339 
-\bibitem[Mellema et al.(2006)]{2005astro.ph..8416M} Mellema, G.,
-  Iliev, I.~T., Alvarez, M.~A., \& Shapiro, P.~R.\ 2006, New
-  Astronomy, 11, 374 (astro-ph/0508416)
-\bibitem[Moffat et al.(2002)]{2002ApJ...573..191M} Moffat, A.~F.~J., et 
-al.\ 2002, \apj, 573, 191 
-\bibitem[O'Dell(2001)]{2001ARA&A..39...99O} O'Dell, C.~R.\ 2001, \araa, 39, 
-99 
-\bibitem[O'Dell et al.(2003)]{2003AJ....125.2590O} O'Dell, C.~R., Peimbert, 
-M., \& Peimbert, A.\ 2003, \aj, 125, 2590 
- \bibitem[O'Dell \& Yusef-Zadeh(2000)]{2000AJ....120..382O} O'Dell, C.~R., 
-\& Yusef-Zadeh, F.\ 2000, \aj, 120, 382 
-\bibitem[Panagia(1973)]{1973AJ.....78..929P} Panagia, N.\ 1973, \aj,
-78, 929 
-\bibitem[Pottasch(1956)]{1956BAN....13...77P} Pottasch, S.~R.\ 1956, \bain, 
-13, 77 
-\bibitem[Raga et al.(1999)]{1999RMxAA..35..123R} Raga, A.~C., Mellema, G., 
-Arthur, S.~J., Binette, L., Ferruit, P., \& Steffen, W.\ 1999, Revista 
-Mexicana de Astronom\'\i{}a y Astrof\'\i{}sica, 35, 123
-\bibitem[Redman et al.(1998)]{1998A&A...331.1099R} Redman, M.~P., Williams, 
-R.~J.~R., Dyson, J.~E., Hartquist, T.~W., \& Fernandez, B.~R.\ 1998, \aap, 
-331, 1099 
-\bibitem[Rho et al.(2005)]{2005sfet.confE..15R} Rho, J., Reach, W.~T., 
-Lefloch, B., \& Fazio, G.\ 2005, In: Star Formation in the Era of Three Great 
-Observatories, see
-\url{http://www.spitzer.caltech.edu/Media/releases/ssc2005-02/ssc2005-02a.shtml}
-\bibitem[Ryutov et al.(2005)]{2005Ap&SS.298..183R} Ryutov, D.~D., Kane, 
-J.~O., Mizuta, A., Pound, M.~W., \& Remington, B.~A.\ 2005, \apss, 298, 183 
-\bibitem[Scowen et al.(1998)]{1998AJ....116..163S} Scowen, P.~A., et al.\ 
-1998, \aj, 116, 163 
-\bibitem[Shu et al.(2002)]{2002ApJ...580..969S} Shu, F.~H., Lizano, S., 
-Galli, D., Cant{\'o}, J., \& Laughlin, G.\ 2002, \apj, 580, 969 
-\bibitem[Spitzer(1968)]{1968dms..book.....S} Spitzer, L.\ 1968,
-  Diffuse Matter in Space, New York: Interscience
-\adjustfinalcols
-\bibitem[Str{\"o}mgren(1939)]{1939ApJ....89..526S} Str{\"o}mgren, B.\ 1939, 
-\apj, 89, 526 
-\bibitem[Sutherland et al.(2003)]{2003ApJS..147..187S} Sutherland,
-R.~S., Bisset, D.~K., \& Bicknell, G.~V.\ 2003, \apjs, 147, 187 
-\bibitem[Tenorio-Tagle(1979)]{1979A&A....71...59T} Tenorio-Tagle, G.\ 1979, 
-\aap, 71, 59 
-\bibitem[Tenorio-Tagle et al.(2006)]{2006astro.ph..1631T}
-  Tenorio-Tagle, G., Mu\~noz-Tu\~n\'on, C., P\'erez, E., Silich, S., \&
-  Telles, E.\ 2006, \apj, in press (astro-ph/0601631)
-\bibitem[V\'azquez-Semadeni et al.(2000)]{2000prpl.conf....3V} 
-V\'azquez-Semadeni, E., Ostriker, E.~C., Passot, T., Gammie, C.~F., \&
-Stone, J.~M.\ 2000, Protostars and Planets IV, 3 
-\bibitem[V{\'a}zquez-Semadeni et al.(2003)]{2003ApJ...585L.131V} 
-V{\'a}zquez-Semadeni, E., Ballesteros-Paredes, J., \& Klessen, R.~S.\
-2003, \apjl, 585, L131 
-\bibitem[V{\'a}zquez-Semadeni et al.(2005)]{2005ApJ...630L..49V} 
-V{\'a}zquez-Semadeni, E., Kim, J., \& Ballesteros-Paredes, J.\ 2005,
-\apjl, 630, L49 
-\bibitem[V{\'a}zquez-Semadeni et al.(2005)]{2005ApJ...618..344V} 
-V{\'a}zquez-Semadeni, E., Kim, J., Shadmehri, M., \&
-Ballesteros-Paredes, J.\ 2005, \apj, 618, 344 
-\bibitem[Williams(1999)]{1999MNRAS.310..789W} Williams, R.~J.~R.\
-1999, \mnras, 310, 789 
-\bibitem[Williams(2006)]{2006-FS-Robin} Williams, R.~J.~R.\ 2006, In:
-  \textit{Diffuse Matter from Star Forming Regions to Active
-    Galaxies: A Volume Honouring John Dyson.} Eds.\ T.~W. Harquist,
-  J.~M. Pittard, \& S.~A.~E.~G. Falle. (Dordrecht: Springer), in press
-\bibitem[Williams \& Dyson(2001)]{2001MNRAS.325..293W} Williams, R.~J.~R., 
-\& Dyson, J.~E.\ 2001, \mnras, 325, 293 
-\bibitem[Williams et al.(2000)]{2000MNRAS.314..315W} Williams, R.~J.~R., 
-Dyson, J.~E., \& Hartquist, T.~W.\ 2000, \mnras, 314, 315 
-\bibitem[Wood \& Churchwell(1989)]{1989ApJS...69..831W} Wood, D.~O.~S., \& 
-Churchwell, E.\ 1989, \apjs, 69, 831 
-\end{thebibliography}
+\bibliography{rm-references-example}
 
 \end{document}
 

@@ -52,52 +52,69 @@
 \let\acknowledgements=\acknowledgments                  % second spelling
 \let\jnl@style=\rm
 \def\ref@jnl#1{{\jnl@style#1}}
-\DeclareRobustCommand\aj{\ref@jnl{AJ}}
-\DeclareRobustCommand\araa{\ref@jnl{ARA\&A}}
-\DeclareRobustCommand\apj{\ref@jnl{ApJ}}
-\DeclareRobustCommand\apjl{\ref@jnl{ApJ}}
-\DeclareRobustCommand\apjs{\ref@jnl{ApJS}}
-\DeclareRobustCommand\ao{\ref@jnl{Appl.~Opt.}}
-\DeclareRobustCommand\apss{\ref@jnl{Ap\&SS}}
-\DeclareRobustCommand\aap{\ref@jnl{A\&A}}
-\DeclareRobustCommand\aapr{\ref@jnl{A\&A~Rev.}}
-\DeclareRobustCommand\aaps{\ref@jnl{A\&AS}}
-\DeclareRobustCommand\azh{\ref@jnl{AZh}}
-\DeclareRobustCommand\baas{\ref@jnl{BAAS}}
-\DeclareRobustCommand\jrasc{\ref@jnl{JRASC}}
-\DeclareRobustCommand\memras{\ref@jnl{MmRAS}}
-\DeclareRobustCommand\mnras{\ref@jnl{MNRAS}}
-\DeclareRobustCommand\pra{\ref@jnl{Phys.~Rev.~A}}
-\DeclareRobustCommand\prb{\ref@jnl{Phys.~Rev.~B}}
-\DeclareRobustCommand\prc{\ref@jnl{Phys.~Rev.~C}}
-\DeclareRobustCommand\prd{\ref@jnl{Phys.~Rev.~D}}
-\DeclareRobustCommand\pre{\ref@jnl{Phys.~Rev.~E}}
-\DeclareRobustCommand\prl{\ref@jnl{Phys.~Rev.~Lett.}}
-\DeclareRobustCommand\pasp{\ref@jnl{PASP}}
-\DeclareRobustCommand\pasj{\ref@jnl{PASJ}}
-\DeclareRobustCommand\qjras{\ref@jnl{QJRAS}}
-\DeclareRobustCommand\skytel{\ref@jnl{S\&T}}
-\DeclareRobustCommand\solphys{\ref@jnl{Sol.~Phys.}}
-\DeclareRobustCommand\sovast{\ref@jnl{Soviet~Ast.}}
-\DeclareRobustCommand\ssr{\ref@jnl{Space~Sci.~Rev.}}
-\DeclareRobustCommand\zap{\ref@jnl{ZAp}}
-\DeclareRobustCommand\nat{\ref@jnl{Nature}}
-\DeclareRobustCommand\iaucirc{\ref@jnl{IAU~Circ.}}
-\DeclareRobustCommand\aplett{\ref@jnl{Astrophys.~Lett.}}
-\DeclareRobustCommand\apspr{\ref@jnl{Astrophys.~Space~Phys.~Res.}}
-\DeclareRobustCommand\bain{\ref@jnl{Bull.~Astron.~Inst.~Netherlands}}
-\DeclareRobustCommand\fcp{\ref@jnl{Fund.~Cosmic~Phys.}}
-\DeclareRobustCommand\gca{\ref@jnl{Geochim.~Cosmochim.~Acta}}
-\DeclareRobustCommand\grl{\ref@jnl{Geophys.~Res.~Lett.}}
-\DeclareRobustCommand\jcp{\ref@jnl{J.~Chem.~Phys.}}
-\DeclareRobustCommand\jgr{\ref@jnl{J.~Geophys.~Res.}}
-\DeclareRobustCommand\jqsrt{\ref@jnl{J.~Quant.~Spec.~Radiat.~Transf.}}
-\DeclareRobustCommand\memsai{\ref@jnl{Mem.~Soc.~Astron.~Italiana}}
-\DeclareRobustCommand\nphysa{\ref@jnl{Nucl.~Phys.~A}}
-\DeclareRobustCommand\physrep{\ref@jnl{Phys.~Rep.}}
-\DeclareRobustCommand\physscr{\ref@jnl{Phys.~Scr}}
-\DeclareRobustCommand\planss{\ref@jnl{Planet.~Space~Sci.}}
-\DeclareRobustCommand\procspie{\ref@jnl{Proc.~SPIE}}
+\DeclareRobustCommand\aj{\ref@jnl{AJ}}%        % Astronomical Journal
+\DeclareRobustCommand\araa{\ref@jnl{ARA\&A}}%  % Annual Review of Astron and Astrophys
+\DeclareRobustCommand\apj{\ref@jnl{ApJ}}%    % Astrophysical Journal
+\DeclareRobustCommand\apjl{\ref@jnl{ApJL}}     % Astrophysical Journal, Letters
+\DeclareRobustCommand\apjs{\ref@jnl{ApJS}}%    % Astrophysical Journal, Supplement
+\DeclareRobustCommand\ao{\ref@jnl{ApOpt}}%   % Applied Optics
+\DeclareRobustCommand\apss{\ref@jnl{Ap\&SS}}%  % Astrophysics and Space Science
+\DeclareRobustCommand\aap{\ref@jnl{A\&A}}%     % Astronomy and Astrophysics
+\DeclareRobustCommand\aapr{\ref@jnl{A\&A~Rv}}%  % Astronomy and Astrophysics Reviews
+\DeclareRobustCommand\aaps{\ref@jnl{A\&AS}}%    % Astronomy and Astrophysics, Supplement
+\DeclareRobustCommand\azh{\ref@jnl{AZh}}%       % Astronomicheskii Zhurnal
+\DeclareRobustCommand\baas{\ref@jnl{BAAS}}%     % Bulletin of the AAS
+\DeclareRobustCommand\icarus{\ref@jnl{Icarus}}% % Icarus
+\DeclareRobustCommand\jaavso{\ref@jnl{JAAVSO}}  % The Journal of the American Association of Variable Star Observers
+\DeclareRobustCommand\jrasc{\ref@jnl{JRASC}}%   % Journal of the RAS of Canada
+\DeclareRobustCommand\memras{\ref@jnl{MmRAS}}%  % Memoirs of the RAS
+\DeclareRobustCommand\mnras{\ref@jnl{MNRAS}}%   % Monthly Notices of the RAS
+\DeclareRobustCommand\pra{\ref@jnl{PhRvA}}% % Physical Review A: General Physics
+\DeclareRobustCommand\prb{\ref@jnl{PhRvB}}% % Physical Review B: Solid State
+\DeclareRobustCommand\prc{\ref@jnl{PhRvC}}% % Physical Review C
+\DeclareRobustCommand\prd{\ref@jnl{PhRvD}}% % Physical Review D
+\DeclareRobustCommand\pre{\ref@jnl{PhRvE}}% % Physical Review E
+\DeclareRobustCommand\prl{\ref@jnl{PhRvL}}% % Physical Review Letters
+\DeclareRobustCommand\pasp{\ref@jnl{PASP}}%     % Publications of the ASP
+\DeclareRobustCommand\pasj{\ref@jnl{PASJ}}%     % Publications of the ASJ
+\DeclareRobustCommand\qjras{\ref@jnl{QJRAS}}%   % Quarterly Journal of the RAS
+\DeclareRobustCommand\skytel{\ref@jnl{S\&T}}%   % Sky and Telescope
+\DeclareRobustCommand\solphys{\ref@jnl{SoPh}}% % Solar Physics
+\DeclareRobustCommand\sovast{\ref@jnl{Soviet~Ast.}}% % Soviet Astronomy
+\DeclareRobustCommand\ssr{\ref@jnl{SSRv}}% % Space Science Reviews
+\DeclareRobustCommand\zap{\ref@jnl{ZA}}%       % Zeitschrift fuer Astrophysik
+\DeclareRobustCommand\nat{\ref@jnl{Nature}}%  % Nature
+\DeclareRobustCommand\iaucirc{\ref@jnl{IAUC}}% % IAU Cirulars
+\DeclareRobustCommand\aplett{\ref@jnl{Astrophys.~Lett.}}%  % Astrophysics Letters
+\DeclareRobustCommand\apspr{\ref@jnl{Astrophys.~Space~Phys.~Res.}}% % Astrophysics Space Physics Research
+\DeclareRobustCommand\bain{\ref@jnl{BAN}}% % Bulletin Astronomical Institute of the Netherlands
+\DeclareRobustCommand\fcp{\ref@jnl{FCPh}}%   % Fundamental Cosmic Physics
+\DeclareRobustCommand\gca{\ref@jnl{GeoCoA}}% % Geochimica Cosmochimica Acta
+\DeclareRobustCommand\grl{\ref@jnl{Geophys.~Res.~Lett.}}%  % Geophysics Research Letters
+\DeclareRobustCommand\jcp{\ref@jnl{JChPh}}%     % Journal of Chemical Physics
+\DeclareRobustCommand\jgr{\ref@jnl{J.~Geophys.~Res.}}%     % Journal of Geophysics Research
+\DeclareRobustCommand\jqsrt{\ref@jnl{JQSRT}}%   % Journal of Quantitiative Spectroscopy and Radiative Trasfer
+\DeclareRobustCommand\memsai{\ref@jnl{MmSAI}}% % Mem. Societa Astronomica Italiana
+\DeclareRobustCommand\nphysa{\ref@jnl{NuPhA}}%     % Nuclear Physics A
+\DeclareRobustCommand\physrep{\ref@jnl{PhR}}%       % Physics Reports
+\DeclareRobustCommand\physscr{\ref@jnl{PhyS}}%        % Physica Scripta
+\DeclareRobustCommand\planss{\ref@jnl{Planet.~Space~Sci.}}%  % Planetary Space Science
+\DeclareRobustCommand\procspie{\ref@jnl{Proc.~SPIE}}%      % Proceedings of the SPIE
+
+\DeclareRobustCommand\actaa{\ref@jnl{AcA}}%  % Acta Astronomica
+\DeclareRobustCommand\caa{\ref@jnl{ChA\&A}}%  % Chinese Astronomy and Astrophysics
+\DeclareRobustCommand\cjaa{\ref@jnl{ChJA\&A}}%  % Chinese Journal of Astronomy and Astrophysics
+\DeclareRobustCommand\jcap{\ref@jnl{JCAP}}%  % Journal of Cosmology and Astroparticle Physics
+\DeclareRobustCommand\na{\ref@jnl{NewA}}%  % New Astronomy
+\DeclareRobustCommand\nar{\ref@jnl{NewAR}}%  % New Astronomy Review
+\DeclareRobustCommand\pasa{\ref@jnl{PASA}}%  % Publications of the Astron. Soc. of Australia
+\DeclareRobustCommand\rmxaa{\ref@jnl{RMxAA}}%  % Revista Mexicana de Astronomia y Astrofisica
+
+%% added feb 9, 2016
+\DeclareRobustCommand\maps{\ref@jnl{M\&PS}}% Meteoritics and Planetary Science
+\DeclareRobustCommand\aas{\ref@jnl{AAS Meeting Abstracts}}% American Astronomical Society Meeting Abstracts
+\DeclareRobustCommand\dps{\ref@jnl{AAS/DPS Meeting Abstracts}}% American Astronomical Society/Division for Planetary Sciences Meeting Abstracts
+
 \let\astap=\aap
 \let\apjlett=\apjl
 \let\apjsupp=\apjs

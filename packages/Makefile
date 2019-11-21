@@ -1,4 +1,4 @@
-RMVERSION=4.0pre
+RMVERSION=4.0.beta1
 
 STYFILES=rmaa.cls rmaa.bst
 DOCFILES=authorguide.tex rmeditor.tex
