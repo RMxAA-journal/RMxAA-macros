@@ -46,12 +46,8 @@
 \@reviewarticlefalse
 \newif\if@proof
 \@prooffalse
-\newif\if@journal
-\@journaltrue
 \newif\if@printdates
 \@printdatesfalse
-\newif\if@proceedings
-\@proceedingsfalse
 \newif\if@manuscript
 \@manuscripttrue
 \newif\if@bigfont
@@ -86,17 +82,17 @@
 \@boldkeywordsfalse
 \RequirePackage{etoolbox}
 \DeclareOption{manuscript}{\typeout{Manuscript for referee}
-  \@manuscripttrue\@journalfalse\@rmtwocolfalse
+  \@manuscripttrue\@rmtwocolfalse
   \PassOptionsToClass{10pt}{article}}
 \DeclareOption{bigfont}{\typeout{Big font manuscript requested by Gary
   Ferland}
-  \@manuscripttrue\@journalfalse\@rmtwocolfalse\@bigfonttrue
+  \@manuscripttrue\@rmtwocolfalse\@bigfonttrue
   \PassOptionsToClass{11pt}{article}}
 \DeclareOption{journal}{\typeout{Main journal option}%
-  \@journaltrue\@rmtwocoltrue\@printdatestrue\@manuscriptfalse
+  \@rmtwocoltrue\@printdatestrue\@manuscriptfalse
   \PassOptionsToClass{10pt}{article}}
 \DeclareOption{guide}{\typeout{User guide option}%
-  \@guidetrue\@journalfalse\@rmtwocoltrue\@manuscriptfalse
+  \@guidetrue\@rmtwocoltrue\@manuscriptfalse
   \PassOptionsToClass{10pt}{article}}
 \DeclareOption{preprint}{\typeout{Preprint option}%
   \@preprinttrue\@manuscriptfalse\PassOptionsToClass{10pt}{article}}
@@ -438,19 +434,14 @@
   \renewcommand\@evenfoot{\thepage\hfil}%
 \if@preprint
 \renewcommand\@oddhead{%
-  \if@proceedings
-  \textsc{To appear in ``\@conftitle{} (\rmaa@YearStyle{\@year})''}\hfil
-  \textit{RMxAC}
-  \else
   \textsc{To appear in} \@journalname\hfil
-  \fi}\fi%
+}\fi%
 \if@guide
 \renewcommand\@oddhead{\textsc{Documentation} (\rmaa@YearStyle{\@year})\hfil}
 \fi%
 \if@manuscript
 \renewcommand\@oddhead{Manuscript for \@journalname{} (\rmaa@YearStyle{\@year})\hfil}
 \fi%
-\if@journal
 \renewcommand\@oddhead{%
   \parbox{\textwidth}{
     \@journalname, \rmaa@VolumeStyle{\@volume},
@@ -461,7 +452,7 @@
       Universidad Nacional Aut\'onoma de M\'exico}\hfil\\[1pt]
     {\small\@DOI@url}\hfil
   }%
-}\fi%
+}%
   \renewcommand\@evenhead{\@oddhead}}
 \pagestyle{rmaa}
 \newif\if@setresumen
@@ -739,7 +730,8 @@
 \newcommand{\@year}{\the\year}
 \newcommand{\@anyo}{\rmaa@VolumenStyle{2007}}
 \newcommand{\@journalname}{\rmaa@JournalNameStyle{%
-    \if@proceedings\RMAASClong\else\RMAAlong\fi}}
+\RMAAlong
+}}
 \newcommand{\@received}{}
 \newcommand{\@accepted}{}
 \newcommand{\@MSnum}{0000}
@@ -799,15 +791,15 @@
 \newcommand{\ADS@BibCode}
 {\ADS@year\ADS@journal\ADS@volume.\PadToFourWithDots{\ADS@firstpage}\ADS@authorinitial}
 \newcommand{\ADS@year}{2001}
-\newcommand{\ADS@journal}{\if@proceedings RMxAC\else RMxAA\fi}
+\newcommand{\ADS@journal}{
+RMxAA
+}
 \newcommand{\ADS@volume}{....}
 \newcommand{\ADS@firstpage}{....}
 \newcommand{\ADS@authorinitial}{A}
 \newcommand{\ADS@doi}{https://doi.org/10.22201/ia.01851101p.0000.00.00.00}
 \newcommand{\ADS@journalname}{%
-  \if@proceedings\@conftitle\space (Eds. \@editors) \fi%
   Revista Mexicana de Astronom\'\i{}a y Astrof\'\i{}sica%
-  \if@proceedings\space (Serie de Conferencias)\fi%
   \space Vol. \@volume, pp. \ADS@firstpage--\ADS@lastpage\space (\@year)%
   \space (http://www.astroscu.unam.mx/\~{}rmaa/)
   }
@@ -1221,8 +1213,7 @@
 \renewcommand{\fnum@figure}{Fig.~\thefigure}
 
 \long\def\@makefigcap#1#2{%
-  \if@proceedings\else\small\fi
-  \if@newstyle\small\fi
+  \small
   \vskip\abovecaptionskip
   \sbox\@tempboxa{#1. #2}%
   \ifdim \wd\@tempboxa >\hsize
@@ -1314,7 +1305,7 @@
   }
 
 \newcommand\tablenotemark[1]{$^\mathrm{#1}$}
-\newcommand\tablenote[2]{\if@proceedings\else\small\fi ${}^\mathrm{#1}$ #2}
+\newcommand\tablenote[2]{\small ${}^\mathrm{#1}$ #2}
 \newcommand\tablenoteskip{\\[0.5\baselineskip]}
 
 \newcommand{\tabnotemark}[1]{\textsuperscript{\lowercase{#1}}}
@@ -1633,8 +1624,8 @@
   \else
      \renewcommand{\@TOCaftertitle}{ (#1)}
   \fi
-  \if@journal\clearpage\thispagestyle{empty}\cleardoublepage\fi
-%% Now input the file, then run the end-of-article hook (reinstated 28
+  \clearpage\thispagestyle{empty}\cleardoublepage
+  %% Now input the file, then run the end-of-article hook (reinstated 28
   %% Sep 2001)
   {\input{\@articledir/\articlename.tex}\@endofarticlehook}}
 \newcommand{\session}[1]{
@@ -1779,10 +1770,9 @@
   \else
      \@restonecolfalse
   \fi
-  %% 9pt for journal style
-  \if@proceedings\else\small\fi
-  \if@newstyle\small\fi %% same for new style
-  \if@proceedings\thispagestyle{rmaafrontfirstpage}\else\thispagestyle{empty}\fi
+  %% 9pt always
+  \small
+\thispagestyle{empty}
   \shortauthor{Contents}\shorttitle{Contents}
   \vspace*{18mm}
   \if@printbanner
@@ -1874,9 +1864,8 @@
   \pagestyle{rmaa}
   \thispagestyle{rmaafirstpage}
   \@begofarticlehook
-  %% 9pt for journal style
-  \if@proceedings\else\small\fi
-  \if@newstyle\small\fi
+  %% 9pt always
+  \small
   \twocolumn[\@makeminititle]
   %% vertical spacing (see also definition of \@idxitem and \indexspace
   \parskip\z@ \@plus .6\p@\relax % allow quite a lot of leaway here to avoid breaks inside entries
@@ -2129,7 +2118,9 @@
 \newcommand{\RMAASClong}{\RMAA\ (Serie de Conferencias)}
 \newcommand{\ibidrule}{\rule[-0.03cm]{4.7em}{.01cm}.\ }
 \newcommand{\ThisVolume}[1]{%
-  \@year, \if@proceedings\RMAASC\else\RMAA\fi, \@volume,
+  \@year,
+  \RMAA,
+  \@volume,
   \if@book\oldpageref{#1:RMAAFirstPage}\else 000\fi\ (this volume)}
 \newcommand{\etal}{et al.\@}
 \def\acknowledgments{\vskip 3ex plus .8ex minus .4ex}

@@ -163,12 +163,8 @@
 \@reviewarticlefalse
 \newif\if@proof
 \@prooffalse
-\newif\if@journal
-\@journaltrue
 \newif\if@printdates
 \@printdatesfalse
-\newif\if@proceedings
-\@proceedingsfalse
 \newif\if@manuscript
 \@manuscripttrue
 \newif\if@bigfont
@@ -221,17 +217,17 @@
 %    \begin{macrocode}
 %<*j-class>
 \DeclareOption{manuscript}{\typeout{Manuscript for referee} 
-  \@manuscripttrue\@journalfalse\@rmtwocolfalse
+  \@manuscripttrue\@rmtwocolfalse
   \PassOptionsToClass{10pt}{article}}
 \DeclareOption{bigfont}{\typeout{Big font manuscript requested by Gary
   Ferland} 
-  \@manuscripttrue\@journalfalse\@rmtwocolfalse\@bigfonttrue
+  \@manuscripttrue\@rmtwocolfalse\@bigfonttrue
   \PassOptionsToClass{11pt}{article}}
 \DeclareOption{journal}{\typeout{Main journal option}%
-  \@journaltrue\@rmtwocoltrue\@printdatestrue\@manuscriptfalse
+  \@rmtwocoltrue\@printdatestrue\@manuscriptfalse
   \PassOptionsToClass{10pt}{article}}
 \DeclareOption{guide}{\typeout{User guide option}%
-  \@guidetrue\@journalfalse\@rmtwocoltrue\@manuscriptfalse
+  \@guidetrue\@rmtwocoltrue\@manuscriptfalse
   \PassOptionsToClass{10pt}{article}}
 %</j-class>
 %    \end{macrocode}
@@ -239,7 +235,7 @@
 %    \begin{macrocode}
 %<*p-class>
 \DeclareOption{proceedings}{\typeout{Proceedings option}%
-  \@proceedingstrue\@journalfalse\@rmtwocoltrue\@newstyletrue
+  \@rmtwocoltrue\@newstyletrue
   \@suppressfulladdressestrue
   \@printdatesfalse\@manuscriptfalse\PassOptionsToClass{10pt}{article}} 
 %</p-class>
@@ -929,19 +925,21 @@
 %    \begin{macrocode}
 \if@preprint
 \renewcommand\@oddhead{%
-  \if@proceedings 
+%<*j-class>
+  \textsc{To appear in} \@journalname\hfil
+%</j-class>
+%<*p-class>
   \textsc{To appear in ``\@conftitle{} (\rmaa@YearStyle{\@year})''}\hfil
   \textit{RMxAC}
-  \else
-  \textsc{To appear in} \@journalname\hfil
-  \fi}\fi%
+%</p-class>
+}\fi%
 \if@guide
 \renewcommand\@oddhead{\textsc{Documentation} (\rmaa@YearStyle{\@year})\hfil}
 \fi%
 \if@manuscript
 \renewcommand\@oddhead{Manuscript for \@journalname{} (\rmaa@YearStyle{\@year})\hfil}
 \fi%
-\if@journal
+%<*j-class>
 \renewcommand\@oddhead{%
   \parbox{\textwidth}{
     \@journalname, \rmaa@VolumeStyle{\@volume},
@@ -952,7 +950,8 @@
       Universidad Nacional Aut\'onoma de M\'exico}\hfil\\[1pt]
     {\small\@DOI@url}\hfil
   }%
-}\fi%
+}%
+%</j-class>
   \renewcommand\@evenhead{\@oddhead}}
 %    \end{macrocode}
 % By default, use the |\ps@rmaa| page style.
@@ -1528,7 +1527,9 @@
 \newcommand{\@year}{\the\year}
 \newcommand{\@anyo}{\rmaa@VolumenStyle{2007}}
 \newcommand{\@journalname}{\rmaa@JournalNameStyle{%
-    \if@proceedings\RMAASClong\else\RMAAlong\fi}}
+%<j-class>\RMAAlong
+%<p-class>\RMAASClong
+}}
 \newcommand{\@received}{}
 \newcommand{\@accepted}{}
 \newcommand{\@MSnum}{0000}
@@ -1652,7 +1653,10 @@
 \newcommand{\ADS@BibCode}
 {\ADS@year\ADS@journal\ADS@volume.\PadToFourWithDots{\ADS@firstpage}\ADS@authorinitial}
 \newcommand{\ADS@year}{2001} 
-\newcommand{\ADS@journal}{\if@proceedings RMxAC\else RMxAA\fi}
+\newcommand{\ADS@journal}{
+%<j-class>RMxAA
+%<p-class>RMxAC
+}
 \newcommand{\ADS@volume}{....} 
 %    \end{macrocode}
 % These two are just set to default values here, |\ADS@firstpage| is set
@@ -1713,9 +1717,9 @@
 % problems---this maybe should be changed though. 
 %    \begin{macrocode}
 \newcommand{\ADS@journalname}{%
-  \if@proceedings\@conftitle\space (Eds. \@editors) \fi%
+%<p-class>\@conftitle\space (Eds. \@editors)\space%
   Revista Mexicana de Astronom\'\i{}a y Astrof\'\i{}sica%
-  \if@proceedings\space (Serie de Conferencias)\fi%
+%<p-class>\space (Serie de Conferencias)%
   \space Vol. \@volume, pp. \ADS@firstpage--\ADS@lastpage\space (\@year)%
   \space (http://www.astroscu.unam.mx/\~{}rmaa/)
   }
@@ -2479,8 +2483,7 @@
 % anything. 
 %    \begin{macrocode}
 \long\def\@makefigcap#1#2{%
-  \if@proceedings\else\small\fi
-  \if@newstyle\small\fi 
+  \small
   \vskip\abovecaptionskip
   \sbox\@tempboxa{#1. #2}%
   \ifdim \wd\@tempboxa >\hsize
@@ -2612,7 +2615,7 @@
 % |\tablenote{MARK}{TEXT}|---now deprecated. 
 %    \begin{macrocode}
 \newcommand\tablenotemark[1]{$^\mathrm{#1}$} 
-\newcommand\tablenote[2]{\if@proceedings\else\small\fi ${}^\mathrm{#1}$ #2} 
+\newcommand\tablenote[2]{\small ${}^\mathrm{#1}$ #2} 
 \newcommand\tablenoteskip{\\[0.5\baselineskip]} 
 %    \end{macrocode}
 % \end{macro}
@@ -3108,8 +3111,8 @@
 %    \end{macrocode}
 % In the main journal articles must start on an odd page. 
 %    \begin{macrocode}
-  \if@journal\clearpage\thispagestyle{empty}\cleardoublepage\fi
-%% Now input the file, then run the end-of-article hook (reinstated 28
+%<j-class>  \clearpage\thispagestyle{empty}\cleardoublepage
+  %% Now input the file, then run the end-of-article hook (reinstated 28
   %% Sep 2001)
   {\input{\@articledir/\articlename.tex}\@endofarticlehook}}
 %    \end{macrocode}
@@ -3296,10 +3299,10 @@
   \else
      \@restonecolfalse
   \fi
-  %% 9pt for journal style
-  \if@proceedings\else\small\fi
-  \if@newstyle\small\fi %% same for new style
-  \if@proceedings\thispagestyle{rmaafrontfirstpage}\else\thispagestyle{empty}\fi
+  %% 9pt always
+  \small
+%<j-class>\thispagestyle{empty}
+%<p-class>\thispagestyle{rmaafrontfirstpage}
   \shortauthor{Contents}\shorttitle{Contents}
   \vspace*{18mm}
   \if@printbanner
@@ -3391,9 +3394,8 @@
   \pagestyle{rmaa}
   \thispagestyle{rmaafirstpage}
   \@begofarticlehook
-  %% 9pt for journal style
-  \if@proceedings\else\small\fi
-  \if@newstyle\small\fi
+  %% 9pt always
+  \small
   \twocolumn[\@makeminititle]
   %% vertical spacing (see also definition of \@idxitem and \indexspace
   \parskip\z@ \@plus .6\p@\relax % allow quite a lot of leaway here to avoid breaks inside entries
@@ -3679,7 +3681,10 @@
 % e.g., |\bibitem{} Bloggs, J. \ThisVolume{bloggs}|.
 %    \begin{macrocode}
 \newcommand{\ThisVolume}[1]{%
-  \@year, \if@proceedings\RMAASC\else\RMAA\fi, \@volume,
+  \@year,
+%<j-class>  \RMAA,
+%<p-class>  \RMAASC,
+  \@volume,
   \if@book\oldpageref{#1:RMAAFirstPage}\else 000\fi\ (this volume)}
 %    \end{macrocode}
 % \end{macro}
