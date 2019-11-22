@@ -25,6 +25,19 @@
   \item[]\itshape}
   {\end{list}}
 
+
+% Experimenting with hyperref configuration
+\usepackage[svgnames]{xcolor}
+\hypersetup{
+  colorlinks,
+  linkcolor=NavyBlue,
+  citecolor=black,
+  urlcolor=NavyBlue
+}
+\newcommand\doarXiv[1]{\href{https://arxiv.org/abs/#1}{#1}}
+\newcommand\dodoi[1]{\href{https://doi.org/#1}{\tiny{DOI}}}
+\newcommand\doads[1]{\href{#1}{\tiny{ADS}}}
+
 % Needed for landscape tables
 \usepackage{pdflscape}
 
@@ -703,7 +716,7 @@ command, which simply adds a bit of vertical space.
   an \texttt{appendix} environment if there is only one).
 \end{appendix}
 
-
+\bibliographystyle{aasjournal-rm}
 \bibliography{rm-references-example}
 
 \end{document}

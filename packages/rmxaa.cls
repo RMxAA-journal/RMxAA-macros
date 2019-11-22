@@ -136,7 +136,6 @@
 \renewcommand\bibsection{\section*{REFERENCES}}
 \setlength\bibsep{0pt}
 \setlength\bibhang{1.5em}
-\bibliographystyle{yahapjrmxaa}
 \fi
 \RequirePackage{graphicx}
 \RequirePackage{ifthen}

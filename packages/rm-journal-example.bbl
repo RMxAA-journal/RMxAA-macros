@@ -1,33 +1,40 @@
-\begin{thebibliography}
-\providecommand\natexlab[1]{#1}
-\providecommand\JournalTitle[1]{#1}
+\begin{thebibliography}{}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\href{#1}{#1}}
+\providecommand{\doads}[1]{\url{#1}}
+\providecommand{\dodoi}[1]{doi:~\href{http://doi.org/#1}{\nolinkurl{#1}}}
+\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl.net/#1}}}
+\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https://arxiv.org/abs/#1}}}
 
 \bibitem[{{Alarie} \& {Morisset}(2019)}]{Alarie:2019a}
-{Alarie}, A. \& {Morisset}, C. 2019,
-  \href{http://dx.doi.org/10.22201/ia.01851101p.2019.55.02.21}{\JournalTitle{\rmxaa},
-  55, 377}
+{Alarie}, A., \& {Morisset}, C. 2019, \rmxaa, 55, 377,
+  \dodoi{10.22201/ia.01851101p.2019.55.02.21},
+  \doads{https://ui.adsabs.harvard.edu/abs/2019RMxAA..55..377A}
 
 \bibitem[{{Arthur} \& {Hoare}(2006)}]{Arthur:2006a}
-{Arthur}, S.~J. \& {Hoare}, M.~G. 2006,
-  \href{http://dx.doi.org/10.1086/503899}{\JournalTitle{\apjs}, 165, 283}
+{Arthur}, S.~J., \& {Hoare}, M.~G. 2006, \apjs, 165, 283,
+  \dodoi{10.1086/503899},
+  \doads{http://adsabs.harvard.edu/abs/2006ApJS..165..283A}
 
 \bibitem[{{Baldwin} {et~al.}(1991){Baldwin}, {Ferland}, {Martin}, {Corbin},
   {Cota}, {Peterson}, \& {Slettebak}}]{Baldwin:1991a}
-{Baldwin}, J.~A., {Ferland}, G.~J., {Martin}, P.~G., {et~al.} 1991,
-  \href{http://dx.doi.org/10.1086/170146}{\JournalTitle{\apj}, 374, 580}
+{Baldwin}, J.~A., {Ferland}, G.~J., {Martin}, P.~G., {et~al.} 1991, \apj, 374,
+  580, \dodoi{10.1086/170146},
+  \doads{https://ui.adsabs.harvard.edu/abs/1991ApJ...374..580B}
 
 \bibitem[{{Chau Giang} {et~al.}(2019){Chau Giang}, {Hoang}, \&
   {Tram}}]{Chau-Giang:2019a}
-{Chau Giang}, N., {Hoang}, T., \& {Tram}, L.~N. 2019, \JournalTitle{arXiv
-  e-prints}, \href{http://arxiv.org/abs/1906.11498}{{\sffamily
-  arXiv:1906.11498}}
+{Chau Giang}, N., {Hoang}, T., \& {Tram}, L.~N. 2019, arXiv e-prints.
+\newblock \doarXiv{1906.11498},
+  \doads{https://ui.adsabs.harvard.edu/abs/2019arXiv190611498C}
 
 \bibitem[{{Lazarian} \& {Hoang}(2019)}]{Lazarian:2019a}
-{Lazarian}, A. \& {Hoang}, T. 2019,
-  \href{http://dx.doi.org/10.3847/1538-4357/ab3d39}{\JournalTitle{\apj}, 883,
-  122}
+{Lazarian}, A., \& {Hoang}, T. 2019, \apj, 883, 122,
+  \dodoi{10.3847/1538-4357/ab3d39},
+  \doads{https://ui.adsabs.harvard.edu/abs/2019ApJ...883..122L}
 
 \bibitem[{{Strömgren}(1939)}]{Stromgren:1939a}
-{Strömgren}, B. 1939, \JournalTitle{\apj}, 89, 526
+{Strömgren}, B. 1939, \apj, 89, 526,
+  \doads{https://ui.adsabs.harvard.edu/abs/1939ApJ....89..526S}
 
 \end{thebibliography}

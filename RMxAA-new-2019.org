@@ -1,6 +1,22 @@
 
 * Fixes to RMAA macros
 
+** Links reference list of PDF file
++ See github [[https://github.com/will-henney/RMxAA/issues/13][issue #13]]
++ I tried a version based on yahapj.bst
++ Now I am trying one based on aasjournal.bst
+  + Need to define the following to override the defaults
+    + \dodoi, \doarxiv, \doeprint
+  + This would let me have icon or text label links, but wouldn't allow the Journal or pages to be linked
+*** Why do all the BST files define ~\natexlab~? 
+- From natbib.dtx:
+  : % The command |\natexlab| is used in the \texttt{.bst} files to enclose the
+  : % extra labels (the letters added to the dates); these are to be suppressed
+  : % for numerical citations.
+- So it is for things like 2000a, 2000b
+- Seem unnecessary, since we never use numeric labels, but might as well leave it
+
+
 ** DOI and ORCID iDs
 + Summary/recommendation:
   + DOI
@@ -250,7 +266,7 @@ CLOSED: [2019-11-15 Fri 10:46]
    - [X] icon in the full addresses
      - Full text link is cancelled
    - [X] Move the code from demo document to class file
-5. [ ] Dejar separado los macros para las dos revistas pues están en páginas distintas
+5. [X] Dejar separado los macros para las dos revistas pues están en páginas distintas
    - Create two separate class files: rmxaa.cls and rmxac.cls
    - This can still be done from the same ~.dtx~ file
 6. [X] Para el ADS

@@ -1,10 +1,15 @@
-% yahapjrmxaa.bst -- bibtex style file for RMxAA based on yahapj.bst
+% rmx-links.bst -- bibtex style file for RMxAA based on yahapj.bst
 %
-% 21 Nov 2019 - minor change by Will Henney <w.henney@irya.unam.mx>:
-% edit one line in function begin.bib, since \begin{thebibliography}
-% does not take an argument in rmxaa.cls
+% Changes by Will Henney <w.henney@irya.unam.mx>:
 %
-% ORIGINAL HEADER FROM PETER WILLIAMS FOLLOWS: 
+% 22 Nov 2019 - update DOI links to current preferred form:
+% https://doi.org/XXX - update arXiV links to https
+%
+% 21 Nov 2019 - edit one line in function begin.bib, since
+% \begin{thebibliography} does not take an argument in rmxaa.cls
+%
+% ORIGINAL HEADER FROM yahapj.bst BY PETER WILLIAMS FOLLOWS: 
+%
 % yahapj.bst -- yet another ApJ bibtex style file
 % Git SHA1 hash: $Id: 0f4c2127b1541077b3712edd55a91630faafbf90 $
 % Reference repository: https://github.com/pkgw/tex-stuff/
@@ -587,7 +592,7 @@ FUNCTION {format.eprint}
   booktitle empty$ not or or
     { "" }
      { archive empty$
-          {"\href{http://arxiv.org/abs/" eprint * "}" *
+          {"\href{https://arxiv.org/abs/" eprint * "}" *
              "{{\sffamily " * format.archive * eprint *
               format.primaryClass * "}}" *}
           {"\href{" archive *  "/" * eprint * "}" *
@@ -995,7 +1000,7 @@ FUNCTION {maybe.doi.link.prepend}
      { "\href{" url * "}{" * swap$ * }
     if$
   }
-  { "\href{http://dx.doi.org/" doi * "}{" * swap$ * }
+  { "\href{https://doi.org/" doi * "}{" * swap$ * }
  if$
 }
 
