@@ -10,6 +10,8 @@
 *.blg
 *.ind
 *.out
+*.htc
+*.loa
 # Files made by compilation in the source folder
 /source/sample.latex2html-init
 /source/ADS.tex

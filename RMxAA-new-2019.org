@@ -15,6 +15,10 @@
   : % for numerical citations.
 - So it is for things like 2000a, 2000b
 - Seem unnecessary, since we never use numeric labels, but might as well leave it
+*** Color for links
++ See this [[https://tex.stackexchange.com/questions/100905/best-practice-for-hyperref-link-colours][stackexchange discussion]]
++ Confirms what I had already thought - a muted blue is best for all links
++ NavyBlue and MidnightBlue from xcolors are possibilities (with svgnames option)
 
 
 ** DOI and ORCID iDs

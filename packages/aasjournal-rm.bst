@@ -722,12 +722,19 @@ FUNCTION {format.eprint}
 % gets picked
 %
 
+% WJH 22 Nov 2019 - Do nothing for the DOI because this is now done by
+% wrapping the Journal, Vol, page.  We still keep the function as a
+% noop so that url and eprint are skipped when DOI is present (do we
+% really want that?)
 FUNCTION {format.doi}
-{ doi empty$
-    { "" }
-    { "\dodoi{" doi * "}" * }
-  if$
-}
+{ "" }
+
+% FUNCTION {format.doi}
+% { doi empty$
+%     { "" }
+%     { "\dodoi{" doi * "}" * }
+%   if$
+% }
 
 FUNCTION {format.ads}
 { adsurl empty$
@@ -1180,6 +1187,28 @@ FUNCTION {format.full.book.spec} % The title should be on the stack.
 
 %%%%%%%  End of functions from astrobib
 
+% 22 Nov 2019 - WJH: the following two functions copied from yahapj.bst
+FUNCTION {maybe.doi.link.prepend}
+{ % Expects some citation text to be on the stack
+ doi empty$
+  { url empty$
+     { }
+     { "\href{" url * "}{" * swap$ * }
+    if$
+  }
+  { "\href{https://doi.org/" doi * "}{" * swap$ * }
+ if$
+}
+
+FUNCTION {maybe.doi.link.end}
+{ % Expects some citation text to be on the stack
+ doi empty$ url empty$ and
+  { }
+  { "}" * }
+ if$
+}
+
+
 FUNCTION {article}
 { output.bibitem
   format.authors "author" output.check
@@ -1190,16 +1219,20 @@ FUNCTION {article}
   crossref missing$
     { journal
       "journal" output.check
-       format.vol.num.pages output
+      maybe.doi.link.prepend
+      format.vol.num.pages output
      }
-     { format.article.crossref output.nonnull
-       format.pages output
+    { format.article.crossref
+      maybe.doi.link.prepend
+      output.nonnull
+      format.pages output
      }
   if$
   pages empty$
     'skip$
     { format.journal.pages }
   if$
+  maybe.doi.link.end
   format.pid output
   format.ads output
   fin.entry
