@@ -22,11 +22,27 @@
   \href{https://doi.org/10.1086/170146}{\apj, 374, 580},
   \doads{https://ui.adsabs.harvard.edu/abs/1991ApJ...374..580B}
 
+\bibitem[{{Brookes}(2016)}]{Brookes:2016a}
+{Brookes}, D.~P. 2016, \href{https://doi.org/10.5281/zenodo.60136}{PhD thesis},
+  University of Birmingham, United Kingdom,
+  \doads{http://adsabs.harvard.edu/abs/2016PhDT........76B}
+
 \bibitem[{{Chau Giang} {et~al.}(2019){Chau Giang}, {Hoang}, \&
   {Tram}}]{Chau-Giang:2019a}
 {Chau Giang}, N., {Hoang}, T., \& {Tram}, L.~N. 2019, arXiv e-prints.
 \newblock \doarXiv{1906.11498},
   \doads{https://ui.adsabs.harvard.edu/abs/2019arXiv190611498C}
+
+\bibitem[{Henney {et~al.}(2002)Henney, Steffen, Binette, \&
+  Raga}]{2002RMxAC..13.....H}
+Henney, W.~J., Steffen, W., Binette, L., \& Raga, A., eds. 2002, Revista
+  Mexicana de Astronomia y Astrofisica Conference Series, Vol.~13, {Emission
+  lines from jet flows},
+  \doads{https://ui.adsabs.harvard.edu/abs/2002RMxAC..13.....H}
+
+\bibitem[{{Kaplan}(2017)}]{Kaplan:2017b}
+{Kaplan}, K.~F. 2017, PhD thesis, The University of Texas at Austin,
+  \doads{https://ui.adsabs.harvard.edu/abs/2017PhDT........56K}
 
 \bibitem[{{Lazarian} \& {Hoang}(2019)}]{Lazarian:2019a}
 {Lazarian}, A., \& {Hoang}, T. 2019,

@@ -1269,6 +1269,7 @@ FUNCTION {book}
 %  if$
   format.pages output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1283,6 +1284,7 @@ FUNCTION {booklet}
   howpublished output
   address output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1320,6 +1322,7 @@ FUNCTION {inbook}
 %  if$
   format.pages "pages" output.check
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1345,6 +1348,7 @@ FUNCTION {incollection}
 %  if$
   format.pages "pages" output.check
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1373,6 +1377,7 @@ FUNCTION {inproceedings}
 %  if$
   format.pages output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1391,6 +1396,7 @@ FUNCTION {manual}
   organization output
   address output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1406,6 +1412,7 @@ FUNCTION {mastersthesis}
   school "school" output.check
   address output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1430,6 +1437,7 @@ FUNCTION {misc}
    {format.aaspublisher}
    if$
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1440,11 +1448,14 @@ FUNCTION {phdthesis}
   name.or.dash
   format.date "year" output.check
   date.block
-%  format.title "title" output.check
+  %  format.title "title" output.check
   bbl.phdthesis format.thesis.type output.nonnull
+  maybe.doi.link.prepend
+  maybe.doi.link.end
   school "school" output.check
   address output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1461,6 +1472,8 @@ FUNCTION {proceedings}
   format.date "year" output.check
   date.block
   title format.full.book.spec output
+  maybe.doi.link.prepend
+  maybe.doi.link.end
 %  format.btitle "title" output.check
 %  format.bvolume output
 %  format.number.series output
@@ -1478,6 +1491,7 @@ FUNCTION {proceedings}
 %  publisher output
   format.pages output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1493,6 +1507,7 @@ FUNCTION {techreport}
   institution "institution" output.check
   address output
   format.pid output
+  format.ads output
   fin.entry
 }
 
@@ -1505,6 +1520,7 @@ FUNCTION {unpublished}
   date.block
 %  format.title "title" output.check
   format.pid output
+  format.ads output
   fin.entry
 }
 
