@@ -581,10 +581,13 @@ FUNCTION {format.in.editors}
 }
 
 
+% WJH 23 Nov 2019 - try and normalize case of titles to sentence case.
+% It is necessary, however to protect capitals for proper names and
+% acronyms with {}.
 FUNCTION {format.title}
 { title empty$
     { "" }
-    { title
+    { title "t" change.case$
     }
   if$
 }
@@ -1359,6 +1362,8 @@ FUNCTION {inproceedings}
   format.date "year" output.check
   date.block
   bbl.in " " * booktitle format.full.book.spec * output
+  maybe.doi.link.prepend
+  maybe.doi.link.end
 %  crossref missing$
 %    { format.in.ed.booktitle "booktitle" output.check
 %      format.bvolume output
@@ -1392,6 +1397,8 @@ FUNCTION {manual}
   format.date "year" output.check
   date.block
   format.btitle "title" output.check
+  maybe.doi.link.prepend
+  maybe.doi.link.end
   format.edition output
   organization output
   address output
@@ -1407,8 +1414,10 @@ FUNCTION {mastersthesis}
   name.or.dash
   format.date "year" output.check
   date.block
-%  format.title "title" output.check
+  format.title "title" output.check
   bbl.mthesis format.thesis.type output.nonnull
+  maybe.doi.link.prepend
+  maybe.doi.link.end
   school "school" output.check
   address output
   format.pid output
@@ -1432,10 +1441,12 @@ FUNCTION {misc}
  if$
 %%
   howpublished output
-   publisher empty$
-   {}
-   {format.aaspublisher}
-   if$
+  publisher empty$
+    {}
+    {format.aaspublisher}
+  if$
+  maybe.doi.link.prepend
+  maybe.doi.link.end
   format.pid output
   format.ads output
   fin.entry
@@ -1448,7 +1459,8 @@ FUNCTION {phdthesis}
   name.or.dash
   format.date "year" output.check
   date.block
-  %  format.title "title" output.check
+  % 23 Nov 2019 WJH: reinstate title for theses
+  format.title "title" output.check
   bbl.phdthesis format.thesis.type output.nonnull
   maybe.doi.link.prepend
   maybe.doi.link.end
@@ -1504,6 +1516,8 @@ FUNCTION {techreport}
   date.block
   format.title "title" output.check
   format.tr.number output.nonnull
+  maybe.doi.link.prepend
+  maybe.doi.link.end
   institution "institution" output.check
   address output
   format.pid output
@@ -1511,6 +1525,7 @@ FUNCTION {techreport}
   fin.entry
 }
 
+% Unpublished will not have a DOI or ADS by definition
 FUNCTION {unpublished}
 { output.bibitem
   format.authors "author" output.check
@@ -1520,7 +1535,6 @@ FUNCTION {unpublished}
   date.block
 %  format.title "title" output.check
   format.pid output
-  format.ads output
   fin.entry
 }
 

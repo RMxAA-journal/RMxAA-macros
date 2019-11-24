@@ -23,8 +23,9 @@
   \doads{https://ui.adsabs.harvard.edu/abs/1991ApJ...374..580B}
 
 \bibitem[{{Brookes}(2016)}]{Brookes:2016a}
-{Brookes}, D.~P. 2016, \href{https://doi.org/10.5281/zenodo.60136}{PhD thesis},
-  University of Birmingham, United Kingdom,
+{Brookes}, D.~P. 2016, {Interferometric Radio Observations of the Interactive
+  Winds of Massive Stars}, \href{https://doi.org/10.5281/zenodo.60136}{PhD
+  thesis}, University of Birmingham, United Kingdom,
   \doads{http://adsabs.harvard.edu/abs/2016PhDT........76B}
 
 \bibitem[{{Chau Giang} {et~al.}(2019){Chau Giang}, {Hoang}, \&
@@ -33,24 +34,53 @@
 \newblock \doarXiv{1906.11498},
   \doads{https://ui.adsabs.harvard.edu/abs/2019arXiv190611498C}
 
+\bibitem[{{Goicoechea} {et~al.}(2018){Goicoechea}, {Cuadrado}, {Pety},
+  {Aguado}, {Black}, {Bron}, {Cernicharo}, {Chapillon}, {Fuente}, {Gerin},
+  {Joblin}, {Roncero}, \& {Tercero}}]{Goicoechea:2018a}
+{Goicoechea}, J.~R., {Cuadrado}, S., {Pety}, J., {et~al.} 2018,
+  \href{https://doi.org/10.1017/S1743921317007761}{in IAU Symposium, Vol. 332,
+  Astrochemistry VII: Through the Cosmos from Galaxies to Planets, ed.
+  M.~{Cunningham}, T.~{Millar}, \& Y.~{Aikawa}} (New York/Cambridge, UK:
+  Cambridge University Press), 210--217,
+  \doads{https://ui.adsabs.harvard.edu/abs/2018IAUS..332..210G}
+
+\bibitem[{{Guti\'errez-Soto}(2015)}]{Gutierrez-Soto:2015a}
+{Guti\'errez-Soto}, L.~A. 2015, Un catálogo de choques de proa estacionarios
+  en la nebulosa de orión, Master's thesis, Universidad Nacional Autónoma de
+  México
+
 \bibitem[{Henney {et~al.}(2002)Henney, Steffen, Binette, \&
   Raga}]{2002RMxAC..13.....H}
-Henney, W.~J., Steffen, W., Binette, L., \& Raga, A., eds. 2002, Revista
-  Mexicana de Astronomia y Astrofisica Conference Series, Vol.~13, {Emission
-  lines from jet flows},
+Henney, W.~J., Steffen, W., Binette, L., \& Raga, A., eds. 2002,
+  \href{https://doi.org/this/is.fake.0000}{Revista Mexicana de Astronomia y
+  Astrofisica Conference Series, Vol.~13, {Emission lines from jet flows}},
   \doads{https://ui.adsabs.harvard.edu/abs/2002RMxAC..13.....H}
 
-\bibitem[{{Kaplan}(2017)}]{Kaplan:2017b}
-{Kaplan}, K.~F. 2017, PhD thesis, The University of Texas at Austin,
-  \doads{https://ui.adsabs.harvard.edu/abs/2017PhDT........56K}
+\bibitem[{Jones {et~al.}(2001--2019)Jones, Oliphant, Peterson,
+  {et~al.}}]{Jones:2001a}
+Jones, E., Oliphant, T., Peterson, P., {et~al.} 2001--2019,
+  \href{http://www.scipy.org/}{{SciPy}: Open source scientific tools for
+  {Python}}.
+\newblock \url{http://www.scipy.org/}
 
 \bibitem[{{Lazarian} \& {Hoang}(2019)}]{Lazarian:2019a}
 {Lazarian}, A., \& {Hoang}, T. 2019,
   \href{https://doi.org/10.3847/1538-4357/ab3d39}{\apj, 883, 122},
   \doads{https://ui.adsabs.harvard.edu/abs/2019ApJ...883..122L}
 
+\bibitem[{Liu {et~al.}(2018)Liu, Anderson, McIntyre, Roshi, Churchwell,
+  Minchin, \& Terzian}]{Liu:2018c}
+Liu, B., Anderson, L.~D., McIntyre, T., {et~al.} 2018, Survey of ionized gas of
+  the {G}alaxy, made with the {A}recibo telescope ({SIGGMA}): Inner {G}alaxy
+  data release, v1.0\href{https://doi.org/10.5281/zenodo.1432823}{,  Zenodo}
+
 \bibitem[{{Strömgren}(1939)}]{Stromgren:1939a}
 {Strömgren}, B. 1939, \apj, 89, 526,
   \doads{https://ui.adsabs.harvard.edu/abs/1939ApJ....89..526S}
+
+\bibitem[{Zucker \& Chen(2018)}]{Zucker:2018a}
+Zucker, C., \& Chen, H. 2018, {RadFil}: a {Python} package for building and
+  fitting radial profiles for interstellar filaments,
+  1.1.1\href{https://doi.org/10.5281/zenodo.1481546}{,  Zenodo}
 
 \end{thebibliography}
