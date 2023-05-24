@@ -1,0 +1,80 @@
+* [2023-05-23 Tue] Call with directors: Chucho G and Luis Z
+
+** Goals for meeting
+- Listen to what they have to say
+- Who else is interested in being editor?
+  - Yilen?
+  - If anybody is, then let them take over
+- Offer to help in any way necessary
+  - Specifically, technical help
+  - Maybe visit Mexico City to work on stuff
+- Make sure that Silvia and Chris are on-board with any changes
+
+  
+
+** Meeting notes
+
+*** Luis Zapata
+- Claustro hace unos meses
+  - MNRAS will be charging
+  - [ ] What is estimate of extra costs that would be incurred
+- Comentarios
+  - Mejorar plataforma de enviar artículos
+  - Faster turnaround
+  - More issues per year
+  - Specialize editors per subject area
+
+
+*** Chucho
+- Consciente de lo problemático de los cargos de página
+- History
+  - Silvia and Chris are Editors
+    - Silvia RMSC
+    - Two técnicos
+- Gran parte del costo es envío, pero ya no que es electrónico
+  - [ ] What is budget at the moment
+- IA used to send a lot of articles to the RMAA
+- Astronomers publish in 6 revistas
+- Trying to get convenio with MNRAS
+- Not possible to get convenio with AAS
+- RMAA cannot be the only solution
+- Needs a more modern editorial committee with specialist editors
+- Production side can be modernised or they can obtain the resources
+- Who does it serve at the moment?
+  - Most articles come from Latin America, not necessarily fro traditional astronomy departments
+- Conference series
+  - Have reduced importance these days
+  - Idea was to closing remarks and summaries of conferences.
+- Main journal
+  - Produce more
+  - And change the editorial
+- Chris has her system, which is very artesanal
+  - Presupuesto 300,000 pesos
+
+
+
+*** Proposed structure by Chucho
+- Editor in chief, could be various people
+- Editorial Committee
+- Specialist editors
+- Sebastian Sanchez
+- Leticia
+- Carlos Roman
+- Yilen Gomez
+  - Assigned to help Chris
+
+
+| MÉXICO         | 2018-2022 | 2018-2022 | Suscripciones |        |        |       |            |                |         |       |        |         |     |         |
+| 1980-2023      | 1980-2000 | ANUAL     |         ANUAL |        |        |       |            |                |         |       |        |         |     |         |
+| Art            | Cit       | <Cit>     |        MedCit |      h |    Art |   Cit | <Cit>      |         MedCit |       h |    MX | UNAM   | UNAM/MX | USD |         |
+| Ap)+Ap)L+ApJSS | 2,121     | 97,582    |          46.0 |    393 | 21,102 |  53.7 | 8)         | Apl+Ap/L+ApJSS |    97.6 |    R2 | 6I     |   84.6% | IOP | 330.000 |
+| MNRAS          | 1.734     | 53.336    |          30.8 | 05.150 |   51.0 |    29 | MNRAS      |          133.2 |   107.4 | 80.6% | OXFORD |  14,000 |     |         |
+| AA+AASS        | 1,320     | 47,575    |          36.0 |     93 |    273 | 8.672 | 318        |             20 | AA+AASS |  52.4 | 42.4   |   80.9% |     |         |
+| 745            | 25,841    | 34.7      |           116 |  29291 |     24 |     4 | PhRuD      |           36.8 |    17.8 | 48.4% |        |         |     |         |
+| RMXAA          | 459       | 5,017     |          10.9 |     32 |     78 | 1,638 | 21.0       |           14.8 |    12.6 | 85.1% |        |         |     |         |
+| AJ             | 348       | 13,633    |          39.2 |     17 |   0096 |   789 | 23         |           11.4 |   78.9% |       |        |         |     |         |
+| RMXAA          | AJ        |           |               |        |        |       |            |                |         |       |        |         |     |         |
+| Total          | 6,727     | 242,984   |          36.1 |  1,018 | 43,887 |  43.1 | Total      |            346 |         |       |        |         |     |         |
+| Total/RM×AA    | 6.82%     | 2.06%     |          3.31 |  7.66% |  3.73% |  2.05 | Total/RMAA |          4.27% |   4.64% |       |        |         |     |         |
+| Todas          | las       | Rev/año   |           492 |  370.6 |        |       |            |                |         |       |        |         |     |         |
+| Mtro.          | Márquez   |           |               |        |        |       |            |                |         |       |        |         |     |         |
